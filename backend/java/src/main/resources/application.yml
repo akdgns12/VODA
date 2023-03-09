@@ -5,3 +5,14 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  # 소셜 로그인
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client_id: 6b962da1630b8dc319eeca83a8061511
+            client_secret: NUZ9Hgye75UTSZNQnZjmDV0sy71XXPNG
+            redirect_uri: http://localhost:8080/user/login/oauth/kakao
+            scope: account_email
