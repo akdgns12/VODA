@@ -1,4 +1,4 @@
-package com.project.voda.domain;
+package com.project.voda.util;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
