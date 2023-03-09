@@ -1,9 +1,8 @@
 package com.project.voda.controller;
 
 import com.project.voda.dto.CalendarListResponseDto;
+import com.project.voda.dto.DiaryListResponseDto;
 import com.project.voda.service.CalendarService;
-import com.project.voda.service.DiaryService;
-import com.project.voda.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,23 @@ public class CalendarController {
     try {
       List<CalendarListResponseDto> response = calendarService.getCalendarAndEmotion(userSeq, date);
       return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+      return exceptionHandling(e);
+    }
+  }
+
+  // 하루 일기 목록
+  @ApiOperation(value = "하루 일기 목록", notes = "캘린더에서 날짜 선택 시 해당 날짜에 대한 일기 목록을 반환하는 API")
+  @GetMapping("/diary/{calendarSeq}")
+  ResponseEntity<?> getDiarys(@PathVariable Long calendarSeq) {
+    log.info("calendarSeq: {}", calendarSeq);
+    try {
+      List<DiaryListResponseDto> response = calendarService.getDiarys(calendarSeq);
+      if (response.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      } else {
+        return new ResponseEntity<>(response, HttpStatus.OK);
+      }
     } catch (Exception e) {
       return exceptionHandling(e);
     }

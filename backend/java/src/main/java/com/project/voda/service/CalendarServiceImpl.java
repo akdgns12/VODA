@@ -2,11 +2,11 @@ package com.project.voda.service;
 
 import com.project.voda.domain.Calendar;
 import com.project.voda.domain.Diary;
-import com.project.voda.domain.Emotion;
 import com.project.voda.domain.User;
 import com.project.voda.dto.CalendarListResponseDto;
+import com.project.voda.dto.DiaryListResponseDto;
 import com.project.voda.repository.CalendarRepository;
-import com.project.voda.repository.EmotionRepository;
+import com.project.voda.repository.DiaryRepository;
 import com.project.voda.repository.UserRepository;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -27,6 +27,7 @@ public class CalendarServiceImpl implements CalendarService {
 
   private final CalendarRepository calendarRepository;
   private final UserRepository userRepository;
+  private final DiaryRepository diaryRepository;
 
   // 한달 감정
   @Override
@@ -41,10 +42,25 @@ public class CalendarServiceImpl implements CalendarService {
       return new ArrayList<>();
     }
 
-    List<Calendar> calendar = calendarRepository.findByUserAndDayBetween(user.get(), fromDate, toDate);
-
-    return calendar.stream()
+    List<Calendar> calendars = calendarRepository.findByUserAndDayBetween(user.get(), fromDate, toDate);
+    return calendars.stream()
         .map(m -> CalendarListResponseDto.builder().calendar(m).build())
+        .collect(Collectors.toList());
+  }
+
+  // 하루 일기 목록
+  @Override
+  public List<DiaryListResponseDto> getDiarys(Long calendarSeq) {
+    Optional<Calendar> calendar = calendarRepository.findById(calendarSeq);
+
+    if (calendar.isEmpty()) {
+      return new ArrayList<>();
+    }
+    log.info("calendar: {}", calendar.get().toString());
+
+    List<Diary> diaries = diaryRepository.findByCalendar(calendar.get());
+    return diaries.stream()
+        .map(m -> DiaryListResponseDto.builder().diary(m).build())
         .collect(Collectors.toList());
   }
 }
