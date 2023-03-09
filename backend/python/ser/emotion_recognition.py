@@ -36,7 +36,7 @@ class EmotionRecognizer:
                 model.add(keras.layers.Dense(1024, activation='relu'))
                 model.add(keras.layers.Dense(30, activation='relu'))
                 model.add(keras.layers.Dropout(0.3))
-                model.add(keras.layers.Dense(7, activation='relu'))
+                model.add(keras.layers.Dense(7, activation='softmax'))
                 print(model.summary())
                 self.model = model
                 self.model.save("test.h5")   
@@ -51,8 +51,12 @@ class EmotionRecognizer:
         self.data = []
         self.data_loaded = False
 
+    def save_model(self):
+        self.model.save("test.h5")
+        print("model saved")
+
     def train(self, optimizer="adam", 
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), 
+              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=False), 
               metrics=['accuracy'],
               batch_size=10, epochs=10
               ):
@@ -64,10 +68,36 @@ class EmotionRecognizer:
         history = self.model.fit(dataset, epochs=epochs)
         pass
 
+    def validate(self, batch_size=10,
+                optimizer="adam", 
+                loss=tf.keras.losses.CategoricalCrossentropy(from_logits=False), 
+                metrics=['accuracy'],
+                ):
+        if not self.data_loaded:
+            print("data not loaded")
+            return
+        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+        dataset = self.dataset.batch(batch_size)
+        self.model.evaluate(dataset)
+
+    def predict_dataset(self):
+        result = self.model.predict(self.dataset.batch(10))
+        return result
+    
+    def predict_file(self,filepath):
+        if not os.path.isfile(filepath):
+            print("file doesn't exist")
+            return
+        data = np.array([self.audio_spectrum(filepath, duration=7)])
+        print(data.shape)
+        result = self.model.predict(x=data, batch_size=None)
+        return result
+
     def load_data(self,data_path):
         dirpath = './dataset/' + data_path.rstrip('_audio').split('/')[-1]
         if os.path.isdir(dirpath):
             self.dataset = tf.data.Dataset.load(dirpath)
+            print('current dataset:', dirpath)
             self.data_loaded = True
             return
         
@@ -81,10 +111,16 @@ class EmotionRecognizer:
                     data = json.load(label)
                 emotion = data["화자정보"]["Emotion"]
                 if emotion == "Anxious":
-                    n = 0
+                    n = tf.one_hot(0, 7)
                 self.data.append([filepath, n])
         self.extract_feature()
         pass
+
+    def unload_data(self):
+        self.data = []
+        self.dataset = None
+        self.data_loaded = False
+        print("data unloaded")
 
     def plot_data(self):
         for i, (filepath, emotion) in enumerate(self.data):
@@ -94,53 +130,64 @@ class EmotionRecognizer:
             plt.close()
         pass
 
+    def audio_spectrum(self, filepath, duration):
+        audio_array, sampling_rate = librosa.load(filepath, duration=duration)
+        d = audio_array.shape[0]
+        pad = sampling_rate * duration - d
+        if pad > 0:
+            audio_padded = np.pad(audio_array, (pad // 2, pad - pad // 2), 'constant', constant_values=0)
+        else:
+            audio_padded = audio_array 
+        
+        # extract spectral feature by three different method
+        # normalize is needed because of the data range
+        mfcc = (librosa.feature.mfcc(y=audio_padded, n_mfcc=128, norm="ortho"))
+
+        chroma = (librosa.feature.chroma_stft(y=audio_padded, n_chroma=128))
+
+        mel = librosa.feature.melspectrogram(y=audio_padded)
+        meldb = librosa.power_to_db(mel, ref=np.min)
+        melnorm = librosa.util.normalize(meldb)
+
+        data = np.stack((mfcc,chroma, melnorm), axis=2)
+        return data
+
     def extract_feature(self):
         print("feature extracting...")
         duration = 7
         result = []
         labels = []
         for i, (filepath, emotion) in enumerate(self.data):
-            audio_array, sampling_rate = librosa.load(filepath, duration=duration)
-            d = audio_array.shape[0]
-            if d < duration * sampling_rate:
-                pad = np.array([0 for _ in range( sampling_rate * duration - d )], float)
-            audio_padded = np.hstack((audio_array, pad))
-            
-            # extract spectral feature by three different method
-            # normalize is needed because of the data range
-            mfcc = (librosa.feature.mfcc(y=audio_padded, n_mfcc=128, norm="ortho"))
 
-            chroma = (librosa.feature.chroma_stft(y=audio_padded, n_chroma=128))
+            #convert audio to spectral image data
+            data = self.audio_spectrum(filepath, duration)
 
-            mel = librosa.feature.melspectrogram(y=audio_padded)
-            meldb = librosa.power_to_db(mel, ref=np.min)
-            melnorm = librosa.util.normalize(meldb)
-
-            data = np.stack((mfcc,chroma, melnorm), axis=2)
-            
-            # featuredata = tf.convert_to_tensor(data, dtype=tf.float32)
             result.append(data)
             labels.append(emotion)
-            # if i == 100:
-            #     break
+
         result = np.array(result)
         labels = np.array(labels)
-        print(result.shape)
-        print(labels.shape)
         resulttensor = tf.convert_to_tensor(result, dtype=tf.float32)
         labeltensor = tf.convert_to_tensor(labels, dtype=tf.float32)
-        print(resulttensor.shape)
-        print(labeltensor.shape)
+        print("input data shape: ", resulttensor.shape)
+        print("label data shape:", labeltensor.shape)
         dataset = tf.data.Dataset.from_tensor_slices((resulttensor, labeltensor))
         tf.data.Dataset.save(dataset, path='./dataset/sample')
         self.dataset = dataset
         self.data_loaded = True
+        print("current dataset: ", 'sample')
         pass
 
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    test.load_data('./audio/sample_audio')
+    # test.load_data('./audio/sample_audio')
     # loadtest.plot_data()
     # test.extract_feature()
-    test.train()
+    # test.train()
+    # test.save_model()
+    # test.validate()
+    # result = test.predict_dataset()
+    # print(result[:10])
+    result = test.predict_file('./audio/sample_audio/0018_G2A3E4S0C0_JBR_000001.wav')
+    print(result)
