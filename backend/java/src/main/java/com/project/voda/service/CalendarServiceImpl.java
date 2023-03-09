@@ -32,8 +32,8 @@ public class CalendarServiceImpl implements CalendarService {
   // 한달 감정
   @Override
   public List<CalendarListResponseDto> getCalendarAndEmotion(Long id, LocalDate date) {
-    LocalDate fromDate = LocalDate.of(date.getYear(), date.getMonthValue(), 1);
-    int endOfMonth = YearMonth.of(date.getYear(),date.getMonthValue()).atEndOfMonth().getDayOfMonth();
+    LocalDate fromDate = LocalDate.of(date.getYear(), date.getMonthValue(), 1); // 선택된 달의 1일
+    int endOfMonth = YearMonth.of(date.getYear(),date.getMonthValue()).atEndOfMonth().getDayOfMonth(); // 선택된 달의 마지막 날짜
     LocalDate toDate = LocalDate.of(date.getYear(), date.getMonthValue(), endOfMonth);
     log.info("fromDate: {}, toDate: {}", fromDate, toDate);
 
