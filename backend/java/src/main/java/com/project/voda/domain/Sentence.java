@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "sentence")
@@ -25,7 +25,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class Sentence extends BaseTimeEntity {
 
   @Id
@@ -33,19 +32,19 @@ public class Sentence extends BaseTimeEntity {
   @Column(name = "sentence_seq")
   private Long sentenceSeq;
 
-  @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "emotion_idx")
-  private Emotion emotion;
-
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "diary_seq")
+  @JoinColumn(name = "diary_seq", nullable = false)
   private Diary diary;
 
-  @Column(name = "content")
+  @OneToOne(fetch = LAZY)
+  @JoinColumn(name = "emotion_idx", nullable = false)
+  private Emotion emotion;
+
+  @Column(name = "content", nullable = false)
   private String content;
 
   @Column(name = "mod_yn")
+  @ColumnDefault("0")
   private boolean modYn;
-
 
 }

@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "user")
@@ -24,7 +24,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class User extends BaseTimeEntity {
 
   @Id
@@ -32,16 +31,17 @@ public class User extends BaseTimeEntity {
   @Column(name = "user_seq")
   private Long userSeq;
 
+  @Column(name = "email", nullable = false)
+  private String email;
+
   @Column(name = "nickname")
   private String nickname;
-
-  @Column(name = "email")
-  private String email;
 
   @Column(name = "model_id")
   private String modelId;
 
   @Column(name = "delete_yn")
+  @ColumnDefault("0")
   private boolean deleteYn;
 
   @JsonIgnore

@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "daily_emotion")
@@ -25,7 +25,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class DailyEmotion extends BaseTimeEntity {
 
   @Id
@@ -34,17 +33,15 @@ public class DailyEmotion extends BaseTimeEntity {
   private Long dailyEmotionSeq;
 
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "calendar_seq")
+  @JoinColumn(name = "calendar_seq", nullable = false)
   private Calendar calendar;
 
   @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "emotion_idx")
+  @JoinColumn(name = "emotion_idx", nullable = false)
   private Emotion emotion;
 
   @Column(name = "cnt")
+  @ColumnDefault(value = "0")
   private int cnt;
-
-
-
 
 }
