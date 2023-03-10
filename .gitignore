@@ -8,6 +8,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 backend/python/experiments/emotion_text/weight/*
 backend/python/experiments/**/text_data/
+backend/python/.env
 .idea/
 # User-specific stuff
 .idea/**/workspace.xml
