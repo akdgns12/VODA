@@ -94,7 +94,7 @@ class EmotionRecognizer:
         return result
 
     def load_data(self,data_path):
-        dirpath = './dataset/' + data_path.rstrip('_audio').split('/')[-1]
+        dirpath = './dataset/' + data_path.split('/')[-1]
         if os.path.isdir(dirpath):
             self.dataset = tf.data.Dataset.load(dirpath)
             print('current dataset:', dirpath)
@@ -102,7 +102,7 @@ class EmotionRecognizer:
             return
         
         print("dataset not found. start to search for metadata")
-        for (root, dirs, files) in os.walk(data_path):
+        for (root, dirs, files) in os.walk(data_path+'_audio'):
             for file in files:
                 filepath = os.path.join(root,file)
                 labeldir = root.split('/')[-1].split('_')[0] + '_label'
@@ -113,7 +113,7 @@ class EmotionRecognizer:
                 if emotion == "Anxious":
                     n = tf.one_hot(0, 7)
                 self.data.append([filepath, n])
-        self.extract_feature()
+        self.extract_feature(data_path)
         pass
 
     def unload_data(self):
@@ -152,7 +152,7 @@ class EmotionRecognizer:
         data = np.stack((mfcc,chroma, melnorm), axis=2)
         return data
 
-    def extract_feature(self):
+    def extract_feature(self, data_path):
         print("feature extracting...")
         duration = 7
         result = []
@@ -172,16 +172,16 @@ class EmotionRecognizer:
         print("input data shape: ", resulttensor.shape)
         print("label data shape:", labeltensor.shape)
         dataset = tf.data.Dataset.from_tensor_slices((resulttensor, labeltensor))
-        tf.data.Dataset.save(dataset, path='./dataset/sample')
+        tf.data.Dataset.save(dataset, path='./dataset/' + data_path.split('/')[-1])
         self.dataset = dataset
         self.data_loaded = True
-        print("current dataset: ", 'sample')
+        print("current dataset: ", data_path.split('/')[-1])
         pass
 
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    # test.load_data('./audio/sample_audio')
+    test.load_data('./audio/sample')
     # loadtest.plot_data()
     # test.extract_feature()
     # test.train()
