@@ -8,6 +8,7 @@ asttokens @ file:///opt/conda/conda-bld/asttokens_1646925590279/work
 astunparse @ file:///home/conda/feedstock_root/build_artifacts/astunparse_1610696312422/work
 async-timeout @ file:///home/conda/feedstock_root/build_artifacts/async-timeout_1640026696943/work
 attrs @ file:///C:/b/abs_09s3y775ra/croot/attrs_1668696195628/work
+audioread @ file:///D:/bld/audioread_1667037068385/work
 Babel @ file:///C:/b/abs_a2shv_3tqi/croot/babel_1671782804377/work
 backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
 beautifulsoup4 @ file:///C:/ci/beautifulsoup4_1650293028159/work
@@ -43,6 +44,7 @@ gast @ file:///home/conda/feedstock_root/build_artifacts/gast_1596839682936/work
 google-auth @ file:///home/conda/feedstock_root/build_artifacts/google-auth_1677787643968/work
 google-auth-oauthlib @ file:///home/conda/feedstock_root/build_artifacts/google-auth-oauthlib_1630497468950/work
 google-pasta==0.2.0
+greenlet==2.0.2
 grpcio @ file:///C:/ci/grpcio_1655475084232/work
 h11==0.14.0
 h5py @ file:///D:/bld/h5py_1656337121838/work
@@ -58,6 +60,7 @@ ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1634143127070/work
 itsdangerous==2.1.2
 jedi @ file:///C:/ci/jedi_1644315428305/work
 Jinja2 @ file:///C:/b/abs_7cdis66kl9/croot/jinja2_1666908141852/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1663332044897/work
 json5 @ file:///tmp/build/80754af9/json5_1624432770122/work
 jsonschema @ file:///C:/b/abs_6ccs97j_l8/croot/jsonschema_1676558690963/work
 jupyter @ file:///C:/Windows/TEMP/abs_56xfdi__li/croots/recipe/jupyter_1659349053177/work
@@ -72,6 +75,9 @@ jupyterlab_server @ file:///C:/b/abs_d1z_g1swc8/croot/jupyterlab_server_16771532
 keras @ file:///C:/Users/builder/adipietro/mc3/tf210/conda-bld/keras_1669760570649/work/keras-2.10.0-py2.py3-none-any.whl
 Keras-Preprocessing @ file:///home/conda/feedstock_root/build_artifacts/keras-preprocessing_1610713559828/work
 kiwisolver @ file:///D:/bld/kiwisolver_1657953239132/work
+lazy_loader @ file:///home/conda/feedstock_root/build_artifacts/lazy_loader_1665509510543/work
+librosa @ file:///home/conda/feedstock_root/build_artifacts/librosa_1676902667026/work
+llvmlite==0.39.1
 lxml @ file:///C:/ci/lxml_1657527492694/work
 Markdown @ file:///home/conda/feedstock_root/build_artifacts/markdown_1657921053229/work
 MarkupSafe @ file:///C:/ci/markupsafe_1654508036328/work
@@ -81,6 +87,7 @@ mistune @ file:///C:/ci_310/mistune_1642084168466/work
 mkl-fft==1.3.1
 mkl-random @ file:///C:/ci_310/mkl_random_1643050563308/work
 mkl-service==2.4.0
+msgpack @ file:///D:/bld/msgpack-python_1666755123861/work
 multidict @ file:///C:/b/abs_6cx_8w3cv2/croot/multidict_1665674238352/work
 munkres==1.1.4
 nbclassic @ file:///C:/b/abs_d0_ze5q0j2/croot/nbclassic_1676902914817/work
@@ -90,6 +97,7 @@ nbformat @ file:///C:/b/abs_85_3g7dkt4/croot/nbformat_1670352343720/work
 nest-asyncio @ file:///C:/b/abs_3a_4jsjlqu/croot/nest-asyncio_1672387322800/work
 notebook @ file:///C:/b/abs_ca13hqvuzw/croot/notebook_1668179888546/work
 notebook_shim @ file:///C:/b/abs_ebfczttg6x/croot/notebook-shim_1668160590914/work
+numba @ file:///D:/bld/numba_1669104200604/work
 numexpr @ file:///C:/b/abs_a7kbak88hk/croot/numexpr_1668713882979/work
 numpy @ file:///C:/b/abs_datssh7cer/croot/numpy_and_numpy_base_1672336199388/work
 oauthlib @ file:///home/conda/feedstock_root/build_artifacts/oauthlib_1666056362788/work
@@ -121,6 +129,7 @@ PyQt5==5.15.7
 PyQt5-sip @ file:///C:/Windows/Temp/abs_d7gmd2jg8i/croots/recipe/pyqt-split_1659273064801/work/pyqt_sip
 pyrsistent @ file:///C:/ci_310/pyrsistent_1642117077485/work
 PySocks @ file:///C:/ci_310/pysocks_1642089375450/work
+PySoundFile==0.9.0.post1
 python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
 python-dotenv==1.0.0
 python-multipart==0.0.6
@@ -134,14 +143,19 @@ qtconsole @ file:///C:/b/abs_5bap7f8n0t/croot/qtconsole_1674008444833/work
 QtPy @ file:///C:/ci/qtpy_1662015130233/work
 requests @ file:///C:/ci/requests_1657735340829/work
 requests-oauthlib @ file:///home/conda/feedstock_root/build_artifacts/requests-oauthlib_1643557462909/work
+resampy==0.4.2
 rfc3986==1.5.0
 rsa @ file:///home/conda/feedstock_root/build_artifacts/rsa_1658328885051/work
+scikit-learn @ file:///D:/bld/scikit-learn_1674599293163/work
 scipy @ file:///C:/bld/scipy_1658811084897/work
 Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
 sip @ file:///C:/Windows/Temp/abs_b8fxd17m2u/croots/recipe/sip_1659012372737/work
 six @ file:///tmp/build/80754af9/six_1644875935023/work
 sniffio @ file:///C:/ci_310/sniffio_1642092172680/work
+soundfile @ file:///home/conda/feedstock_root/build_artifacts/pysoundfile_1676571469739/work
 soupsieve @ file:///C:/b/abs_fasraqxhlv/croot/soupsieve_1666296394662/work
+soxr @ file:///D:/bld/soxr-python_1667959271197/work
+SQLAlchemy==2.0.5.post1
 stack-data @ file:///opt/conda/conda-bld/stack_data_1646927590127/work
 starlette==0.25.0
 tensorboard @ file:///C:/Users/builder/adipietro/mc3/tf210/conda-bld/tensorboard_1669760968711/work/tensorboard-2.10.0-py3-none-any.whl
@@ -151,6 +165,7 @@ tensorflow==2.10.0
 tensorflow-estimator @ file:///C:/Users/builder/adipietro/mc3/tf210/conda-bld/tensorflow-estimator_1669761460695/work/tensorflow_estimator-2.10.0-py2.py3-none-any.whl
 termcolor @ file:///home/conda/feedstock_root/build_artifacts/termcolor_1672833821273/work
 terminado @ file:///C:/b/abs_25nakickad/croot/terminado_1671751845491/work
+threadpoolctl @ file:///home/conda/feedstock_root/build_artifacts/threadpoolctl_1643647933166/work
 tinycss2 @ file:///C:/b/abs_52w5vfuaax/croot/tinycss2_1668168823131/work
 toml @ file:///tmp/build/80754af9/toml_1616166611790/work
 tomli @ file:///C:/Windows/TEMP/abs_ac109f85-a7b3-4b4d-bcfd-52622eceddf0hy332ojo/croots/recipe/tomli_1657175513137/work
@@ -169,6 +184,6 @@ Werkzeug @ file:///home/conda/feedstock_root/build_artifacts/werkzeug_1676411946
 widgetsnbextension @ file:///C:/ci/widgetsnbextension_1645009839917/work
 win-inet-pton @ file:///C:/ci_310/win_inet_pton_1642658466512/work
 wincertstore==0.2
-wrapt @ file:///C:/Windows/Temp/abs_7c3dd407-1390-477a-b542-fd15df6a24085_diwiza/croots/recipe/wrapt_1657814452175/work
+wrapt @ file:///D:/bld/wrapt_1677485718477/work
 yarl @ file:///D:/bld/yarl_1648966692031/work
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1677313463193/work
