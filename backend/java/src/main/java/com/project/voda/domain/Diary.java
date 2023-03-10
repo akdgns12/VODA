@@ -3,6 +3,9 @@ package com.project.voda.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,7 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "diary")
@@ -26,7 +30,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class Diary extends BaseTimeEntity {
 
   @Id
@@ -38,15 +41,22 @@ public class Diary extends BaseTimeEntity {
   @JoinColumn(name = "emotion_idx")
   private Emotion emotion;
 
-  @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "voice_seq")
-  private Voice voice;
-
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "calendar_seq")
+  @JoinColumn(name = "calendar_seq", nullable = false)
   private Calendar calendar;
 
-  @Column(name = "content")
+  @Column(name = "voice_url", nullable = false)
+  private String voiceUrl;
+
+  @Column(name = "content", nullable = false)
   private String content;
+
+  @Column(name = "delete_yn")
+  @ColumnDefault("0")
+  private boolean deleteYn;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "diary")
+  private List<Sentence> sentences = new ArrayList<>();
 
 }
