@@ -41,6 +41,7 @@ public class CalendarServiceImpl implements CalendarService {
     if (user.isEmpty()) {
       return new ArrayList<>();
     }
+    log.info("find user: {}", user.get().getUserSeq());
 
     List<Calendar> calendars = calendarRepository.findByUserAndDayBetween(user.get(), fromDate, toDate);
     return calendars.stream()
@@ -56,7 +57,7 @@ public class CalendarServiceImpl implements CalendarService {
     if (calendar.isEmpty()) {
       return new ArrayList<>();
     }
-    log.info("calendar: {}", calendar.get().toString());
+    log.info("find calendar: {}", calendar.get().getCalendarSeq());
 
     List<Diary> diaries = diaryRepository.findByCalendar(calendar.get());
     return diaries.stream()
