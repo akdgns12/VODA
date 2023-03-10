@@ -55,9 +55,9 @@ def predict(predict_sentence):
 if __name__ =="__main__":
     max_len = 64
     batch_size=64
-    tokenizerasd = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+    tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
     bertmodel,vocab = get_pytorch_kobert_model()
-    tok=tokenizerasd.tokenize
+    tok=tokenizer.tokenize
 
     device = torch.device("cpu")
     # model = get_pytorch_kobert_model()
