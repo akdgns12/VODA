@@ -59,8 +59,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
     log.info("find calendar: {}", calendar.get().getCalendarSeq());
 
-    List<Diary> diaries = diaryRepository.findByCalendar(calendar.get());
-    return diaries.stream()
+    return calendar.get().getDiaries().stream()
         .map(m -> DiaryListResponseDto.builder().diary(m).build())
         .collect(Collectors.toList());
   }

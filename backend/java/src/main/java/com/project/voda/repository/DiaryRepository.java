@@ -7,7 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
-  // 하루 일기 목록
-  List<Diary> findByCalendar(Calendar calendar);
-
 }
