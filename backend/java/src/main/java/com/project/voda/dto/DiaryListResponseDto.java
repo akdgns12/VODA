@@ -11,7 +11,6 @@ public class DiaryListResponseDto {
 
   private Long diarySeq;
   private String content;
-  private Long voiceSeq;
   private String voiceUrl;
   private int emotionIdx;
   private String emotionName;
@@ -21,8 +20,7 @@ public class DiaryListResponseDto {
   public DiaryListResponseDto(Diary diary) {
     this.diarySeq = diary.getDiarySeq();
     this.content = diary.getContent();
-    this.voiceSeq = diary.getVoice().getVoiceSeq();
-    this.voiceUrl = diary.getVoice().getUrl();
+    this.voiceUrl = diary.getVoiceUrl();
     this.emotionIdx = diary.getEmotion().getEmotionIdx();
     this.emotionName = diary.getEmotion().getName();
     this.emotionImgUrl = diary.getEmotion().getImgUrl();
