@@ -1,18 +1,13 @@
 package com.project.voda.controller;
 
-import com.project.voda.domain.User;
 import com.project.voda.dto.KakaoProfileDto;
 import com.project.voda.dto.OAuthTokenDto;
 import com.project.voda.dto.UserSignUpRequestDto;
 import com.project.voda.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +36,6 @@ public class UserController {
       // 유저 정보 가져오기
       KakaoProfileDto kakaoProfile = userService.userInfoRequest(oAuthTokenDto);
       String email = kakaoProfile.getKakao_account().getEmail();
-
       if(userService.findByEmail(email) == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
