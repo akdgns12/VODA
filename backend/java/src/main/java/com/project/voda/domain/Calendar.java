@@ -22,12 +22,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "calendar")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,14 +37,14 @@ public class Calendar extends BaseTimeEntity {
   private Long calendarSeq;
 
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "user_seq")
+  @JoinColumn(name = "user_seq", nullable = false)
   private User user;
 
   @OneToOne(fetch = LAZY)
   @JoinColumn(name = "emotion_idx")
   private Emotion emotion;
 
-  @Column(name = "day")
+  @Column(name = "day", nullable = false)
   private LocalDate day;
 
   @JsonIgnore
@@ -56,6 +54,5 @@ public class Calendar extends BaseTimeEntity {
   @JsonIgnore
   @OneToMany(mappedBy = "calendar")
   private List<DailyEmotion> dailyEmotions = new ArrayList<>();
-
 
 }

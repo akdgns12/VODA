@@ -16,12 +16,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "training_sentence")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,10 +31,10 @@ public class TrainingSentence extends BaseTimeEntity {
   private Long trainingSentenceIdx;
 
   @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "emotion_idx")
+  @JoinColumn(name = "emotion_idx", nullable = false)
   private Emotion emotion;
 
-  @Column(name = "sentence")
-  private String sentence;
+  @Column(name = "content", nullable = false)
+  private String content;
 
 }

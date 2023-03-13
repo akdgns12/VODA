@@ -10,12 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "emotion")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,10 +23,10 @@ public class Emotion extends BaseTimeEntity {
   @Column(name = "emotion_idx")
   private Integer emotionIdx;
 
+  @Column(name = "name", nullable = false)
+  private String name;
+
   @Column(name = "img_url")
   private String imgUrl;
-
-  @Column(name = "name")
-  private String name;
 
 }
