@@ -32,7 +32,6 @@ public class UserController {
   @ApiOperation(value = "소셜 로그인")
   @GetMapping("/login/oauth/kakao")
   public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code){
-    log.info("인가 코드: ",code);
     Map<String, Object> resultMap = new HashMap<>();
     HttpStatus status = null;
 
@@ -45,23 +44,14 @@ public class UserController {
 
       if(userService.findByEmail(email) == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
-
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
-        resultMap.put("이미 로그인 된 유저입니다.", email);
-        status = HttpStatus.OK;
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        resultMap.put("이미 등록된 유저 email", email);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
       }
     }catch (Exception e){
       return exceptionHandling(e);
     }
-
-
-    String response = "성공적으로 카카오 로그인 API 코드를 불러왔습니다.";
-    resultMap.put("response : ", response);
-    resultMap.put("code : ", code);
-    status = HttpStatus.OK;
-
-    return new ResponseEntity<Map<String, Object>>(resultMap, status);
   }
 
   @ApiOperation(value = "회원 가입", notes = "닉네임을 입력받고 회웝가입 하는 API")
