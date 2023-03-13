@@ -13,7 +13,7 @@ import librosa
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-emotions = ["neutral", "happiness", "sadness", "angry", "disgust", "surprise", "fear"]
+emotions = {"Neutrality" : 7, "Happy" : 1, "Sad" : 2, "Angry" : 3, "Anxious" : 4, "Hurt" : 5, "Embarrassed" : 6}
 
 class EmotionRecognizer:
 
@@ -102,16 +102,18 @@ class EmotionRecognizer:
             return
         
         print("dataset not found. start to search for metadata")
+        self.data = []
         for (root, dirs, files) in os.walk(data_path+'_audio'):
             for file in files:
                 filepath = os.path.join(root,file)
-                labeldir = root.split('/')[-1].split('_')[0] + '_label'
-                labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
+                labeldir = data_path + '_label'
+                labelpath = filepath
+                labelpath.replace('audio', 'label')
+                # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
                 with open(labelpath, 'r', encoding='UTF8') as label:
                     data = json.load(label)
                 emotion = data["화자정보"]["Emotion"]
-                if emotion == "Anxious":
-                    n = tf.one_hot(0, 7)
+                n = tf.one_hot(emotions[emotion], 7)
                 self.data.append([filepath, n])
         self.extract_feature(data_path)
         pass
