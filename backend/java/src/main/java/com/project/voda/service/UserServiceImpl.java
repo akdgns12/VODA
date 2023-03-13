@@ -6,9 +6,9 @@ import com.project.voda.dto.OAuthTokenDto;
 import com.project.voda.dto.UserDto;
 import com.project.voda.dto.UserSignUpRequestDto;
 import com.project.voda.repository.UserRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,11 +22,12 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-@Builder
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
-    
+    @Value("${spring.security.oauth2.client.registration.kakao.client_id}") private String clientId;
+    @Value("${spring.security.oauth2.client.registration.kakao.client_secret}") private String clientSecret;
+
     // Email로 회원정보 가져오기
     @Override
     public UserDto findByEmail(String email) {
@@ -46,8 +47,8 @@ public class UserServiceImpl implements UserService{
         //HttpBody
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "4afbb9b3768b16849eeb3117d5771293"); //clientId 는 프로퍼티에 정의해놨음
-        body.add("client_secret", "ahySHtODda84juW8ZEnZbY0qKSDrVdCE");
+        body.add("client_id", clientId); //clientId 는 프로퍼티에 정의해놨음
+        body.add("client_secret", clientSecret);
         body.add("redirect_uri", "http://localhost:8080/user/login/oauth/kakao");
         body.add("code", code);
 
