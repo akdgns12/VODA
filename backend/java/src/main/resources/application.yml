@@ -1,28 +1,7 @@
 spring:
   profiles:
-    include: db
+    include: db, oauth
 
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
-  # 소셜 로그인
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client_id: 4afbb9b3768b16849eeb3117d5771293
-            client_secret: ahySHtODda84juW8ZEnZbY0qKSDrVdCE
-            redirect_uri: http://localhost:8080/user/login/oauth/kakao
-            scope: account_email
-            client_name: kakao
-            authorization-grant-type: authorization_code
-            client-authentication-method: POST #카카오는 필수 파라미터를 POST로 요청해야됌!
-            redirect-uri: http://localhost:8080/user/login/oauth/kakao
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: kakao_account
