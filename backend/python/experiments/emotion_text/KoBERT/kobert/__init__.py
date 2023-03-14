@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from KoBERT.kobert.utils.utils import download, get_tokenizer
-from KoBERT.kobert.pytorch_kobert import get_pytorch_kobert_model
+from .utils.utils import download, get_tokenizer
+from .pytorch_kobert import get_pytorch_kobert_model
 # from KoBERT.kobert.mxnet_kobert import get_mxnet_kobert_model
 # from KoBERT.kobert.onnx_kobert import get_onnx_kobert_model
 
