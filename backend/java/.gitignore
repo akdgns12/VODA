@@ -38,3 +38,4 @@ out/
 
 ### resources ###
 application-db.yml
+application-oauth.yml

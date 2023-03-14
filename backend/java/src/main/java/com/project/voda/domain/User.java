@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.project.voda.dto.UserSignUpRequestDto;
 import com.project.voda.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public class User extends BaseTimeEntity {
   @Column(name = "user_seq")
   private Long userSeq;
 
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
   @Column(name = "nickname")
@@ -47,5 +48,4 @@ public class User extends BaseTimeEntity {
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   private List<Calendar> calendars = new ArrayList<>();
-
 }
