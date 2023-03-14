@@ -31,17 +31,17 @@ class Calendar(Base):
     calendar_seq = Column(Integer, primary_key=True, autoincrement=True)
     day = Column(Date)
     user_seq = Column(Integer, ForeignKey("user.user_seq"))
-    emotion_idx = Column(Integer, ForeignKey('emotion.emotion_seq'))
+    emotion_idx = Column(Integer, ForeignKey('emotion.emotion_idx'))
     mod_dtm = Column(DateTime(timezone=True), default=func.now())
     reg_dtm = Column(DateTime(timezone=True), onupdate=func.now())
 
-    user = relationship("user", backref="user")
-    emotion = relationship("emotion", backref="emotion")
+    user = relationship("User", uselist=False, backref="calendar_user")
+    emotion = relationship("Emotion", backref="calendar_emotion")
 
 class Diary(Base):
     __table_args__={"extend_existing": True }
     __tablename__ = "diary"
-    diary_seqs = Column(Integer, primary_key= True, autoincrement=True )
+    diary_seq = Column(Integer, primary_key= True, autoincrement=True )
     content = Column(String)
     delete_yn = Column(Boolean)
     voice_url = Column(String)
@@ -50,9 +50,10 @@ class Diary(Base):
     mod_dtm = Column(DateTime(timezone=True), default=func.now())
     reg_dtm = Column(DateTime(timezone=True), onupdate=func.now())
     
-    calendar = relationship("calendar", backref="calendar")
-    emotion = relationship("emotion", backref="emotion")
-
+    calendar = relationship("Calendar", backref="diary_calendar")
+    emotion = relationship("Emotion", backref="diary_emotion")
+    def __repr__(self):
+        return f'<Post: {self.diary_seq}>'
 class DailyEmotion(Base):
     __table_args__ = {"extend_existing": True}
     __tablename__="daily_emotion"
@@ -63,8 +64,8 @@ class DailyEmotion(Base):
     mod_dtm = Column(DateTime(timezone=True), default=func.now())
     reg_dtm = Column(DateTime(timezone=True), onupdate=func.now())
 
-    calendar = relationship("calendar", backref="calendar") 
-    emotion = relationship("emotion", backref="emotion")
+    calendar = relationship("Calendar", backref="daily_emotion_calendar") 
+    emotion = relationship("Emotion", backref="daily_emotion_emotion")
 
 class Emotion(Base):
     __table_args__ = {"extend_existing" :True }
@@ -86,8 +87,8 @@ class Sentence(Base):
     mod_dtm = Column(DateTime(timezone=True), default=func.now())
     reg_dtm = Column(DateTime(timezone=True), onupdate=func.now())
 
-    diary = relationship("diary", backref="diary")
-    emotion = relationship("emotion", backref="emotion")
+    diary = relationship("Diary", backref="sentence_diary")
+    emotion = relationship("Emotion", backref="sentence_emotion", uselist=False)
 
 
 class TrainingSentence(Base):
@@ -99,4 +100,4 @@ class TrainingSentence(Base):
     mod_dtm = Column(DateTime(timezone=True), default=func.now())
     reg_dtm = Column(DateTime(timezone=True), onupdate=func.now())
 
-    emotion = relationship("emotion", backref="emotion")
+    emotion = relationship("Emotion", backref="training_sentence_emotion")
