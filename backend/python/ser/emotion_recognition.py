@@ -10,6 +10,7 @@ import json
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import librosa
+import gc
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
@@ -94,7 +95,7 @@ class EmotionRecognizer:
         return result
 
     def load_data(self,data_path):
-        dirpath = './dataset/' + data_path.split('/')[-1]
+        dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
         if os.path.isdir(dirpath):
             self.dataset = tf.data.Dataset.load(dirpath)
             print('current dataset:', dirpath)
@@ -103,13 +104,13 @@ class EmotionRecognizer:
         
         print("dataset not found. start to search for metadata")
         self.data = []
-        for (root, dirs, files) in os.walk(data_path+'_audio'):
+        for (root, dirs, files) in os.walk(data_path):
             for file in files:
                 filepath = os.path.join(root,file)
-                labeldir = data_path + '_label'
-                labelpath = filepath
-                labelpath.replace('audio', 'label')
+                # labeldir = data_path + '_label'
+                labelpath = filepath.replace('audio', 'label').replace('wav', 'json')
                 # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
+                # print(filepath, labelpath)
                 with open(labelpath, 'r', encoding='UTF8') as label:
                     data = json.load(label)
                 emotion = data["화자정보"]["Emotion"]
@@ -119,6 +120,8 @@ class EmotionRecognizer:
         pass
 
     def unload_data(self):
+        del self.data
+        gc.collect()
         self.data = []
         self.dataset = None
         self.data_loaded = False
@@ -152,6 +155,14 @@ class EmotionRecognizer:
         melnorm = librosa.util.normalize(meldb)
 
         data = np.stack((mfcc,chroma, melnorm), axis=2)
+        del sampling_rate
+        del audio_array
+        del mfcc
+        del chroma
+        del mel
+        del meldb
+        del melnorm
+        gc.collect()
         return data
 
     def extract_feature(self, data_path):
@@ -159,8 +170,10 @@ class EmotionRecognizer:
         duration = 7
         result = []
         labels = []
+        l = int(len(self.data) / 10)
         for i, (filepath, emotion) in enumerate(self.data):
-
+            if i % l == 0:
+                print(f'{10*i/l} % completed')
             #convert audio to spectral image data
             data = self.audio_spectrum(filepath, duration)
 
@@ -174,22 +187,80 @@ class EmotionRecognizer:
         print("input data shape: ", resulttensor.shape)
         print("label data shape:", labeltensor.shape)
         dataset = tf.data.Dataset.from_tensor_slices((resulttensor, labeltensor))
-        tf.data.Dataset.save(dataset, path='./dataset/' + data_path.split('/')[-1])
+        tf.data.Dataset.save(dataset, path='./dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1])
         self.dataset = dataset
         self.data_loaded = True
         print("current dataset: ", data_path.split('/')[-1])
+        del dataset
+        del result
+        del labels
+        del resulttensor
+        del labeltensor
+        del data
         pass
 
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    test.load_data('./audio/sample')
-    # loadtest.plot_data()
-    # test.extract_feature()
-    # test.train()
-    # test.save_model()
-    # test.validate()
-    # result = test.predict_dataset()
-    # print(result[:10])
-    result = test.predict_file('./audio/sample_audio/0018_G2A3E4S0C0_JBR_000001.wav')
-    print(result)
+    for dirs in os.listdir('./data/Training/T2_audio/감정/당황'):
+        test.load_data('./data/Training/T2_audio/감정/당황/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T2_audio/감정/상처'):
+        test.load_data('./data/Training/T2_audio/감정/상처/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T2_audio/감정/중립'):
+        test.load_data('./data/Training/T2_audio/감정/중립/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/기쁨구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/기쁨구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/기쁨대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/기쁨구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/당황구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/당황구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/당황대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/당황대화체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/분노구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/분노구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/분노대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/분노대화체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/불안구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/불안구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/불안대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/불안대화체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/상처구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/상처구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/상처대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/상처대화체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/슬픔구연체'):
+        test.load_data('./data/Training/T4_audio/감정발화/슬픔구연체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    for dirs in os.listdir('./data/Training/T4_audio/감정발화/슬픔대화체'):
+        test.load_data('./data/Training/T4_audio/감정발화/슬픔대화체/' + dirs)
+        test.unload_data()
+        gc.collect()
+    # result = test.predict_file('./audio/sample_audio/0018_G2A3E4S0C0_JBR_000001.wav')
+    # print(result)
