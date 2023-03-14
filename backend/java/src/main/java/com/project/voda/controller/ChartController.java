@@ -1,5 +1,6 @@
 package com.project.voda.controller;
 
+import com.project.voda.dto.ChartMonthRepositoryDto;
 import com.project.voda.dto.ChartWeekResponseDto;
 import com.project.voda.service.ChartService;
 import io.swagger.annotations.Api;
@@ -38,6 +39,20 @@ public class ChartController {
     log.info("userSeq: {}, date: {}", userSeq, date);
     try {
       List<ChartWeekResponseDto> response = chartService.getChartWeek(userSeq, date);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+      return exceptionHandling(e);
+    }
+  }
+
+  // 월별 차트
+  @ApiOperation(value = "월별 차트", notes = "유저 PK 값과 날짜를 보내면 해당 월의 감정별 개수를 반환하는 API")
+  @ApiImplicitParams(value = {@ApiImplicitParam(name = "userSeq", value = "user PK"), @ApiImplicitParam(name = "date", value = "'yyyy-MM-dd' Date 값")})
+  @GetMapping("/month/{userSeq}")
+  ResponseEntity<?> getChartMonth(@PathVariable Long userSeq, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    log.info("userSeq: {}, date: {}", userSeq, date);
+    try {
+      ChartMonthRepositoryDto response = chartService.getChartMonth(userSeq, date);
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch (Exception e) {
       return exceptionHandling(e);

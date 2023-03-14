@@ -1,19 +1,17 @@
 package com.project.voda.service;
 
-import com.project.voda.domain.Calendar;
 import com.project.voda.domain.DailyEmotion;
-import com.project.voda.domain.Emotion;
 import com.project.voda.domain.User;
+import com.project.voda.dto.ChartMonthRepositoryDto;
 import com.project.voda.dto.ChartWeekResponseDto;
-import com.project.voda.repository.CalendarRepository;
 import com.project.voda.repository.DailyEmotionRepository;
 import com.project.voda.repository.EmotionRepository;
 import com.project.voda.repository.UserRepository;
+import io.swagger.models.auth.In;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,5 +66,34 @@ public class ChartServiceImpl implements ChartService {
     });
 
     return response;
+  }
+
+  // 월별 차트
+  @Override
+  public ChartMonthRepositoryDto getChartMonth(Long userSeq, LocalDate date) {
+    LocalDate fromDate = LocalDate.of(date.getYear(), date.getMonthValue(), 1); // 선택된 달의 1일
+    int endOfMonth = YearMonth.of(date.getYear(),date.getMonthValue()).atEndOfMonth().getDayOfMonth(); // 선택된 달의 마지막 날짜
+    LocalDate toDate = LocalDate.of(date.getYear(), date.getMonthValue(), endOfMonth);
+    log.info("fromDate: {}, toDate: {}", fromDate, toDate);
+
+    List<String> labels = new ArrayList<>();
+    List<Integer> data = new ArrayList<>();
+
+    Optional<User> user = userRepository.findById(userSeq);
+    if (user.isEmpty()) {
+      return null;
+    }
+    List<DailyEmotion> dailyEmotions = dailyEmotionRepository.findByUserAndDayBetween(user.get(), fromDate, toDate);
+
+    emotionRepository.findAll().forEach(emotion -> {
+      labels.add(emotion.getName());
+      data.add(dailyEmotions.stream()
+          .filter(m -> m.getEmotion().getEmotionIdx() == emotion.getEmotionIdx())
+          .map(m -> m.getCnt())
+          .reduce(0, Integer::sum));
+    });
+
+    log.info("labels: {}, data: {}", labels, data);
+    return ChartMonthRepositoryDto.builder().labels(labels).data(data).build();
   }
 }
