@@ -1,16 +1,17 @@
 package com.project.voda.controller;
 
-import com.project.voda.dto.KakaoProfileDto;
-import com.project.voda.dto.OAuthTokenDto;
-import com.project.voda.dto.UserSignUpRequestDto;
+import com.project.voda.dto.*;
 import com.project.voda.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,25 +24,27 @@ import java.util.Map;
 public class UserController {
 
   private final UserService userService;
+  @Value("${spring.security.oauth2.client.registration.kakao.client_id}") private String clientId;
+  @Value("${spring.security.oauth2.client.registration.kakao.client_secret}") private String clientSecret;
+  @Value("${spring.security.oauth2.client.registration.kakao.redirect_uri}") private String redirectUri;
 
   @ApiOperation(value = "소셜 로그인")
   @GetMapping("/login/oauth/kakao")
   public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code){
-    Map<String, Object> resultMap = new HashMap<>();
-    HttpStatus status = null;
-
     try{
       // 토큰 가져오기
-      OAuthTokenDto oAuthTokenDto = userService.tokenRequest(code);
+      OAuthTokenDto oAuthTokenDto = tokenRequest(code);
       // 유저 정보 가져오기
-      KakaoProfileDto kakaoProfile = userService.userInfoRequest(oAuthTokenDto);
+      KakaoProfileDto kakaoProfile = userInfoRequest(oAuthTokenDto);
       String email = kakaoProfile.getKakao_account().getEmail();
-      if(userService.findByEmail(email) == null){
+      UserSignUpResponseDto userSignUpResponseDto = userService.findByEmail(email);
+      if(userSignUpResponseDto == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
-        resultMap.put("이미 등록된 유저 email", email);
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
+        userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
+        return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){
       return exceptionHandling(e);
@@ -59,6 +62,44 @@ public class UserController {
     }catch (Exception e){
       return exceptionHandling(e);
     }
+  }
+
+  // 인가 code로 token 가져오기
+  public OAuthTokenDto tokenRequest(String code) {
+    RestTemplate restTemplate = new RestTemplate();
+
+    //HttpHeader
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+    //HttpBody
+    MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+    body.add("grant_type", "authorization_code");
+    body.add("client_id", clientId); //clientId 는 프로퍼티에 정의해놨음
+    body.add("client_secret", clientSecret);
+    body.add("redirect_uri", redirectUri);
+    body.add("code", code);
+
+    //HttpHeader와 HttpBody 담기기
+    HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers); // params : body
+
+    return restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, kakaoTokenRequest, OAuthTokenDto.class).getBody();
+  }
+
+  // token으로 유저 정보 가져오기
+  public KakaoProfileDto userInfoRequest(OAuthTokenDto oauthTokenDto) {
+    ///유저정보 요청
+    RestTemplate restTemplate = new RestTemplate();
+
+    //HttpHeader
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + oauthTokenDto.getAccess_token());
+    headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+    //HttpHeader와 HttpBody 담기기
+    HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
+
+    return restTemplate.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.GET, kakaoProfileRequest, KakaoProfileDto.class).getBody();
   }
 
   private ResponseEntity<?> exceptionHandling(Exception e) {
