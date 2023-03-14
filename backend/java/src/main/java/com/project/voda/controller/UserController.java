@@ -50,7 +50,7 @@ public class UserController {
 
   @ApiOperation(value = "회원 가입", notes = "닉네임을 입력받고 회원가입 하는 API")
   @PostMapping("/signup")
-  public ResponseEntity<?> join(UserSignUpRequestDto signUpRequestDto){
+  public ResponseEntity<?> join(@RequestBody UserSignUpRequestDto signUpRequestDto){
     log.info("회원가입 Data : ",signUpRequestDto);
 
     try{
