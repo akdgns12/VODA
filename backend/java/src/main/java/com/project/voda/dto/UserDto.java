@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class UserDto {
-    private Long user_seq;
+    private Long userSeq;
     private String nickname;
     private String email;
     private String modelId;
@@ -21,7 +21,7 @@ public class UserDto {
 
     @Builder
     private UserDto(User user){
-        this.user_seq = user.getUserSeq();
+        this.userSeq = user.getUserSeq();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.modelId = user.getModelId();
