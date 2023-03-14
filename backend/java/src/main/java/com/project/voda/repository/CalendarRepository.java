@@ -12,6 +12,4 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
   // 한달 감정
   List<Calendar> findByUserAndDayBetween(User user, LocalDate fromDate, LocalDate toDate);
 
-  Optional<Calendar> findByUserAndDay(User user, LocalDate date);
-
 }
