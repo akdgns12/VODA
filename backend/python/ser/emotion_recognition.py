@@ -26,17 +26,16 @@ class EmotionRecognizer:
             if name == "new":
                 model = keras.models.Sequential()
                 model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 302, 3)))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
-                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu'))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
-                # model.add(keras.layers.Dropout(0.2))
-                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu'))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
                 model.add(keras.layers.Dropout(0.3))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
+                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu'))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
+                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu'))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
                 model.add(keras.layers.Flatten())
                 model.add(keras.layers.Dense(1024, activation='relu'))
+                model.add(keras.layers.Dropout(0.2))
                 model.add(keras.layers.Dense(30, activation='relu'))
-                model.add(keras.layers.Dropout(0.3))
                 model.add(keras.layers.Dense(7, activation='softmax'))
                 print(model.summary())
                 self.model = model
@@ -197,15 +196,12 @@ class EmotionRecognizer:
         del resulttensor
         del labeltensor
         del data
+        gc.collect()
         pass
 
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    for dirs in os.listdir('./data/Training/T2_audio/감정/당황'):
-        test.load_data('./data/Training/T2_audio/감정/당황/' + dirs)
-        test.unload_data()
-        gc.collect()
     for dirs in os.listdir('./data/Training/T2_audio/감정/상처'):
         test.load_data('./data/Training/T2_audio/감정/상처/' + dirs)
         test.unload_data()
