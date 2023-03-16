@@ -41,7 +41,7 @@ def add_sentence(
     sentence_emotions = []
     emotions = [0 for _ in range(5)]
     for sentence in sentences : 
-        sentence_emotions.append((sentence.text,AIMODEL.predict(sentence.text if sentence.text[-1] =='.' else sentence.text+'.')))
+        sentence_emotions.append((sentence.text, int(AIMODEL.predict(sentence.text if sentence.text[-1] =='.' else sentence.text+'.'))))
         save_sentence = models.Sentence(
             diary_seq = diary.diary_seq,
             content = sentence.text,
@@ -52,9 +52,9 @@ def add_sentence(
     best_emotion_cnt = 0 
     best_emotion_ind = 3
     for ind,emotion in enumerate(emotions):
-        if best_emotion_cnt > emotion: 
+        if best_emotion_cnt <= emotion: 
             best_emotion_cnt = emotion 
             best_emotion_ind = ind 
     diary.emotion_idx = best_emotion_ind
     db.commit()
-    return emotions
+    return sentence_emotions
