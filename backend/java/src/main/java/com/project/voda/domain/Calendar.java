@@ -51,8 +51,4 @@ public class Calendar extends BaseTimeEntity {
   @OneToMany(mappedBy = "calendar")
   private List<Diary> diaries = new ArrayList<>();
 
-  @JsonIgnore
-  @OneToMany(mappedBy = "calendar")
-  private List<DailyEmotion> dailyEmotions = new ArrayList<>();
-
 }
