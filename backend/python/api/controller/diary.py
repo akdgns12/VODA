@@ -16,4 +16,5 @@ def post_diary(
      db = get_db() 
      calendar = calendar_service.check_exist_calendar(db,date,id)
      diary = diary_service.add_diary(db,AIMODEL,calendar,text_content,"asd")
+     sentences = diary_service.add_sentence(db,AIMODEL,diary,calendar,text_content)
      return {"result" : diary.emotion_idx}
