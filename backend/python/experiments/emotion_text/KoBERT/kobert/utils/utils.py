@@ -16,7 +16,7 @@
 import hashlib
 import os
 
-from KoBERT.kobert.utils.aws_s3_downloader import AwsS3Downloader
+from .aws_s3_downloader import AwsS3Downloader
 
 
 def download(url, chksum=None, cachedir=".cache"):
