@@ -2,7 +2,7 @@
   <v-app>
     <div class="container">
       <video autoplay muted loop class="video-background">
-        <source src="../assets/production ID_4508060.mp4" type="video/mp4"/>
+        <source src="../assets/bg.mp4" type="video/mp4"/>
       </video>
       <v-container>
         <v-row>
