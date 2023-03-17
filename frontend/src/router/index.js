@@ -4,7 +4,6 @@ import SignUp from '../components/SignUp.vue'
 import KakaoLogin from '../components/KakaoLogin.vue'
 import Main from '../components/MainView.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [

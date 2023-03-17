@@ -27,12 +27,11 @@
                   />
                   <v-card-actions>
                     <v-btn
-                      color="#855CF8"
-                      rounded = "pill"
+                      rounded
+                      color="#855CF8" 
                       large
                       block
                       dark
-                      class="mb-3"
                       @click="signUpSubmit()"
                     >
                       SIGN UP
@@ -94,3 +93,8 @@ export default {
     }
 }
 </script>
+<style>
+.pill {
+  border-radius: 50px;
+}
+</style>
