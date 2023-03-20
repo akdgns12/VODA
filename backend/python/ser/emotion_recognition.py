@@ -93,30 +93,43 @@ class EmotionRecognizer:
         result = self.model.predict(x=data, batch_size=None)
         return result
 
-    def load_data(self,data_path):
-        dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
-        if os.path.isdir(dirpath):
-            self.dataset = tf.data.Dataset.load(dirpath)
-            print('current dataset:', dirpath)
-            self.data_loaded = True
-            return
+    # def load_data(self,data_path):
+    #     dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
+    #     if os.path.isdir(dirpath):
+    #         self.dataset = tf.data.Dataset.load(dirpath)
+    #         print('current dataset:', dirpath)
+    #         self.data_loaded = True
+    #         return
         
-        print("dataset not found. start to search for metadata")
-        self.data = []
-        for (root, dirs, files) in os.walk(data_path):
-            for file in files:
-                filepath = os.path.join(root,file)
-                # labeldir = data_path + '_label'
-                labelpath = filepath.replace('audio', 'label').replace('wav', 'json')
-                # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
-                # print(filepath, labelpath)
-                with open(labelpath, 'r', encoding='UTF8') as label:
-                    data = json.load(label)
-                emotion = data["화자정보"]["Emotion"]
-                n = tf.one_hot(emotions[emotion], 7)
-                self.data.append([filepath, n])
-        self.extract_feature(data_path)
-        pass
+    #     print("dataset not found. start to search for metadata")
+    #     self.data = []
+    #     for (root, dirs, files) in os.walk(data_path):
+    #         for file in files:
+    #             filepath = os.path.join(root,file)
+    #             # labeldir = data_path + '_label'
+    #             labelpath = filepath.replace('audio', 'label').replace('wav', 'json')
+    #             # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
+    #             # print(filepath, labelpath)
+    #             with open(labelpath, 'r', encoding='UTF8') as label:
+    #                 data = json.load(label)
+    #             emotion = data["화자정보"]["Emotion"]
+    #             n = tf.one_hot(emotions[emotion], 7)
+    #             self.data.append([filepath, n])
+    #     self.extract_feature(data_path)
+    #     pass
+
+    def load_data(self, data_path):
+        dataset = tf.data.Dataset.load(data_path)
+        if not self.data_loaded:
+            self.dataset = dataset
+        else:
+            self.dataset = self.dataset.concatenate(dataset)
+        print('current dataset: ', data_path)
+        print(self.dataset.cardinality())
+        print(self.dataset.take(1))
+        self.data_loaded = True
+        gc.collect()
+        return
 
     def unload_data(self):
         del self.data
@@ -202,61 +215,20 @@ class EmotionRecognizer:
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    for dirs in os.listdir('./data/Training/T2_audio/감정/상처'):
-        test.load_data('./data/Training/T2_audio/감정/상처/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T2_audio/감정/중립'):
-        test.load_data('./data/Training/T2_audio/감정/중립/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/기쁨구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/기쁨구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/기쁨대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/기쁨구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/당황구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/당황구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/당황대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/당황대화체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/분노구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/분노구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/분노대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/분노대화체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/불안구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/불안구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/불안대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/불안대화체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/상처구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/상처구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/상처대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/상처대화체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/슬픔구연체'):
-        test.load_data('./data/Training/T4_audio/감정발화/슬픔구연체/' + dirs)
-        test.unload_data()
-        gc.collect()
-    for dirs in os.listdir('./data/Training/T4_audio/감정발화/슬픔대화체'):
-        test.load_data('./data/Training/T4_audio/감정발화/슬픔대화체/' + dirs)
-        test.unload_data()
-        gc.collect()
+    # for dirs in os.listdir('./data/Training/T2_audio/감정/상처'):
+    #     test.load_data('./data/Training/T2_audio/감정/상처/' + dirs)
+    #     print(test.dataset.cardinality())
+    #     test.unload_data()
+    #     gc.collect()
+    for dirs in os.listdir('./dataset'):
+        for dir in os.listdir('./dataset/' + dirs):
+            test.load_data('./dataset/' + dirs + '/' + dir)
+    print(test.dataset.cardinality())
+    
+    # for dirs in os.listdir('./data/Training/T2_audio/감정/중립'):
+    #     test.load_data('./data/Training/T2_audio/감정/중립/' + dirs)
+    #     test.unload_data()
+    #     gc.collect()
+    
     # result = test.predict_file('./audio/sample_audio/0018_G2A3E4S0C0_JBR_000001.wav')
     # print(result)
