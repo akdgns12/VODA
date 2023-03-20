@@ -75,8 +75,8 @@
 import AudioPlayer from "./player";
 import Downloader from "./downloader";
 import IconButton from "./icon-button";
-import Recorder from "../lib/recorder";
-import { convertTimeMMSS } from "../lib/utils";
+import Recorder from "../library/recorder";
+import { convertTimeMMSS } from "../library/utils";
 
 export default {
   props: {
