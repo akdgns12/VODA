@@ -57,4 +57,4 @@ def add_sentence(
             best_emotion_ind = ind 
     diary.emotion_idx = best_emotion_ind
     db.commit()
-    return sentence_emotions
+    return sentence_emotions, emotions
