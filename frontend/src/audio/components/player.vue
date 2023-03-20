@@ -30,7 +30,7 @@
 import IconButton from "../components/icon-button.vue";
 import LineControl from "../components/line-control.vue";
 import VolumeControl from "../components/volume-control.vue";
-import { convertTimeMMSS } from "../lib/utils";
+import { convertTimeMMSS } from "../library/utils";
 export default {
   props: {
     src: { type: String },
