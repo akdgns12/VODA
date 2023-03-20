@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { calculateLineHeadPosition } from "../lib/utils";
+import { calculateLineHeadPosition } from "../library/utils";
 export default {
   props: {
     refId: { type: String },
