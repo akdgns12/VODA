@@ -19,7 +19,7 @@ import torch
 from transformers import BertModel
 import gluonnlp as nlp
 
-from KoBERT.kobert import download, get_tokenizer
+from .utils import download, get_tokenizer
 
 
 def get_pytorch_kobert_model(ctx="cpu", cachedir=".cache"):

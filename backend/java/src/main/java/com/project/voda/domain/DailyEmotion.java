@@ -2,6 +2,7 @@ package com.project.voda.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,12 +34,15 @@ public class DailyEmotion extends BaseTimeEntity {
   private Long dailyEmotionSeq;
 
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "calendar_seq", nullable = false)
-  private Calendar calendar;
+  @JoinColumn(name = "user_seq", nullable = false)
+  private User user;
 
   @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "emotion_idx", nullable = false)
+  @JoinColumn(name = "emotion_idx")
   private Emotion emotion;
+
+  @Column(name = "day", nullable = false)
+  private LocalDate day;
 
   @Column(name = "cnt")
   @ColumnDefault(value = "0")
