@@ -1,8 +1,7 @@
 <template>
   <v-app>
-    <v-container fluid pa-0>
-      
-      <v-layout class="d-flex justify-center align-center" >
+    <v-container fluid pa-0>   
+      <!-- <v-layout class="d-flex justify-center align-center" >
           <v-col cols="auto">
             <v-btn icon @click="prev">
               <v-icon dark>mdi-chevron-left</v-icon>  
@@ -19,16 +18,15 @@
               <v-icon dark>mdi-chevron-right</v-icon>
             </v-btn>
           </v-col>
-      </v-layout>
+      </v-layout> -->
       <v-layout>
         <v-flex xs12 class="mb-3">
           <v-sheet height="500">
             <vc-calendar
-              class="custom-calendar max-w-full"
-              :attributes="attributes"
+              class="custom-calendar"
+              dark
               disable-page-swipe
               locale = "en"
-              color="red"
             >
               <template v-slot:day-content="{ day}">
                 <div class="flex flex-col h-full z-100 overflow-hidden">
@@ -59,7 +57,7 @@
             </v-icon>
           </v-btn>
 
-          <v-btn>
+          <v-btn @click ="startRecording()">
             <v-icon  
               color="red"
               size="60"
@@ -115,6 +113,7 @@ export default {
           },
         }
       ],
+    mediaStream: null,
   }),
   mounted() {
     // this.$refs.calendar.checkChange();
@@ -148,7 +147,50 @@ export default {
           ${day.day}
       `;
     },
-  },
+    startRecording(){
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+      if (isMobile) {
+        // 모바일 장비인 경우
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ audio: true })
+            .then((stream) => {
+              this.stream = stream;
+              // 마이크 접근 권한이 허용된 경우
+            })
+            .catch((error) => {
+              // 마이크 접근 권한이 거부된 경우
+              if (error.name === 'NotAllowedError') {
+                alert('마이크 접근 권한이 필요합니다.');
+              } else if (error.name === 'NotFoundError' || error.name === 'NotReadableError') {
+                alert('마이크를 찾을 수 없습니다.');
+              } else {
+                alert('마이크에 접근할 수 없습니다.');
+              }
+            });
+        } else {
+          alert('미디어 입력 장치를 지원하지 않습니다.');
+        }
+      } 
+      else {
+        // 데스크톱 장비인 경우
+        navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        if (navigator.getUserMedia) {
+          navigator.getUserMedia({ audio: true },
+            (stream) => {
+              this.stream = stream;
+              // 마이크 접근 권한이 허용된 경우
+            },
+            () => {
+              // 마이크 접근 권한이 거부된 경우
+              alert('마이크 접근 권한이 필요합니다.');
+            });
+        } else {
+          alert('미디어 입력 장치를 지원하지 않습니다.');
+        }
+      }
+    }
+  }
 };
 </script>
 
@@ -205,10 +247,13 @@ export default {
   --weekday-border: 1px solid #eaeaea;
 
     border-radius: 10px 10px 0px 0px;
-    width: 100%;
+    //달력 너비
+    width: 90%;
 
   .vc-header {
     padding: 10px 0;
+    background-color: red;
+    border-radius: 10px 10px 0px 0px;
   }
   .vc-weeks {
     padding: 0;
@@ -219,6 +264,7 @@ export default {
     border-top: var(--weekday-border);
     padding: 5px 0;
     color: black;
+    
   }
   .vc-day {
     padding: 0 5px 3px 5px;
@@ -229,6 +275,7 @@ export default {
 
     &.weekday-1,
     &.weekday-7 {
+      color:red;
     }
 
     &:not(.on-bottom) {
