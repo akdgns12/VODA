@@ -14,7 +14,7 @@ host = os.getenv("DB_SERVER")
 port = os.getenv("DB_PORT")
 database = os.getenv("DB")
 
-MYSQL_DB = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset=utf8"
+MYSQL_DB = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset=utf8mb4"
 
 # Create the SQLAlchemy engine
 engine = create_engine(
