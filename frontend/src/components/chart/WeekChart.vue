@@ -1,14 +1,19 @@
 <template>
-  <div>
-    <canvas ref="barChart" />
-  </div>
+  <v-app>
+    <v-container fluid class="pa-0">
+      <WeekDatePicker />
+      <canvas ref="barChart" />
+    </v-container>
+  </v-app>
 </template>
 
 <script>
 import { Chart, registerables } from "chart.js";
+import WeekDatePicker from "./WeekDatePicker.vue";
 Chart.register(...registerables);
 
 export default {
+  components: { WeekDatePicker },
   data: () => ({
     type: "line",
     data: {
