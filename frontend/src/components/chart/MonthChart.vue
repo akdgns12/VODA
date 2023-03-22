@@ -1,14 +1,21 @@
 <template>
-  <div>
-    <canvas ref="polarArea" />
-  </div>
+  <v-app>
+    <v-container fluid class="pa-0">
+      <MonthDatePicker />
+      <canvas ref="polarArea" />
+    </v-container>
+  </v-app>
 </template>
 
 <script>
 import { Chart, registerables } from "chart.js";
+import MonthDatePicker from "./MonthDatePicker.vue";
 Chart.register(...registerables);
 
 export default {
+  components: {
+    MonthDatePicker,
+  },
   data: () => ({
     type: "line",
     data: {
