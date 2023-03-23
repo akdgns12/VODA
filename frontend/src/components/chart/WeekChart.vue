@@ -14,53 +14,65 @@ Chart.register(...registerables);
 
 export default {
   components: { WeekDatePicker },
-  data: () => ({
-    type: "line",
-    data: {
-      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-      datasets: [
-        {
-          label: "# of Votes",
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  }),
-  mounted() {
-    this.createChart();
-  },
+  name: "WeekChart",
+  data: () => ({}),
+
   methods: {
     createChart() {
       new Chart(this.$refs.barChart, {
         type: "line",
-        data: this.data,
-        options: this.options,
+        data: {
+          labels: [
+            "03/18",
+            "03/19",
+            "03/20",
+            "03/21",
+            "03/23",
+            "03/22",
+            "03/23",
+          ],
+          datasets: [
+            {
+              label: "슬픔",
+              data: this.$store.getters.weeks[0].data,
+              backgroundColor: "#007AFF",
+              borderColor: "#007AFF",
+            },
+            {
+              label: "놀람",
+              data: this.$store.getters.weeks[1].data,
+              backgroundColor: "#FFDB1E",
+              borderColor: "#FFDB1E",
+            },
+            {
+              label: "화남",
+              data: this.$store.getters.weeks[2].data,
+              backgroundColor: "#EA3838",
+              borderColor: "#EA3838",
+            },
+            {
+              label: "보통",
+              data: this.$store.getters.weeks[3].data,
+              backgroundColor: "#FF9500",
+              borderColor: "#FF9500",
+            },
+            {
+              label: "행복",
+              data: this.$store.getters.weeks[4].data,
+              backgroundColor: "#5AC165",
+              borderColor: "#5AC165",
+            },
+          ],
+        },
       });
     },
+  },
+  mounted() {
+    this.$store
+      .dispatch("getWeekChart", { userSeq: 1, date: "2023-03-23" })
+      .then(() => {
+        this.createChart();
+      });
   },
 };
 </script>
