@@ -13,8 +13,8 @@ const routes = [
     component: KakaoLogin,
   },
   {
-    path: "/signUp",
-    name: "signUp",
+    path: "/user/signup",
+    name: "signup",
     component: SignUp,
   },
   {

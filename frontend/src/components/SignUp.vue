@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-main class="blue-grey lighten-4">
+    <v-main class="background">
       <!-- SignUp Component -->
       <v-container
         style="max-width: 450px"
@@ -9,32 +9,33 @@
         <v-row align="center">
           <v-col cols="12">
             <v-card>
-              <div class="pa-10">
+              <div class="box pa-10">
                 <h1
                   style="text-align: center"
                   class="mb-10"
+              
                 >
-                  SignUp
+                  SIGN UP
                 </h1>
                 <v-form ref="form">
                   <v-text-field
                     v-model="nickname"
                     required
                     prepend-inner-icon="mdi-account"
-                    label="Nickname"
+                    label="NICKNAME"
                     :counter="10"
                     :rules="nameRules"
                   />
                   <v-card-actions>
                     <v-btn
+                      class="pill"
                       rounded
-                      color="#855CF8" 
                       large
                       block
                       dark
                       @click="signUpSubmit()"
                     >
-                      SIGN UP
+                      click
                     </v-btn>
                   </v-card-actions>
                 </v-form>
@@ -48,53 +49,73 @@
 </template>
 <script>
 export default {
-    data: () => ({
-        nickname : "",
-        nameRules: [
-          v => !!v || '닉네임을 작성해주세요',
-          v => (v && v.length <= 10) || '닉네임을 10글자를 넘을 수 없습니다.',
-      ],
-    }),
-    methods: {
-        signUpSubmit(){
-          const validate = this.$refs.form.validate()
-          if(validate){
-          let saveData = {};
-          saveData.nickname = this.nickname;
+  
+  data: () => ({
+      nickname : "",
+      nameRules: [
+        v => !!v || '닉네임을 작성해주세요',
+        v => (v && v.length <= 10) || '닉네임을 10글자를 넘을 수 없습니다.',
+    ],
+  }),
+  methods: {
+    signUpSubmit(){
+      const validate = this.$refs.form.validate()
+      if(validate){
+      let saveData = {};
+      saveData.nickname = this.nickname;
 
-          try {
-             this.$axios.post("/api/member", JSON.stringify(saveData), {
-               headers: {
-                 "Content-Type": `application/json`,
-                  },
+      try {
+          this.$axios.post("/api/member", JSON.stringify(saveData), {
+            headers: {
+              "Content-Type": `application/json`,
+              },
+              })
+              .then((response) => {
+                console.log(response)
+                if (response.data.errorCode === 400) {
+                  alert(response.data.errorMessage)
+
+                  }
+                  else{
+                    alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
+                    this.$router.push({path: './main'});
+                  }
                   })
-                  .then((response) => {
-                    console.log(response)
-                    if (response.data.errorCode === 400) {
-                      alert(response.data.errorMessage)
+        .catch(error =>{
+          console.log(error.response);
 
-                      }
-                      else{
-                        alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
-                        this.$router.push({path: './main'});
-                      }
-                      })
-            .catch(error =>{
-              console.log(error.response);
-
-            });
+        });
       } catch (error) {
         console.error(error);
       }
-        }},
-        linkToLogin(){
-          this.$router.push({path:"./main"});
-        }
-    }
+    }},
+    linkToLogin(){
+      this.$router.push({path:"./main"});
+    },
+    
+  },
+  created(){
+    this.$store.dispatch("setShowBottomNavigation", false);
+  }
 }
 </script>
-<style>
+<style lang="scss">
+  @font-face {
+    font-family: 'ComingSoon-Regular';
+    src: url('../../public/fonts/ComingSoon-Regular.ttf');
+  }
+#inspire{
+  font-family: 'ComingSoon-Regular';
+}
 .pill {
   border-radius: 50px;
+  background: linear-gradient(#97C7FF,#855CF8);
+  font-weight: bold;  
 }
-</style>
+.background{
+  background: linear-gradient(#855CF8,#D3B0FF,#97C7FF);  
+}
+.v-sheet.v-card{
+  border-radius: 20px;
+}
+</style>>
