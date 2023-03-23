@@ -6,18 +6,20 @@
       </video>
       <v-container>
         <v-row>
-          <img class="logo">
+          <div class="logo"></div>
         </v-row>
   
         <v-row justify="center" class="fill-height">
           <v-col cols="12" sm="6" md="4">
-            <a @click="loginWithKakao()">
-              <img
-                src="@/assets/KakaoLogin/kakaoLogin.png"
-                width="222"
-                alt="카카오 로그인 버튼"
-              />
-            </a>
+            <div class="loginBtn">
+              <a @click="loginWithKakao()">
+                <img
+                  src="@/assets/KakaoLogin/kakaoLogin.png"
+                  width="222"
+                  alt="카카오 로그인 버튼"
+                />
+              </a>
+            </div>
          </v-col>
         </v-row>
       </v-container>
@@ -27,10 +29,12 @@
 </template>
 
 <script>
+
 export default {
+
   name : 'loginPage',
   data: () => ({
-
+    showBottomNav:false,
   }),
   methods: {
     async loginWithKakao() {
@@ -41,13 +45,15 @@ export default {
           '&redirect_uri=' +
           process.env.VUE_APP_KAKAO_REDIRECT_URI+
           '&scope=account_email'
-      
     }
-  }
+  },
+    created() {
+     this.$store.dispatch("setShowBottomNavigation", false);
+  },
 }
 </script>
 
-<style>
+<style scoped lang="scss">
   @font-face {
     font-family: 'NanumSquareNeoHv';
     src: url('../../public/fonts/NanumSquareNeo-eHv.ttf');
@@ -56,17 +62,18 @@ export default {
     margin-top: 220px;
     margin-left: auto;
     margin-right: auto;
-    justify-self: center;
     align-self: center;
-    background-size: contain;
-    background-image: url("../assets/logo.png");
-    width:385px;
-    height: 94px;
+    background-size: cover;
+
+    background-image: url("../assets/logo.svg");
+    width:397px;
+    height: 103px;
   }
   .container {
     position: relative;
     height: 100vh;
     overflow: hidden;
+    // background: linear-gradient(#855CF8,#D3B0FF,#97C7FF);  
   }
   .video-background {
     position: absolute;
@@ -80,4 +87,8 @@ export default {
   .fill-height {
     height: 100%;
   }
+  .loginBtn{
+    margin-block-start: 230px;
+  }
+
 </style>
