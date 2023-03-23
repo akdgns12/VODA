@@ -1,13 +1,71 @@
 <template>
   <div class="ar-player">
     <div class="ar-player-actions">
-      <icon-button
-        id="play"
-        class="ar-icon ar-icon__lg ar-player__play"
-        :name="playBtnIcon"
-        :class="{ 'ar-player__play--active': isPlaying }"
-        @click.native="playback"
-      />
+      <v-bottom-sheet inset>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            id="play"
+            class="ar-icon ar-icon__lg ar-player__play"
+            :name="playBtnIcon"
+            :class="{ 'ar-player__play--active': isPlaying }"
+            @click.native="playback"
+            v-bind="attrs"
+            v-on="on"
+          />
+        </template>
+        <v-card tile>
+          <v-progress-linear
+            :value="50"
+            class="my-0"
+            height="3"
+          ></v-progress-linear>
+
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>The Walker</v-list-item-title>
+                <v-list-item-subtitle
+                  >Fitz & The Trantrums</v-list-item-subtitle
+                >
+              </v-list-item-content>
+
+              <v-spacer></v-spacer>
+
+              <v-list-item-icon>
+                <v-btn icon>
+                  <v-icon>mdi-rewind</v-icon>
+                </v-btn>
+              </v-list-item-icon>
+
+              <v-list-item-icon
+                :class="{ 'mx-5': $vuetify.breakpoint.mdAndUp }"
+              >
+                <icon-button
+                  id="play"
+                  class="ar-icon ar-icon__lg ar-player__play"
+                  :name="playBtnIcon"
+                  :class="{ 'ar-player__play--active': isPlaying }"
+                  @click.native="playback"
+                  v-bind="attrs"
+                  v-on="on"
+                />
+                <!-- <v-btn>
+                  <v-icon @click.native="playback">mdi-pause</v-icon>
+                </v-btn> -->
+              </v-list-item-icon>
+
+              <v-list-item-icon
+                class="ml-0"
+                :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
+              >
+                <v-btn icon>
+                  <v-icon>mdi-fast-forward</v-icon>
+                </v-btn>
+              </v-list-item-icon>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-bottom-sheet>
     </div>
 
     <div class="ar-player-bar">
