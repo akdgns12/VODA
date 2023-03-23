@@ -230,6 +230,18 @@ export default {
     volume() {
       return parseFloat(this.recorder.volume);
     },
+    color() {
+      switch (this.value) {
+        case 0:
+          return "#5AC165";
+        case 1:
+          return "#855CF8";
+        case 2:
+          return "#FF9500";
+        default:
+          return "#5AC165";
+      }
+    },
   },
 };
 </script>
@@ -395,6 +407,11 @@ export default {
   &__downloader {
     right: 115px;
     margin-top: 10px;
+  }
+  .bottom-nav {
+    position: fixed;
+    bottom: -100px;
+    width: 100%;
   }
 }
 @import "../scss/icons";
