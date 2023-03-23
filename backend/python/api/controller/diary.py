@@ -1,8 +1,7 @@
 from fastapi import APIRouter, File, Form, UploadFile, status
 from datetime import datetime, date 
 from ..config.database import get_db 
-from ..service import calendar_service 
-from ..service import diary_service
+from ..service import calendar_service , diary_service, daily_emotion_service
 from experiments.emotion_text.model_call import model_call
 
 router = APIRouter()
@@ -17,8 +16,10 @@ def post_diary(
 ): 
      db = get_db() 
      calendar = calendar_service.check_exist_calendar(db,date,id)
+     daily_emotions = daily_emotion_service.check_exist_daily_emotion(db,date,id)
      diary = diary_service.add_diary(db,AIMODEL,calendar,text_content,"asd")
-     sentences,emotions_cnt = diary_service.add_sentence(db,AIMODEL,diary,calendar,text_content)
+     sentences,emotions_cnt = diary_service.add_sentence(db,AIMODEL,diary,daily_emotions,text_content)
+     calendar_service.update_best_emotion(db,calendar,daily_emotions)
      labels = ["슬픔","놀람","화남","중립","행복"]
      result = {
         "sentences": sentences, 
