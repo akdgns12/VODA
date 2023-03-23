@@ -40,37 +40,8 @@
           </v-sheet>
         </v-flex>
       </v-layout>
-
-      <v-layout class="bottom-nav">
-        <v-bottom-navigation
-          v-model="value"
-          :background-color="color"
-          dark
-          class="d-flex justify-between"
-          grow
-        >
-          <v-btn>
-            <span></span>
-            <v-icon large>
-              {{ icons.mdiCalendarMonth }}
-            </v-icon>
-          </v-btn>
-
-          <v-btn>
-            <v-icon color="red" size="60">
-              {{ icons.mdiRadioboxMarked }}
-            </v-icon>
-          </v-btn>
-
-          <v-btn>
-            <span></span>
-            <v-icon large>
-              {{ icons.mdiChartBellCurve }}
-            </v-icon>
-          </v-btn>
-        </v-bottom-navigation>
-      </v-layout>
     </v-container>
+    <bottom-nav></bottom-nav>
   </v-app>
 </template>
 
@@ -80,8 +51,10 @@ import {
   mdiChartBellCurve,
   mdiCalendarMonth,
 } from "@mdi/js";
+import BottomNav from "../components/BottomNav.vue";
 
 export default {
+  components: { BottomNav },
   data: () => ({
     type: "month",
     key: "today",
