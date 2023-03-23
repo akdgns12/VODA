@@ -8,7 +8,7 @@
     </div>
 
     <div class="ar-content" :class="{ ar__blur: isUploading }">
-      <div class="ar-recorder">
+      <v-row class="ar-recorder">
         <icon-button
           class="ar-icon ar-icon__lg"
           :name="iconButtonType"
@@ -23,7 +23,8 @@
           name="stop"
           @click.native="stopRecorder"
         />
-      </div>
+        
+      </v-row>
 
       <div class="ar-recorder__records-limit" v-if="attempts">
         Attempts: {{ attemptsLeft }}/{{ attempts }}
@@ -102,6 +103,7 @@ export default {
       recordList: [],
       selected: {},
       uploadStatus: null,
+      value: 3,
     };
   },
   components: {
@@ -194,11 +196,23 @@ export default {
     volume() {
       return parseFloat(this.recorder.volume);
     },
+    color() {
+      switch (this.value) {
+        case 0:
+          return "#5AC165";
+        case 1:
+          return "#855CF8";
+        case 2:
+          return "#FF9500";
+        default:
+          return "#5AC165";
+      }
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .ar {
   width: 420px;
   font-family: "Roboto", sans-serif;
@@ -353,6 +367,11 @@ export default {
   &__downloader {
     right: 115px;
   }
+  .bottom-nav {
+  position: fixed;
+  bottom: -100px;
+  width: 100%;
+}
 }
 @import "../scss/icons";
 </style>

@@ -19,7 +19,8 @@
     "vue-audio-recorder": "^3.0.1",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^3.5.1",
-    "vuetify": "^2.6.0"
+    "vuetify": "^2.6.0",
+    "vuex": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
