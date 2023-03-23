@@ -5,4 +5,8 @@
 
 ## Progress
 - solved the issue with corrupted data, Training procedure started
-- Accuracy is broken, need to find out why
+- Accuracy is broken, need to find out whyv
+
+## Errors
+- WARNING:tensorflow:Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 1299465 batches). You may need to use the repeat() function when building your dataset
+- solved: because the size of dataset is None, we have to specify steps per epochs
