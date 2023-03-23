@@ -13,46 +13,39 @@ import MonthDatePicker from "./MonthDatePicker.vue";
 Chart.register(...registerables);
 
 export default {
-  components: {
-    MonthDatePicker,
-  },
-  data: () => ({
-    type: "line",
-    data: {
-      labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
-      datasets: [
-        {
-          label: "My First Dataset",
-          data: [11, 16, 7, 3, 14],
-          backgroundColor: [
-            "rgb(255, 99, 132)",
-            "rgb(75, 192, 192)",
-            "rgb(255, 205, 86)",
-            "rgb(201, 203, 207)",
-            "rgb(54, 162, 235)",
-          ],
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  }),
-  mounted() {
-    this.createChart();
-  },
+  components: { MonthDatePicker },
+  name: "MonthChart",
+  data: () => ({}),
+  computed: {},
   methods: {
     createChart() {
       new Chart(this.$refs.polarArea, {
         type: "polarArea",
-        data: this.data,
-        options: this.options,
+        data: {
+          labels: this.$store.getters.monthLabels,
+          datasets: [
+            {
+              label: "월별 차트",
+              data: this.$store.getters.monthData,
+              backgroundColor: [
+                "#007AFF",
+                "#FFDB1E",
+                "#EA3838",
+                "#FF9500",
+                "#5AC165",
+              ],
+            },
+          ],
+        },
       });
     },
+  },
+  mounted() {
+    this.$store
+      .dispatch("getMonthChart", { userSeq: 1, date: "2023-03-23" })
+      .then(() => {
+        this.createChart();
+      });
   },
 };
 </script>
