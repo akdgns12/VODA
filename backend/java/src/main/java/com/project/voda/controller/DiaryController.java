@@ -25,7 +25,7 @@ public class DiaryController {
   private final DiaryService diaryService;
 
   @ApiImplicitParam(name = "diarySeq", value = "diary PK")
-  @DeleteMapping("/diary/{diarySeq}")
+  @DeleteMapping("/{diarySeq}")
   ResponseEntity<?> removeDiary(@PathVariable Long diarySeq){
     log.info("delete diary : {}", diarySeq);
     try{
