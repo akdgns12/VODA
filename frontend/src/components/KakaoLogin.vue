@@ -9,10 +9,12 @@
           <div class="logo"></div>
         </v-row>
   
-        <v-row justify="center" class="fill-height">
-          <v-col cols="12" sm="6" md="4">
+        <v-row justify="center" align-end gutter="md">
+          
+          <v-col cols="12" sm="6" md="4"> 
+            <v-spacer></v-spacer>     
             <div class="loginBtn">
-              <a @click="loginWithKakao()">
+              <a @click="loginWithKakao">
                 <img
                   src="@/assets/KakaoLogin/kakaoLogin.png"
                   width="222"
@@ -35,21 +37,34 @@ export default {
   name : 'loginPage',
   data: () => ({
     showBottomNav:false,
+    URL: "",
   }),
   methods: {
     async loginWithKakao() {
       // 카카오 로그인 API 호출
-      window.location.href = 'https://kauth.kakao.com/oauth/authorize?response_type=code' +
+      window.location.href='https://kauth.kakao.com/oauth/authorize?response_type=code' +
           '&client_id=' +
           process.env.VUE_APP_KAKAO_APP_KEY +
           '&redirect_uri=' +
-          process.env.VUE_APP_KAKAO_REDIRECT_URI+
-          '&scope=account_email'
+          // 
+          process.env.VUE_APP_KAKAO_REDIRECT_URI +
+          '&scope=account_email'    
+      // this.$router.push('/user/login/oauth/kakao')
     }
+    
   },
     created() {
      this.$store.dispatch("setShowBottomNavigation", false);
+
   },
+  // mounted(){
+  //       //  this.URL = 'https://kauth.kakao.com/oauth/authorize?response_type=code' +
+  //       //   '&client_id=' +
+  //       //   process.env.VUE_APP_KAKAO_APP_KEY +
+  //       //   '&redirect_uri=' +
+  //       //   process.env.VUE_APP_KAKAO_REDIRECT_URI+
+  //       //   '&scope=account_email'
+  // }
 }
 </script>
 
@@ -59,15 +74,14 @@ export default {
     src: url('../../public/fonts/NanumSquareNeo-eHv.ttf');
   }
   .logo{
-    margin-top: 220px;
+    margin-top: 20vh;
     margin-left: auto;
     margin-right: auto;
     align-self: center;
-    background-size: cover;
-
     background-image: url("../assets/logo.svg");
-    width:397px;
-    height: 103px;
+    background-size: contain;
+    width: 400px;
+    height: 110px;
   }
   .container {
     position: relative;
@@ -88,7 +102,16 @@ export default {
     height: 100%;
   }
   .loginBtn{
-    margin-block-start: 230px;
+    position: relative;
+    bottom: 0;
   }
-
+  @media only screen and (max-width: 600px) {
+  .loginBtn {
+    margin-top: 10px;
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+  }
+  }
 </style>
