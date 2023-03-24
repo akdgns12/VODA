@@ -6,16 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.project.voda.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -48,7 +39,10 @@ public class Calendar extends BaseTimeEntity {
   private LocalDate day;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "calendar")
+  @OneToMany(mappedBy = "calendar", cascade = CascadeType.REMOVE)
   private List<Diary> diaries = new ArrayList<>();
 
+  public void updateEmotion(Emotion emotion){
+    this.emotion = emotion;
+  }
 }
