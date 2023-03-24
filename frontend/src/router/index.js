@@ -4,6 +4,7 @@ import SignUp from "../components/SignUp.vue";
 import KakaoLogin from "../components/KakaoLogin.vue";
 import Main from "../components/MainView.vue";
 import Record from "../audio/components/recorder.vue";
+import Chart from "../components/ChartView.vue";
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,11 @@ const routes = [
     path: "/record",
     name: "record",
     component: Record,
+  },
+  {
+    path: "/chart",
+    name: "chart",
+    component: Chart,
   },
 ];
 
