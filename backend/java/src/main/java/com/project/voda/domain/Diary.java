@@ -56,7 +56,7 @@ public class Diary extends BaseTimeEntity {
   private boolean deleteYn;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "diary")
+  @OneToMany(mappedBy = "diary", orphanRemoval = true)
   private List<Sentence> sentences = new ArrayList<>();
 
 }
