@@ -58,7 +58,7 @@ class DailyEmotion(Base):
     __table_args__ = {"extend_existing": True}
     __tablename__="daily_emotion"
     daily_emotion_seq = Column(Integer,primary_key=True, autoincrement=True )
-    cnt = Column(Integer)
+    cnt = Column(Integer, default=0)
     day = Column(Date, nullable = False)
     emotion_idx = Column(Integer, ForeignKey("emotion.emotion_idx"))
     reg_dtm = Column(DateTime(timezone=True), default=func.now())

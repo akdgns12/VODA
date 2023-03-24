@@ -4,6 +4,7 @@ import vuetify from "./plugins/vuetify";
 import router from "./router";
 import axios from "axios";
 import VCalendar from "v-calendar";
+import "material-design-icons-iconfont/dist/material-design-icons.css";
 import store from "./store";
 
 Vue.prototype.$http = axios;
@@ -16,5 +17,6 @@ new Vue({
   vuetify,
   router,
   store,
+  icons: { iconfont: "md" },
   render: (h) => h(App),
 }).$mount("#app");
