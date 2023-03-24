@@ -29,7 +29,11 @@ public class DiaryController {
   ResponseEntity<?> removeDiary(@PathVariable Long diarySeq){
     log.info("delete diary : {}", diarySeq);
     try{
-      diaryService.removeDiary(diarySeq);
+      if(diaryService.removeDiary(diarySeq)) {
+        log.info("success delete diary : {}", diarySeq);
+      } else {
+        log.info("already deleted diary : {}", diarySeq);
+      }
       return new ResponseEntity<>(HttpStatus.OK);
     }catch (Exception e){
       return exceptionHandling(e);
