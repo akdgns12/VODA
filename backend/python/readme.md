@@ -10,3 +10,6 @@
 ## Errors
 - WARNING:tensorflow:Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 1299465 batches). You may need to use the repeat() function when building your dataset
 - solved: because the size of dataset is None, we have to specify steps per epochs
+
+## Connect remote Tensorboard server
+- tensorboard --logdir logs/fit --host=70.12.130.101 
