@@ -23,7 +23,6 @@
 
 <script>
 export default {
-  components: { BottomNav },
   data: () => ({
     type: "month",
     key: "today",

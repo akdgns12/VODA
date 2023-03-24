@@ -65,38 +65,38 @@
         <audio-player :record="selected" />
       </v-flex>
     </v-container>
-    <v-app-bar>
-      <v-layout class="bottom-nav">
-        <v-bottom-navigation grow>
-          <v-btn @click="toMain">
-            <v-icon large color="black">
-              {{ icons.mdiCalendarMonth }}
-            </v-icon>
-          </v-btn>
-          <v-btn class="ar-recorder">
-            <icon-button
-              class="ar-icon ar-icon__lg"
-              :name="iconButtonType"
-              :class="{
-                'ar-icon--rec': isRecording,
-                'ar-icon--pulse': isRecording && volume > 0.02,
-              }"
-              @click.native="toggleRecorder"
-            />
-            <!-- <icon-button
+    <!-- <v-app-bar> -->
+    <v-layout class="bottom-nav">
+      <v-bottom-navigation grow>
+        <v-btn @click="toMain">
+          <v-icon large color="black">
+            {{ icons.mdiCalendarMonth }}
+          </v-icon>
+        </v-btn>
+        <v-btn class="ar-recorder">
+          <icon-button
+            class="ar-icon ar-icon__lg"
+            :name="iconButtonType"
+            :class="{
+              'ar-icon--rec': isRecording,
+              'ar-icon--pulse': isRecording && volume > 0.02,
+            }"
+            @click.native="toggleRecorder"
+          />
+          <!-- <icon-button
               class="ar-icon ar-icon__sm ar-recorder__stop"
               name="stop"
               @click.native="stopRecorder"
             /> -->
-          </v-btn>
-          <v-btn>
-            <v-icon large color="black">
-              {{ icons.mdiChartBellCurve }}
-            </v-icon>
-          </v-btn>
-        </v-bottom-navigation>
-      </v-layout>
-    </v-app-bar>
+        </v-btn>
+        <v-btn>
+          <v-icon large color="black">
+            {{ icons.mdiChartBellCurve }}
+          </v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-layout>
+    <!-- </v-app-bar> -->
   </v-app>
 </template>
 
@@ -113,6 +113,9 @@ import {
 } from "@mdi/js";
 
 export default {
+  created() {
+    this.$store.dispatch("setShowBottomNavigation", false);
+  },
   props: {
     attempts: { type: Number },
     time: { type: Number },

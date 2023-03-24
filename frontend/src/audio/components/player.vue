@@ -14,72 +14,68 @@
           />
         </template>
         <v-card tile>
-          <v-progress-linear
-            :value="50"
-            class="my-0"
-            height="3"
-          ></v-progress-linear>
-
+          <v-progress-linear>
+            <line-control
+              class="ar-player__progress"
+              ref-id="progress"
+              :percentage="progress"
+              @change-linehead="_onUpdateProgress"
+            />
+          </v-progress-linear>
           <v-list>
             <v-list-item>
               <v-list-item-content>
+                <v-col align="left">{{ playedTime }}</v-col>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-col align="right">{{ duration }}</v-col>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+
+          <v-list>
+            <!-- <v-list-item-content>
                 <v-list-item-title>The Walker</v-list-item-title>
                 <v-list-item-subtitle
                   >Fitz & The Trantrums</v-list-item-subtitle
                 >
-              </v-list-item-content>
+              </v-list-item-content> -->
+            <!-- </v-list-item> -->
 
-              <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-list-item>
+              <v-row justify="end">
+                <v-col cols="5">
+                  <v-row>
+                    <v-btn icon @click="_rewindProgress()">
+                      <v-icon>mdi-rewind</v-icon>
+                    </v-btn>
 
-              <v-list-item-icon>
-                <v-btn icon>
-                  <v-icon>mdi-rewind</v-icon>
-                </v-btn>
-              </v-list-item-icon>
+                    <icon-button
+                      id="play"
+                      class="ar-icon ar-icon__lg ar-player__play"
+                      :name="playBtnIcon"
+                      :class="{ 'ar-player__play--active': isPlaying }"
+                      @click.native="playback"
+                      v-bind="attrs"
+                      v-on="on"
+                    />
 
-              <v-list-item-icon
-                :class="{ 'mx-5': $vuetify.breakpoint.mdAndUp }"
-              >
-                <icon-button
-                  id="play"
-                  class="ar-icon ar-icon__lg ar-player__play"
-                  :name="playBtnIcon"
-                  :class="{ 'ar-player__play--active': isPlaying }"
-                  @click.native="playback"
-                  v-bind="attrs"
-                  v-on="on"
-                />
-                <!-- <v-btn>
-                  <v-icon @click.native="playback">mdi-pause</v-icon>
-                </v-btn> -->
-              </v-list-item-icon>
+                    <v-btn icon>
+                      <v-icon>mdi-fast-forward</v-icon>
+                    </v-btn>
+                  </v-row>
+                </v-col>
 
-              <v-list-item-icon
-                class="ml-0"
-                :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
-              >
-                <v-btn icon>
-                  <v-icon>mdi-fast-forward</v-icon>
-                </v-btn>
-              </v-list-item-icon>
+                <v-col cols="3">
+                  <volume-control @change-volume="_onChangeVolume" />
+                </v-col>
+              </v-row>
             </v-list-item>
           </v-list>
         </v-card>
       </v-bottom-sheet>
     </div>
-
-    <div class="ar-player-bar">
-      <div class="ar-player__time">{{ playedTime }}</div>
-      <line-control
-        class="ar-player__progress"
-        ref-id="progress"
-        :percentage="progress"
-        @change-linehead="_onUpdateProgress"
-      />
-      <div class="ar-player__time">{{ duration }}</div>
-      <volume-control @change-volume="_onChangeVolume" />
-    </div>
-
     <audio :id="playerUniqId" :src="audioSource"></audio>
   </div>
 </template>
@@ -152,10 +148,20 @@ export default {
       }
       this.isPlaying = !this.isPlaying;
     },
+    // 뒤로가기 버튼 눌렀을시 동작 함수
+    _rewindProgress() {
+      if (this.isPlaying) {
+      }
+
+      this.playedTime = convertTimeMMSS(0);
+      this.progress = 0;
+      this.isPlaying = false;
+    },
     _resetProgress() {
       if (this.isPlaying) {
         this.player.pause();
       }
+
       this.duration = convertTimeMMSS(0);
       this.playedTime = convertTimeMMSS(0);
       this.progress = 0;
@@ -180,6 +186,9 @@ export default {
 </script>
 
 <style lang="scss">
+.ar-player {
+  align-self: right;
+}
 .ar-player {
   width: 380px;
   height: unset;
@@ -213,8 +222,11 @@ export default {
     justify-content: space-around;
   }
   &__progress {
-    width: 160px;
-    margin: 0 8px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    // width: 600px;
+    // margin: 0 8px;
   }
   &__time {
     color: rgba(84, 84, 84, 0.5);
