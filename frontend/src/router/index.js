@@ -4,8 +4,12 @@ import SignUp from "../components/SignUp.vue";
 import KakaoLogin from "../components/KakaoLogin.vue";
 import Calendar from "../components/MainView.vue";
 import Record from "../audio/components/recorder.vue";
+<<<<<<< HEAD
 import DiaryDetail from "../components/DiaryDetail.vue"
 import RedirectHandler from "../components/OAuth2RedirectHadeler.vue"
+=======
+import Chart from "../components/ChartView.vue";
+>>>>>>> b264400091c990ca3400cf3b7397dd0876c74e8c
 
 Vue.use(VueRouter);
 
@@ -30,6 +34,7 @@ const routes = [
     component: Record,
   },
   {
+<<<<<<< HEAD
     path: "/calendar/diary/:calendarSeq",
     name: 'DiaryDetail',
     component: DiaryDetail,
@@ -40,6 +45,12 @@ const routes = [
     name: 'RedirectHandler',
     component: RedirectHandler,
   }
+=======
+    path: "/chart",
+    name: "chart",
+    component: Chart,
+  },
+>>>>>>> b264400091c990ca3400cf3b7397dd0876c74e8c
 ];
 
 // eslint-disable-next-line no-new

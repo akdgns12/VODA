@@ -33,7 +33,7 @@ def add_sentence(
         db: Session, 
         AIMODEL: model_call,
         diary: models.Diary, 
-        calendar: models.Calendar,
+        daily_emotions : models.DailyEmotion,
         text_content:str,
 ):
     kiwi = Kiwi()
@@ -52,6 +52,7 @@ def add_sentence(
     best_emotion_cnt = 0 
     best_emotion_ind = 3
     for ind,emotion in enumerate(emotions):
+        daily_emotions[ind].cnt += emotion
         if best_emotion_cnt <= emotion: 
             best_emotion_cnt = emotion 
             best_emotion_ind = ind 

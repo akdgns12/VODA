@@ -48,4 +48,10 @@ public class DailyEmotion extends BaseTimeEntity {
   @ColumnDefault(value = "0")
   private int cnt;
 
+  public void subCnt(int cnt){
+    if(this.cnt - cnt >= 0) {
+      this.cnt -= cnt;
+    }
+
+  }
 }

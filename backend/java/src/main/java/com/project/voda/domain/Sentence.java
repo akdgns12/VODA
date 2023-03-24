@@ -2,15 +2,7 @@ package com.project.voda.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.project.voda.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -32,7 +24,7 @@ public class Sentence extends BaseTimeEntity {
   @Column(name = "sentence_seq")
   private Long sentenceSeq;
 
-  @ManyToOne(fetch = LAZY)
+  @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
   @JoinColumn(name = "diary_seq", nullable = false)
   private Diary diary;
 

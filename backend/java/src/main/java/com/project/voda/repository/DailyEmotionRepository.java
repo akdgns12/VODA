@@ -13,5 +13,5 @@ public interface DailyEmotionRepository extends JpaRepository<DailyEmotion, Long
 
   // 주별 차트
   List<DailyEmotion> findByUserAndDayBetween(User user, LocalDate fromDate, LocalDate toDate);
-
+  List<DailyEmotion> findByUserAndDay(User user, LocalDate day);
 }
