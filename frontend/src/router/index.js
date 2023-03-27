@@ -21,7 +21,7 @@ const routes = [
     component: SignUp,
   },
   {
-    path: "/calendar/:userSeq",
+    path: "/calendar/:userseq",
     name: "calendar",
     component: Calendar,
   },
@@ -31,7 +31,7 @@ const routes = [
     component: Record,
   },
   {
-    path: "/calendar/diary/:calendarSeq",
+    path: "/calendar/diary",
     name: 'DiaryDetail',
     component: DiaryDetail,
     props: true
