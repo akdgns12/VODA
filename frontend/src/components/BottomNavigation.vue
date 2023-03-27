@@ -1,12 +1,15 @@
 <template>
   <v-bottom-navigation
+    v-model="value"
+    :background-color="color"
+    dark
     class="bottom-nav d-flex justify-between"
     v-if="showBottomNavigation"
     grow
   >
-    <v-btn @click="toMain">
+    <v-btn @click="toCalendar">
       <span></span>
-      <v-icon large color="black">
+      <v-icon large>
         {{ icons.mdiCalendarMonth }}
       </v-icon>
     </v-btn>
@@ -43,31 +46,15 @@ export default {
       mdiCalendarMonth,
       mdiRadioboxMarked,
     },
-  }),
-  computed: {
-    ...mapGetters(["showBottomNavigation"]),
-    // color() {
-    //   switch (this.value) {
-    //     case 0:
-    //       return "#5AC165";
-    //     case 1:
-    //       return "#855CF8";
-    //     case 2:
-    //       return "#FF9500";
-    //     default:
-    //       return "#5AC165";
-    //   }
-    // },
-  },
-  methods: {
-    toRecord() {
-      this.$router.push("/record");
-    },
-    toMain() {
-      this.$router.push("/main");
-    },
-  },
-};
+    methods: {
+        toRecord(){
+            this.$router.push("/record")
+        },
+        toCalendar(){
+            this.$router.push("/calendar")
+        }
+    }
+}
 </script>
 
 <style></style>

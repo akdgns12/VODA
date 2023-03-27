@@ -12,7 +12,7 @@
             <div class="flex flex-col h-full z-100 overflow-hidden">
               <div class="day-header">{{ day.day }}</div>
               <br />
-              <v-btn> emotion </v-btn>
+              <v-btn @click="handleDateClick(day.date)"> emotion </v-btn>
             </div>
           </template>
         </vc-calendar>
@@ -24,54 +24,12 @@
 <script>
 export default {
   data: () => ({
-    type: "month",
-    key: "today",
     focus: new Date(),
-    end: "2019-01-06",
-    typeOptions: [
-      { text: "Day", value: "day" },
-      { text: "4 Day", value: "4day" },
-      { text: "Week", value: "week" },
-      { text: "Month", value: "month" },
-      { text: "Custom Daily", value: "custom-daily" },
-      { text: "Custom Weekly", value: "custom-weekly" },
-    ],
-    masks: {
-      weekdays: "WWW",
-    },
-    attributes: [
-      {
-        key: 1,
-        customData: {
-          title: "Lunch with mom.",
-          class: "bg-red-600 text-white",
-        },
-      },
-    ],
-    mediaStream: null,
   }),
   created() {
     this.$store.dispatch("setShowBottomNavigation", true);
   },
-  mounted() {
-    // this.$refs.calendar.checkChange();
-  },
   methods: {
-    prev() {
-      this.focus = new Date(
-        this.focus.getFullYear(),
-        this.focus.getMonth() - 1,
-        1
-      );
-    },
-    next() {
-      this.focus = new Date(
-        this.focus.getFullYear(),
-        this.focus.getMonth() + 1,
-        1
-      );
-      console.log("focus:", this.focus);
-    },
     showEvent(date) {
       console.log(date);
       console.log("focus:", this.focus);
@@ -81,6 +39,16 @@ export default {
       return `
           ${day.day}
       `;
+    },
+    handleDateClick(date) {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const formattedDate = `${year}.${month < 10 ? "0" + month : month}.${
+        day < 10 ? "0" + day : day
+      }`;
+      console.log(formattedDate);
+      this.$router.push(`/calendar/diary/{calendarSeq}`);
     },
   },
 };
@@ -125,8 +93,8 @@ export default {
 ::v-deep .custom-calendar.vc-container {
   //달력 내부 선
   margin-top: 30px;
-  --day-border: 1px solid #b8c2cc;
-  --day-border-highlight: 1px solid #b8c2cc;
+  // --day-border: 1px solid #b8c2cc;
+  // --day-border-highlight: 1px solid #b8c2cc;
   //날짜별 크기
   --day-width: 20px;
   --day-height: 90px;

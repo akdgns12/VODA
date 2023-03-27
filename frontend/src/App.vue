@@ -39,6 +39,9 @@ export default {
     toMain() {
       this.$router.push("/main");
     },
+    toMain() {
+      this.$router.push("/calendar/:userSeq");
+    },
   },
   computed: {
     color() {
