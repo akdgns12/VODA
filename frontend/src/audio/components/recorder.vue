@@ -48,7 +48,6 @@
             </div>
             <div class="ar__text">Record {{ idx + 1 }}</div>
             <div class="ar__text">{{ record.duration }}</div>
-
             <downloader
               v-if="record.id === selected.id && showDownloadButton"
               class="ar__downloader"

@@ -29,9 +29,8 @@ public class UserController {
   @Value("${spring.security.oauth2.client.registration.kakao.redirect_uri}") private String redirectUri;
 
   @ApiOperation(value = "소셜 로그인")
-  @GetMapping("/login/oauth/kakao/{code}")
-   public ResponseEntity<?> kakaoCallback(@RequestParam String code){
-    log.info(code);
+  @GetMapping("/login/oauth/kakao")
+  public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code){
     try{
       // 토큰 가져오기
       OAuthTokenDto oAuthTokenDto = tokenRequest(code);
@@ -41,12 +40,10 @@ public class UserController {
       UserSignUpResponseDto userSignUpResponseDto = userService.findByEmail(email);
       if(userSignUpResponseDto == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
-        System.out.println("no DB");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
         userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
         userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
-
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){
@@ -70,7 +67,7 @@ public class UserController {
   // 인가 code로 token 가져오기
   public OAuthTokenDto tokenRequest(String code) {
     RestTemplate restTemplate = new RestTemplate();
-    System.out.println("tokenRequest code:" + code);
+
     //HttpHeader
     HttpHeaders headers = new HttpHeaders();
     headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -83,10 +80,9 @@ public class UserController {
     body.add("redirect_uri", redirectUri);
     body.add("code", code);
 
-    System.out.println(redirectUri);
     //HttpHeader와 HttpBody 담기기
     HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers); // params : body
-    System.out.println(kakaoTokenRequest);
+
     return restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, kakaoTokenRequest, OAuthTokenDto.class).getBody();
   }
 

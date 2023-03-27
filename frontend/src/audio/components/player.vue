@@ -57,11 +57,9 @@
                       :name="playBtnIcon"
                       :class="{ 'ar-player__play--active': isPlaying }"
                       @click.native="playback"
-                      v-bind="attrs"
-                      v-on="on"
                     />
 
-                    <v-btn icon>
+                    <v-btn icon @click="_fostwindProgress()">
                       <v-icon>mdi-fast-forward</v-icon>
                     </v-btn>
                   </v-row>
@@ -85,6 +83,7 @@ import IconButton from "../components/icon-button.vue";
 import LineControl from "../components/line-control.vue";
 import VolumeControl from "../components/volume-control.vue";
 import { convertTimeMMSS } from "../library/utils";
+
 export default {
   props: {
     src: { type: String },
@@ -148,14 +147,24 @@ export default {
       }
       this.isPlaying = !this.isPlaying;
     },
-    // 뒤로가기 버튼 눌렀을시 동작 함수
+    // 뒤로가기 버튼
     _rewindProgress() {
+      this.player.currentTime = 0;
+    },
+    // 앞으로가기 버튼
+    _fostwindProgress() {
+      // 0.5초 앞으로 -> 일정시간 이상 되면 녹음 끝으로 이동하는 문제
       if (this.isPlaying) {
+        this.player.currentTime += 2;
+        this._onTimeUpdate();
+      } else {
+        this.player.currentTime += 2;
+        this._onTimeUpdate();
       }
 
-      this.playedTime = convertTimeMMSS(0);
-      this.progress = 0;
-      this.isPlaying = false;
+      console.log(this.player.currentTime);
+      console.log(this.playedTime);
+      console.log(this.progress);
     },
     _resetProgress() {
       if (this.isPlaying) {

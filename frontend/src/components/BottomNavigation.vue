@@ -22,7 +22,7 @@
 
     <v-btn>
       <span></span>
-      <v-icon large color="black">
+      <v-icon large>
         {{ icons.mdiChartBellCurve }}
       </v-icon>
     </v-btn>
@@ -46,15 +46,31 @@ export default {
       mdiCalendarMonth,
       mdiRadioboxMarked,
     },
-    methods: {
-        toRecord(){
-            this.$router.push("/record")
-        },
-        toCalendar(){
-            this.$router.push("/calendar")
-        }
-    }
-}
+  }),
+  computed: {
+    ...mapGetters(["showBottomNavigation"]),
+    color() {
+      switch (this.value) {
+        case 0:
+          return "#5AC165";
+        case 1:
+          return "#855CF8";
+        case 2:
+          return "#FF9500";
+        default:
+          return "#5AC165";
+      }
+    },
+  },
+  methods: {
+    toRecord() {
+      this.$router.push("/record");
+    },
+    toCalendar() {
+      this.$router.push("/calendar");
+    },
+  },
+};
 </script>
 
 <style></style>
