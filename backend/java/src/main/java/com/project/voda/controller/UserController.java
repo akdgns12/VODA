@@ -41,12 +41,10 @@ public class UserController {
       UserSignUpResponseDto userSignUpResponseDto = userService.findByEmail(email);
       if(userSignUpResponseDto == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
-        System.out.println("no DB");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
         userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
         userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
-
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){
