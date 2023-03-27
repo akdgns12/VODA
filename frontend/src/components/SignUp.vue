@@ -61,11 +61,11 @@ export default {
     signUpSubmit(){
       const validate = this.$refs.form.validate()
       if(validate){
-      let saveData = {};
-      saveData.nickname = this.nickname;
+        let saveData = {};
+        saveData.nickname = this.nickname;  
 
       try {
-          this.$axios.post("/api/member", JSON.stringify(saveData), {
+          this.$axios.get("/user/signup", saveData, {
             headers: {
               "Content-Type": `application/json`,
               },
@@ -76,11 +76,11 @@ export default {
                   alert(response.data.errorMessage)
 
                   }
-                  else{
-                    alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
-                    this.$router.push({path: './main'});
-                  }
-                  })
+                else{
+                  alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
+                  this.$router.push({path: '/'});
+                }
+                })
         .catch(error =>{
           console.log(error.response);
 
@@ -88,11 +88,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    }},
-    linkToLogin(){
-      this.$router.push({path:"./main"});
-    },
-    
+    }},   
   },
   created(){
     this.$store.dispatch("setShowBottomNavigation", false);
