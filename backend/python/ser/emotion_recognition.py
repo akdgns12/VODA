@@ -14,7 +14,7 @@ import gc
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-emotions = {"Neutrality" : 7, "Happy" : 1, "Sad" : 2, "Angry" : 3, "Anxious" : 4, "Hurt" : 5, "Embarrassed" : 6}
+emotions = {"Neutrality" : 0, "Happy" : 1, "Sad" : 2, "Angry" : 3, "Anxious" : 4, "Hurt" : 3, "Embarrassed" : 4}
 
 class EmotionRecognizer:
 
@@ -93,40 +93,41 @@ class EmotionRecognizer:
         result = self.model.predict(x=data, batch_size=None)
         return result
 
-    # def load_data(self,data_path):
-    #     dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
-    #     if os.path.isdir(dirpath):
-    #         self.dataset = tf.data.Dataset.load(dirpath)
-    #         print('current dataset:', dirpath)
-    #         self.data_loaded = True
-    #         return
+    def extract_data(self,data_path):
+        dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
+        if os.path.isdir(dirpath):
+            # self.dataset = tf.data.Dataset.load(dirpath)
+            # print('current dataset:', dirpath)
+            # self.data_loaded = True
+            return
         
-    #     print("dataset not found. start to search for metadata")
-    #     self.data = []
-    #     for (root, dirs, files) in os.walk(data_path):
-    #         for file in files:
-    #             filepath = os.path.join(root,file)
-    #             # labeldir = data_path + '_label'
-    #             labelpath = filepath.replace('audio', 'label').replace('wav', 'json')
-    #             # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
-    #             # print(filepath, labelpath)
-    #             with open(labelpath, 'r', encoding='UTF8') as label:
-    #                 data = json.load(label)
-    #             emotion = data["화자정보"]["Emotion"]
-    #             n = tf.one_hot(emotions[emotion], 7)
-    #             self.data.append([filepath, n])
-    #     self.extract_feature(data_path)
-    #     pass
+        print("dataset not found. start to search for metadata")
+        self.data = []
+        for (root, dirs, files) in os.walk(data_path):
+            for file in files:
+                filepath = os.path.join(root,file)
+                # labeldir = data_path + '_label'
+                labelpath = filepath.replace('audio', 'label').replace('wav', 'json')
+                # labelpath = '/'.join(root.split('/')[:-1] + [labeldir, file.rstrip('.wav')]) + '.json'
+                # print(filepath, labelpath)
+                with open(labelpath, 'r', encoding='UTF8') as label:
+                    data = json.load(label)
+                emotion = data["화자정보"]["Emotion"]
+                n = tf.one_hot(emotions[emotion], 7)
+                self.data.append([filepath, n])
+        self.extract_feature(data_path)
+        pass
 
     def load_data(self, data_path):
+        # print(data_path)
         dataset = tf.data.Dataset.load(data_path)
         if not self.data_loaded:
             self.dataset = dataset
         else:
             self.dataset = self.dataset.concatenate(dataset)
-        print('current dataset: ', data_path)
-        print(self.dataset.cardinality())
-        print(self.dataset.take(1))
+        # print('current dataset: ', data_path)
+        # print(self.dataset.cardinality())
+        # print(self.dataset.take(1))
         self.data_loaded = True
         gc.collect()
         return
@@ -140,37 +141,51 @@ class EmotionRecognizer:
         print("data unloaded")
 
     def plot_data(self):
-        for i, (filepath, emotion) in enumerate(self.data):
-            audio_array, sampling_rate = librosa.load(filepath)
-            fig, ax = plt.subplots()
-            librosa.display.waveshow(audio_array, sr=sampling_rate, ax=ax)
-            plt.close()
-        pass
+        fig, axs = plt.subplots(2,figsize=(30, 15))
+        for i, (data, label) in enumerate(self.dataset):
+            if i == 2:
+                break
+            channel3 = tf.squeeze(tf.slice(data, [0,0,2], [-1,-1,1]))
+            # Plot the mel spectrogram
+            axs[i].imshow(channel3, interpolation="nearest", cmap="inferno", origin="lower")
+            # axs[i].set_xlabel("Time")
+            # axs[i].set_ylabel("Frequency")
+            # axs[i].set_title("Mel Spectrogram")
+            # Show the plot
+            print(channel3.shape)
+        plt.show()
+
+        # for i, (filepath, emotion) in enumerate(self.data):
+        #     audio_array, sampling_rate = librosa.load(filepath)
+        #     fig, ax = plt.subplots()
+        #     librosa.display.waveshow(audio_array, sr=sampling_rate, ax=ax)
+        #     plt.close()
+        # pass
 
     def audio_spectrum(self, filepath, duration):
         audio_array, sampling_rate = librosa.load(filepath, duration=duration)
         d = audio_array.shape[0]
         pad = sampling_rate * duration - d
         if pad > 0:
-            audio_padded = np.pad(audio_array, (pad // 2, pad - pad // 2), 'constant', constant_values=0)
+            audio_padded = np.pad(audio_array, (0, pad), 'constant', constant_values=0)
         else:
             audio_padded = audio_array 
         
         # extract spectral feature by three different method
         # normalize is needed because of the data range
-        mfcc = (librosa.feature.mfcc(y=audio_padded, n_mfcc=128, norm="ortho"))
+        # mfcc = (librosa.feature.mfcc(y=audio_padded, n_mfcc=128, norm="ortho"))
 
-        chroma = (librosa.feature.chroma_stft(y=audio_padded, n_chroma=128))
+        # chroma = (librosa.feature.chroma_stft(y=audio_padded, n_chroma=128))
 
         mel = librosa.feature.melspectrogram(y=audio_padded)
         meldb = librosa.power_to_db(mel, ref=np.min)
         melnorm = librosa.util.normalize(meldb)
 
-        data = np.stack((mfcc,chroma, melnorm), axis=2)
+        data = np.array(melnorm)
         del sampling_rate
         del audio_array
-        del mfcc
-        del chroma
+        # del mfcc
+        # del chroma
         del mel
         del meldb
         del melnorm
@@ -179,7 +194,7 @@ class EmotionRecognizer:
 
     def extract_feature(self, data_path):
         print("feature extracting...")
-        duration = 7
+        duration = 5
         result = []
         labels = []
         l = int(len(self.data) / 10)
@@ -200,8 +215,8 @@ class EmotionRecognizer:
         print("label data shape:", labeltensor.shape)
         dataset = tf.data.Dataset.from_tensor_slices((resulttensor, labeltensor))
         tf.data.Dataset.save(dataset, path='./dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1])
-        self.dataset = dataset
-        self.data_loaded = True
+        # self.dataset = dataset
+        # self.data_loaded = True
         print("current dataset: ", data_path.split('/')[-1])
         del dataset
         del result
@@ -215,16 +230,16 @@ class EmotionRecognizer:
 # test code
 if __name__ == "__main__":
     test = EmotionRecognizer()
-    # for dirs in os.listdir('./data/Training/T2_audio/감정/상처'):
-    #     test.load_data('./data/Training/T2_audio/감정/상처/' + dirs)
-    #     print(test.dataset.cardinality())
-    #     test.unload_data()
-    #     gc.collect()
-    for dirs in os.listdir('./dataset'):
-        for dir in os.listdir('./dataset/' + dirs):
-            test.load_data('./dataset/' + dirs + '/' + dir)
-    print(test.dataset.cardinality())
-    
+    # for dirs in os.listdir('./dataset/분노'):
+    #     test.load_data('./dataset/분노/' + dirs)
+    # test.plot_data()
+        
+    for dirs in os.listdir("./data/Training/감정_audio"):
+        for dir in os.listdir("./data/Training/감정_audio/" + dirs):
+            test.extract_data("./data/Training/감정_audio/" + dirs + '/' + dir)
+            test.unload_data()
+            gc.collect()
+
     # for dirs in os.listdir('./data/Training/T2_audio/감정/중립'):
     #     test.load_data('./data/Training/T2_audio/감정/중립/' + dirs)
     #     test.unload_data()
