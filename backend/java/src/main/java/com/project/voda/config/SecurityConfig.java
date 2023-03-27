@@ -71,7 +71,7 @@ public class SecurityConfig {
 //         configuration.setAllowedOriginPatterns();
         // 추후 경로에 맞게 수정 필요
         configuration.addAllowedOrigin("http://localhost:8081");
-//        configuration.addAllowedOrigin("http://3.34.141.63:3000");
+        configuration.addAllowedOrigin("https://j8a104.p.ssafy.io");
 //        configuration.addAllowedOrigin("http://3.34.141.63:443");
 //        configuration.addAllowedOrigin("https://ggati.site");
         configuration.addAllowedHeader("*");

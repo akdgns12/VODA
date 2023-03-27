@@ -16,7 +16,6 @@ const userStore = {
   },
   actions: {
     async getUserInfo({commit},{data}){
-      console.log(data)
       await doGetUser( 
         data,
         ({data})=>{

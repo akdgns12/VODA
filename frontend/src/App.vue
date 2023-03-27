@@ -40,7 +40,7 @@ export default {
       this.$router.push("/user/signup")
     },
     toMain(){
-      this.$router.push("/calendar")
+      this.$router.push("/calendar/:userSeq")
     }
   },
   computed: {

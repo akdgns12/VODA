@@ -46,7 +46,7 @@ public class UserController {
       }else{ // 2. 저장됐다면 바로 메인 페이지로
         userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
         userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
-        System.out.println("yse DB"+userSignUpResponseDto);
+
         return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){

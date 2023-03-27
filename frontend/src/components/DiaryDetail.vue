@@ -26,11 +26,6 @@
         src="https://cdn.vuetifyjs.com/images/cards/forest.jpg"
         gradient="to top, rgba(0,0,3,.44), rgba(0,0,0,.44)"
       >
-        <!-- <v-container class="align-center">
-          <v-row align="center">
-            <strong class="text-h1 font-weight-regular mr-6"></strong>
-          </v-row>
-        </v-container> -->
       </v-img>
     </v-card>
     <v-card-text class="py-0">

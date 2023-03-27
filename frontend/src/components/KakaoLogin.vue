@@ -49,7 +49,6 @@ export default {
           // 
           process.env.VUE_APP_KAKAO_REDIRECT_URI +
           '&scope=account_email'    
-      // this.$router.push('/user/login/oauth/kakao')
     }
     
   },
@@ -57,14 +56,6 @@ export default {
      this.$store.dispatch("setShowBottomNavigation", false);
 
   },
-  // mounted(){
-  //       //  this.URL = 'https://kauth.kakao.com/oauth/authorize?response_type=code' +
-  //       //   '&client_id=' +
-  //       //   process.env.VUE_APP_KAKAO_APP_KEY +
-  //       //   '&redirect_uri=' +
-  //       //   process.env.VUE_APP_KAKAO_REDIRECT_URI+
-  //       //   '&scope=account_email'
-  // }
 }
 </script>
 

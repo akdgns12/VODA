@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import userStore from '@/store/modules/userStore';
 export default {
   name: 'RedirectHandler',
     data(){
@@ -15,16 +16,13 @@ export default {
     async mounted(){
       try{
         
-        console.log("ㅇ야아아아ㅏ")
-        // if(!this.$router.query.code){
-        //   return this.$router.push('/')
-        // }
+
         let params = new URL(window.location.href).searchParams;
         const code = params.get("code");
         console.log(code);
-         this.$store
-      .dispatch("getUserInfo", { data : code })
-
+         
+        this.$store.dispatch("getUserInfo", { data : code })
+        console.log(userStore.state.userData)
       
         // await api.get("/user/login/oauth/kakao")
         //   .then((response) => {
