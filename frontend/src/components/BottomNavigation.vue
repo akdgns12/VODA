@@ -7,7 +7,7 @@
         v-if="showBottomNavigation"
         grow
         >
-        <v-btn>
+        <v-btn @click = 'toCalendar'>
             <span></span>
             <v-icon large>
             {{ icons.mdiCalendarMonth }}
@@ -65,6 +65,9 @@ export default {
     methods: {
         toRecord(){
             this.$router.push("/record")
+        },
+        toCalendar(){
+            this.$router.push("/calendar")
         }
     }
 }
