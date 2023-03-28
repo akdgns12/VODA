@@ -36,7 +36,7 @@ class EmotionRecognizer:
                 model.add(keras.layers.Dense(1024, activation='relu'))
                 model.add(keras.layers.Dropout(0.2))
                 model.add(keras.layers.Dense(30, activation='relu'))
-                model.add(keras.layers.Dense(7, activation='softmax'))
+                model.add(keras.layers.Dense(5, activation='relu'))
                 print(model.summary())
                 self.model = model
                 self.model.save("test.h5")   
@@ -70,7 +70,7 @@ class EmotionRecognizer:
 
     def validate(self, batch_size=10,
                 optimizer="adam", 
-                loss=tf.keras.losses.CategoricalCrossentropy(from_logits=False), 
+                loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True), 
                 metrics=['accuracy'],
                 ):
         if not self.data_loaded:
@@ -88,7 +88,7 @@ class EmotionRecognizer:
         if not os.path.isfile(filepath):
             print("file doesn't exist")
             return
-        data = np.array([self.audio_spectrum(filepath, duration=7)])
+        data = np.array([self.audio_spectrum(filepath, duration=5)])
         print(data.shape)
         result = self.model.predict(x=data, batch_size=None)
         return result
@@ -97,7 +97,7 @@ class EmotionRecognizer:
         dirpath = './dataset/'+ data_path.split('/')[-2] + '/' + data_path.split('/')[-1]
         if os.path.isdir(dirpath):
             # self.dataset = tf.data.Dataset.load(dirpath)
-            # print('current dataset:', dirpath)
+            print('current dataset:', dirpath)
             # self.data_loaded = True
             return
         
@@ -229,7 +229,7 @@ class EmotionRecognizer:
 
 # test code
 if __name__ == "__main__":
-    test = EmotionRecognizer()
+    test = EmotionRecognizer(name="new")
     # for dirs in os.listdir('./dataset/분노'):
     #     test.load_data('./dataset/분노/' + dirs)
     # test.plot_data()

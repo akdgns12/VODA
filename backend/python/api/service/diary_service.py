@@ -5,6 +5,7 @@ from ..model import models, schemas
 from experiments.emotion_text.test import predict 
 from experiments.emotion_text import model_call
 from kiwipiepy import Kiwi
+from ser import emotion_recognition
 
 # AIMODEL = model_call.model_call()
 
@@ -59,3 +60,8 @@ def add_sentence(
     diary.emotion_idx = best_emotion_ind
     db.commit()
     return sentence_emotions, emotions
+
+def speech_emotion(voice_file):
+    emotionRecognizer = emotion_recognition.EmotionRecognizer()
+    speech_emotion = emotionRecognizer.predict_file(voice_file)
+    return speech_emotion
