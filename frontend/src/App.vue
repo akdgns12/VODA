@@ -7,6 +7,10 @@
 
       <v-btn @click="toSignUp">sign Up </v-btn>
       <v-btn @click="toMain"> Main </v-btn>
+<<<<<<< HEAD
+=======
+      <v-btn @click="logout()"> Logout</v-btn>
+>>>>>>> c580f134e971e8913c69d9a545b7b4da863aec3e
     </div>
   </v-app>
 </template>
@@ -32,15 +36,31 @@ export default {
   components: {
     BottomNavigation,
   },
+<<<<<<< HEAD
+=======
+
+>>>>>>> c580f134e971e8913c69d9a545b7b4da863aec3e
   methods: {
     toSignUp() {
       this.$router.push("/user/signup");
     },
     toMain() {
+<<<<<<< HEAD
       this.$router.push("/main");
     },
     toMain() {
       this.$router.push("/calendar/:userSeq");
+=======
+      this.$router.push("/calendar/:userSeq");
+    },
+    // 카카오 로그아웃
+    async logout() {
+      window.location.href =
+        `https://kauth.kakao.com/oauth/logout?client_id=` +
+        process.env.VUE_APP_KAKAO_APP_KEY +
+        `&logout_redirect_uri=` +
+        process.env.VUE_APP_KAKAO_LOGOUT_REDIRECT_URI;
+>>>>>>> c580f134e971e8913c69d9a545b7b4da863aec3e
     },
   },
   computed: {
