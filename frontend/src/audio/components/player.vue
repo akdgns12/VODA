@@ -59,7 +59,7 @@
                       @click.native="playback"
                     />
 
-                    <v-btn icon @click="_fostwindProgress()">
+                    <v-btn icon @click="_postwindProgress()">
                       <v-icon>mdi-fast-forward</v-icon>
                     </v-btn>
                   </v-row>
@@ -152,7 +152,7 @@ export default {
       this.player.currentTime = 0;
     },
     // 앞으로가기 버튼
-    _fostwindProgress() {
+    _postwindProgress() {
       // 0.5초 앞으로 -> 일정시간 이상 되면 녹음 끝으로 이동하는 문제
       if (this.isPlaying) {
         this.player.currentTime += 2;
