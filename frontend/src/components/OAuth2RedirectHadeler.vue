@@ -28,9 +28,6 @@ export default {
         // 없으면 회원가입 페이지로 라우팅
         this.$router.push("/user/signup");
       }
-      if (this.$store.getters.userStatus == 302) {
-        this.$router.push("/user/signup");
-      }
     } catch (error) {
       console.log(error);
     }
