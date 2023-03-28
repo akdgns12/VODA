@@ -4,9 +4,9 @@ import SignUp from "../components/SignUp.vue";
 import KakaoLogin from "../components/KakaoLogin.vue";
 import Calendar from "../components/MainView.vue";
 import Record from "../audio/components/recorder.vue";
-import DiaryDetail from "../components/DiaryDetail.vue"
-import Chart from "../components/ChartView.vue"
-import RedirectHandler from "../components/OAuth2RedirectHadeler.vue"
+import DiaryDetail from "../components/DiaryDetail.vue";
+import Chart from "../components/ChartView.vue";
+import RedirectHandler from "../components/OAuth2RedirectHadeler.vue";
 
 Vue.use(VueRouter);
 
@@ -32,13 +32,13 @@ const routes = [
   },
   {
     path: "/calendar/diary",
-    name: 'DiaryDetail',
+    name: "DiaryDetail",
     component: DiaryDetail,
-    props: true
+    props: true,
   },
   {
     path: "/user/login/oauth/kakao/callback",
-    name: 'RedirectHandler',
+    name: "RedirectHandler",
     component: RedirectHandler,
   },
   {
