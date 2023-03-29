@@ -2,7 +2,7 @@ import { apiInstance } from ".";
 
 const api = apiInstance();
 
-async function doGetUser( code) {
+async function doGetUser(code) {
   try {
     const response = await api.get(`/user/login/oauth/kakao/${code}`, {
       params: { code: code },

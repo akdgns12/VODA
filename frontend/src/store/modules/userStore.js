@@ -4,7 +4,7 @@ const userStore = {
   state: {
     userData: {},
     userStatus: null,
-    error:null,
+    error: null,
   },
   getters: {
     userData(state) {
@@ -13,9 +13,9 @@ const userStore = {
     userStatus(state) {
       return state.userStatus;
     },
-    error(state){
+    error(state) {
       return state.error;
-    }
+    },
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -28,38 +28,34 @@ const userStore = {
   actions: {
     async getUserInfo({ commit }, { data }) {
       try {
-        const response =  await doGetUser(data); // 받아온 데이터를 userData 변수에 저장
-        
-        console.log(response);
+        const response = await doGetUser(data); // 받아온 데이터를 userData 변수에 저장
         const userData = response.data;
         const userStatus = response.status;
 
-        commit("SET_USER_STATUS", userStatus); 
-        commit("SET_USER_DATA", userData);  // mutations 를 통해 state.userData 에 반영
+        commit("SET_USER_STATUS", userStatus);
+        commit("SET_USER_DATA", userData); // mutations 를 통해 state.userData 에 반영
 
         // 로컬 스토리지에 accessToken과 refreshToken을 저장
         localStorage.setItem("accessToken", userData.accessToken);
         localStorage.setItem("refreshToken", userData.refreshToken);
 
-
-        return userData;  // userData 변수를 반환
+        return userData; // userData 변수를 반환
       } catch (error) {
-        console.log(error);
-        throw error;  // 에러 발생 시 호출자에게 에러를 전달
+        throw error; // 에러 발생 시 호출자에게 에러를 전달
       }
-    }
-    // async getUserInfo({commit},{data}){
-    //   await doGetUser( 
+    },
+    // async getUserInfo({ commit }, { data }) {
+    //   await doGetUser(
     //     data,
-    //     ({data})=>{
-    //       commit("SET_USER_DATA",data)
+    //     ({ data }) => {
+    //       commit("SET_USER_DATA", data);
     //     },
     //     (error) => {
     //       console.log(error);
     //     }
     //   );
-    // }
-  }
-}
+    // },
+  },
+};
 
 export default userStore;

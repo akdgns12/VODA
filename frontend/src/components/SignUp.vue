@@ -39,6 +39,9 @@
   </v-app>
 </template>
 <script>
+import { apiInstance } from "@/api";
+const api = apiInstance;
+
 export default {
   data: () => ({
     nickname: "",
@@ -55,11 +58,11 @@ export default {
         saveData.nickname = this.nickname;
 
         try {
-          this.$axios
-            .get("/user/signup", saveData, {
-              headers: {
-                "Content-Type": `application/json`,
-              },
+          api
+            .post("/user/signup", saveData, {
+              // headers: {
+              //   "Content-Type": `application/json`,
+              // },
             })
             .then((response) => {
               console.log(response);
