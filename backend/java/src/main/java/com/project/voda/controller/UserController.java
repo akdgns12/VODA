@@ -34,29 +34,31 @@ public class UserController {
     try{
       // 토큰 가져오기
       OAuthTokenDto oAuthTokenDto = tokenRequest(code);
-      // 유저 정보 가져오기
-      KakaoProfileDto kakaoProfile = userInfoRequest(oAuthTokenDto);
+      KakaoProfileDto kakaoProfile = userInfoRequest(oAuthTokenDto.getAccess_token());
       String email = kakaoProfile.getKakao_account().getEmail();
-      UserSignUpResponseDto userSignUpResponseDto = userService.findByEmail(email);
-      if(userSignUpResponseDto == null){
+      UserSignInResponseDto userSignInResponseDto = userService.findByEmail(email);
+      if(userSignInResponseDto == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
-        return new ResponseEntity<>(email, HttpStatus.NO_CONTENT);
+        userSignInResponseDto = new UserSignInResponseDto();
+        userSignInResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
+        return new ResponseEntity<>(userSignInResponseDto, HttpStatus.ACCEPTED);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
-        userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
-        userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
-        return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
+        userSignInResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
+        userSignInResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
+        return new ResponseEntity<>(userSignInResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){
       return exceptionHandling(e);
     }
   }
 
-  @ApiOperation(value = "회원 가입", notes = "닉네임을 입력받고 회원가입 하는 API")
+  @ApiOperation(value = "회원 가입", notes = "닉네임과 access_token을 전달받고 회원가입 하는 API")
   @PostMapping("/signup")
-  public ResponseEntity<?> join(@RequestBody UserSignUpRequestDto signUpRequestDto){
+  public ResponseEntity<?> join(@RequestBody UserSignUpRequestDto signUpRequestDto, @RequestParam String access_token){
     log.info("회원가입 Data : ",signUpRequestDto);
-
     try{
+      KakaoProfileDto kakaoProfile = userInfoRequest(access_token);
+      signUpRequestDto.setEmail(kakaoProfile.getKakao_account().getEmail());
       userService.create(signUpRequestDto);
       return new ResponseEntity<>(HttpStatus.OK);
     }catch (Exception e){
@@ -86,14 +88,14 @@ public class UserController {
     return restTemplate.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, kakaoTokenRequest, OAuthTokenDto.class).getBody();
   }
 
-  // token으로 유저 정보 가져오기
-  public KakaoProfileDto userInfoRequest(OAuthTokenDto oauthTokenDto) {
+  // access_token으로 유저 정보 가져오기
+  public KakaoProfileDto userInfoRequest(String access_token) {
     ///유저정보 요청
     RestTemplate restTemplate = new RestTemplate();
 
     //HttpHeader
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + oauthTokenDto.getAccess_token());
+    headers.add("Authorization", "Bearer " + access_token);
     headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
     //HttpHeader와 HttpBody 담기기
