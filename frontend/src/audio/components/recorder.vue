@@ -4,23 +4,6 @@
     <h2>녹음해보세요.</h2>
     <v-container class="ar" fluid>
       <v-flex class="ar-content" :class="{ ar__blur: isUploading }">
-        <!-- <div class="ar-recorder">
-          <icon-button
-            class="ar-icon ar-icon__lg"
-            :name="iconButtonType"
-            :class="{
-              'ar-icon--rec': isRecording,
-              'ar-icon--pulse': isRecording && volume > 0.02,
-            }"
-            @click.native="toggleRecorder"
-          />
-          <icon-button
-            class="ar-icon ar-icon__sm ar-recorder__stop"
-            name="stop"
-            @click.native="stopRecorder"
-          />
-        </div> -->
-
         <div class="ar-recorder__records-limit" v-if="attempts">
           Attempts: {{ attemptsLeft }}/{{ attempts }}
         </div>
@@ -29,6 +12,7 @@
           Record duration is limited: {{ time }}m
         </div>
 
+        <!-- 녹음 파일 선택, 삭제, download component -->
         <div class="ar-records">
           <div
             class="ar-records__record"
@@ -56,15 +40,13 @@
             />
           </div>
         </div>
-        <!-- <audio-recorder
-          ref="recorder"
-          :after-recording="stopRecorder"
-          :before-recording="toggleRecorder"
-        /> -->
+
+        <!-- 선택된 record -->
         <audio-player :record="selected" />
       </v-flex>
     </v-container>
-    <!-- <v-app-bar> -->
+
+    <!-- bottom nav -->
     <v-layout class="bottom-nav">
       <v-bottom-navigation grow>
         <v-btn @click="toMain">
@@ -72,6 +54,7 @@
             {{ icons.mdiCalendarMonth }}
           </v-icon>
         </v-btn>
+        <!-- 녹음 시작 및 중지 버튼 -->
         <v-btn class="ar-recorder">
           <icon-button
             class="ar-icon ar-icon__lg"
@@ -82,11 +65,6 @@
             }"
             @click.native="toggleRecorder"
           />
-          <!-- <icon-button
-              class="ar-icon ar-icon__sm ar-recorder__stop"
-              name="stop"
-              @click.native="stopRecorder"
-            /> -->
         </v-btn>
         <v-btn>
           <v-icon large color="black">
@@ -95,7 +73,6 @@
         </v-btn>
       </v-bottom-navigation>
     </v-layout>
-    <!-- </v-app-bar> -->
   </v-app>
 </template>
 

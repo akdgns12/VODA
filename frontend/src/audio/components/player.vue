@@ -3,6 +3,7 @@
     <div class="ar-player-actions">
       <v-bottom-sheet inset>
         <template v-slot:activator="{ on, attrs }">
+          <!-- 녹음 재생 버튼 -->
           <v-btn
             id="play"
             class="ar-icon ar-icon__lg ar-player__play"
@@ -13,6 +14,8 @@
             v-on="on"
           />
         </template>
+
+        <!-- 녹음 재생 component -->
         <v-card tile>
           <v-progress-linear>
             <line-control
@@ -32,16 +35,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-
           <v-list>
-            <!-- <v-list-item-content>
-                <v-list-item-title>The Walker</v-list-item-title>
-                <v-list-item-subtitle
-                  >Fitz & The Trantrums</v-list-item-subtitle
-                >
-              </v-list-item-content> -->
-            <!-- </v-list-item> -->
-
             <v-spacer></v-spacer>
             <v-list-item>
               <v-row justify="end">
@@ -147,13 +141,12 @@ export default {
       }
       this.isPlaying = !this.isPlaying;
     },
-    // 뒤로가기 버튼
+    // 재생시간 0초로
     _rewindProgress() {
       this.player.currentTime = 0;
     },
-    // 앞으로가기 버튼
+    // 재생시간 2초 앞으로
     _postwindProgress() {
-      // 0.5초 앞으로 -> 일정시간 이상 되면 녹음 끝으로 이동하는 문제
       if (this.isPlaying) {
         this.player.currentTime += 2;
         this._onTimeUpdate();
@@ -161,10 +154,6 @@ export default {
         this.player.currentTime += 2;
         this._onTimeUpdate();
       }
-
-      console.log(this.player.currentTime);
-      console.log(this.playedTime);
-      console.log(this.progress);
     },
     _resetProgress() {
       if (this.isPlaying) {
