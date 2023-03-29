@@ -33,7 +33,6 @@ export default {
   components: {
     BottomNavigation,
   },
-
   methods: {
     toSignUp() {
       this.$router.push("/user/signup");

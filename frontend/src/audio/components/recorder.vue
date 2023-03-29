@@ -1,75 +1,79 @@
 <template>
-  <div class="ar">
-    <div class="ar__overlay" v-if="isUploading"></div>
-    <div class="ar-spinner" v-if="isUploading">
-      <div class="ar-spinner__dot"></div>
-      <div class="ar-spinner__dot"></div>
-      <div class="ar-spinner__dot"></div>
-    </div>
-
-    <div class="ar-content" :class="{ ar__blur: isUploading }">
-      <v-row class="ar-recorder">
-        <icon-button
-          class="ar-icon ar-icon__lg"
-          :name="iconButtonType"
-          :class="{
-            'ar-icon--rec': isRecording,
-            'ar-icon--pulse': isRecording && volume > 0.02,
-          }"
-          @click.native="toggleRecorder"
-        />
-        <icon-button
-          class="ar-icon ar-icon__sm ar-recorder__stop"
-          name="stop"
-          @click.native="stopRecorder"
-        />
-        
-      </v-row>
-
-      <div class="ar-recorder__records-limit" v-if="attempts">
-        Attempts: {{ attemptsLeft }}/{{ attempts }}
-      </div>
-      <div class="ar-recorder__duration">{{ recordedTime }}</div>
-      <div class="ar-recorder__time-limit" v-if="time">
-        Record duration is limited: {{ time }}m
-      </div>
-
-      <div class="ar-records">
-        <div
-          class="ar-records__record"
-          :class="{ 'ar-records__record--selected': record.id === selected.id }"
-          :key="record.id"
-          v-for="(record, idx) in recordList"
-          @click="choiceRecord(record)"
-        >
-          <div
-            class="ar__rm"
-            v-if="record.id === selected.id"
-            @click="removeRecord(idx)"
-          >
-            &times;
-          </div>
-          <div class="ar__text">Record {{ idx + 1 }}</div>
-          <div class="ar__text">{{ record.duration }}</div>
-
-          <downloader
-            v-if="record.id === selected.id && showDownloadButton"
-            class="ar__downloader"
-            :record="record"
-            :filename="filename"
-          />
+  <v-app>
+    <h2>오늘의 일기를</h2>
+    <h2>녹음해보세요.</h2>
+    <v-container class="ar" fluid>
+      <v-flex class="ar-content" :class="{ ar__blur: isUploading }">
+        <div class="ar-recorder__records-limit" v-if="attempts">
+          Attempts: {{ attemptsLeft }}/{{ attempts }}
         </div>
-      </div>
+        <div class="ar-recorder__duration">{{ recordedTime }}</div>
+        <div class="ar-recorder__time-limit" v-if="time">
+          Record duration is limited: {{ time }}m
+        </div>
 
-      <!-- <audio-player src="/audio/example.mp3" />
-      <audio-recorder
-        ref="recorder"
-        :after-recording="stopRecorder"
-        :before-recording="toggleRecorder"
-      /> -->
-      <audio-player :record="selected" />
-    </div>
-  </div>
+        <!-- 녹음 파일 선택, 삭제, download component -->
+        <div class="ar-records">
+          <div
+            class="ar-records__record"
+            :class="{
+              'ar-records__record--selected': record.id === selected.id,
+            }"
+            :key="record.id"
+            v-for="(record, idx) in recordList"
+            @click="choiceRecord(record)"
+          >
+            <div
+              class="ar__rm"
+              v-if="record.id === selected.id"
+              @click="removeRecord(idx)"
+            >
+              &times;
+            </div>
+            <div class="ar__text">Record {{ idx + 1 }}</div>
+            <div class="ar__text">{{ record.duration }}</div>
+            <downloader
+              v-if="record.id === selected.id && showDownloadButton"
+              class="ar__downloader"
+              :record="record"
+              :filename="filename"
+            />
+          </div>
+        </div>
+
+        <!-- 선택된 record -->
+        <audio-player :record="selected" />
+      </v-flex>
+    </v-container>
+
+    <!-- bottom nav -->
+    <v-layout class="bottom-nav">
+      <v-bottom-navigation grow>
+        <v-btn @click="toMain">
+          <v-icon large color="black">
+            {{ icons.mdiCalendarMonth }}
+          </v-icon>
+        </v-btn>
+        <!-- 녹음 시작 및 중지 버튼 -->
+        <v-btn class="ar-recorder">
+          <icon-button
+            class="ar-icon ar-icon__lg"
+            :name="iconButtonType"
+            :class="{
+              'ar-icon--rec': isRecording,
+              'ar-icon--pulse': isRecording && volume > 0.02,
+            }"
+            @click.native="toggleRecorder"
+          />
+        </v-btn>
+        <v-btn>
+          <v-icon large color="black">
+            {{ icons.mdiChartBellCurve }}
+          </v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-layout>
+  </v-app>
 </template>
 
 <script>
@@ -78,8 +82,16 @@ import Downloader from "./downloader";
 import IconButton from "./icon-button";
 import Recorder from "../library/recorder";
 import { convertTimeMMSS } from "../library/utils";
+import {
+  mdiRadioboxMarked,
+  mdiChartBellCurve,
+  mdiCalendarMonth,
+} from "@mdi/js";
 
 export default {
+  created() {
+    this.$store.dispatch("setShowBottomNavigation", false);
+  },
   props: {
     attempts: { type: Number },
     time: { type: Number },
@@ -103,32 +115,27 @@ export default {
       recordList: [],
       selected: {},
       uploadStatus: null,
+      icons: {
+        mdiChartBellCurve,
+        mdiCalendarMonth,
+        mdiRadioboxMarked,
+      },
       value: 3,
     };
   },
+
   components: {
     AudioPlayer,
     Downloader,
     IconButton,
   },
-  // mounted() {
-  //   this.$eventBus.$on("start-upload", () => {
-  //     this.isUploading = true;
-  //     this.beforeUpload && this.beforeUpload("before upload");
-  //   });
-  //   this.$eventBus.$on("end-upload", (msg) => {
-  //     this.isUploading = false;
-  //     if (msg.status === "success") {
-  //       this.successfulUpload && this.successfulUpload(msg.response);
-  //     } else {
-  //       this.failedUpload && this.failedUpload(msg.response);
-  //     }
-  //   });
-  // },
   beforeDestroy() {
     this.stopRecorder();
   },
   methods: {
+    toMain() {
+      this.$router.push("/main");
+    },
     toggleRecorder() {
       if (this.attempts && this.recorder.records.length >= this.attempts) {
         return;
@@ -136,7 +143,7 @@ export default {
       if (!this.isRecording || (this.isRecording && this.isPause)) {
         this.recorder.start();
       } else {
-        this.recorder.pause();
+        this.stopRecorder();
       }
     },
     stopRecorder() {
@@ -171,6 +178,12 @@ export default {
     },
   },
   computed: {
+    color() {
+      switch (this.value) {
+        default:
+          return "#5AC165";
+      }
+    },
     attemptsLeft() {
       return this.attempts - this.recordList.length;
     },
@@ -212,7 +225,13 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-left: -16px;
+}
 .ar {
   width: 420px;
   font-family: "Roboto", sans-serif;
@@ -366,12 +385,13 @@ export default {
   &__downloader,
   &__downloader {
     right: 115px;
+    margin-top: 10px;
   }
   .bottom-nav {
-  position: fixed;
-  bottom: -100px;
-  width: 100%;
-}
+    position: fixed;
+    bottom: -100px;
+    width: 100%;
+  }
 }
 @import "../scss/icons";
 </style>
