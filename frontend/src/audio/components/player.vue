@@ -1,27 +1,73 @@
 <template>
   <div class="ar-player">
     <div class="ar-player-actions">
-      <icon-button
-        id="play"
-        class="ar-icon ar-icon__lg ar-player__play"
-        :name="playBtnIcon"
-        :class="{ 'ar-player__play--active': isPlaying }"
-        @click.native="playback"
-      />
-    </div>
+      <v-bottom-sheet inset>
+        <template v-slot:activator="{ on, attrs }">
+          <!-- 녹음 재생 버튼 -->
+          <v-btn
+            id="play"
+            class="ar-icon ar-icon__lg ar-player__play"
+            :name="playBtnIcon"
+            :class="{ 'ar-player__play--active': isPlaying }"
+            @click.native="playback"
+            v-bind="attrs"
+            v-on="on"
+          />
+        </template>
 
-    <div class="ar-player-bar">
-      <div class="ar-player__time">{{ playedTime }}</div>
-      <line-control
-        class="ar-player__progress"
-        ref-id="progress"
-        :percentage="progress"
-        @change-linehead="_onUpdateProgress"
-      />
-      <div class="ar-player__time">{{ duration }}</div>
-      <volume-control @change-volume="_onChangeVolume" />
-    </div>
+        <!-- 녹음 재생 component -->
+        <v-card tile>
+          <v-progress-linear>
+            <line-control
+              class="ar-player__progress"
+              ref-id="progress"
+              :percentage="progress"
+              @change-linehead="_onUpdateProgress"
+            />
+          </v-progress-linear>
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <v-col align="left">{{ playedTime }}</v-col>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-col align="right">{{ duration }}</v-col>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-list>
+            <v-spacer></v-spacer>
+            <v-list-item>
+              <v-row justify="end">
+                <v-col cols="5">
+                  <v-row>
+                    <v-btn icon @click="_rewindProgress()">
+                      <v-icon>mdi-rewind</v-icon>
+                    </v-btn>
 
+                    <icon-button
+                      id="play"
+                      class="ar-icon ar-icon__lg ar-player__play"
+                      :name="playBtnIcon"
+                      :class="{ 'ar-player__play--active': isPlaying }"
+                      @click.native="playback"
+                    />
+
+                    <v-btn icon @click="_postwindProgress()">
+                      <v-icon>mdi-fast-forward</v-icon>
+                    </v-btn>
+                  </v-row>
+                </v-col>
+
+                <v-col cols="3">
+                  <volume-control @change-volume="_onChangeVolume" />
+                </v-col>
+              </v-row>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-bottom-sheet>
+    </div>
     <audio :id="playerUniqId" :src="audioSource"></audio>
   </div>
 </template>
@@ -31,6 +77,7 @@ import IconButton from "../components/icon-button.vue";
 import LineControl from "../components/line-control.vue";
 import VolumeControl from "../components/volume-control.vue";
 import { convertTimeMMSS } from "../library/utils";
+
 export default {
   props: {
     src: { type: String },
@@ -94,10 +141,25 @@ export default {
       }
       this.isPlaying = !this.isPlaying;
     },
+    // 재생시간 0초로
+    _rewindProgress() {
+      this.player.currentTime = 0;
+    },
+    // 재생시간 2초 앞으로
+    _postwindProgress() {
+      if (this.isPlaying) {
+        this.player.currentTime += 2;
+        this._onTimeUpdate();
+      } else {
+        this.player.currentTime += 2;
+        this._onTimeUpdate();
+      }
+    },
     _resetProgress() {
       if (this.isPlaying) {
         this.player.pause();
       }
+
       this.duration = convertTimeMMSS(0);
       this.playedTime = convertTimeMMSS(0);
       this.progress = 0;
@@ -122,6 +184,9 @@ export default {
 </script>
 
 <style lang="scss">
+.ar-player {
+  align-self: right;
+}
 .ar-player {
   width: 380px;
   height: unset;
@@ -155,8 +220,11 @@ export default {
     justify-content: space-around;
   }
   &__progress {
-    width: 160px;
-    margin: 0 8px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    // width: 600px;
+    // margin: 0 8px;
   }
   &__time {
     color: rgba(84, 84, 84, 0.5);
