@@ -4,7 +4,7 @@
       <WeekDatePicker
         :startDate="this.startDate"
         :endDate="this.endDate"
-        @change="change(date)"
+        @change="change(startDate, endDate)"
       />
       <canvas ref="barChart" />
     </v-container>
@@ -71,6 +71,7 @@ export default {
       this.charts.push(chart);
     },
     change(startDate, endDate) {
+      console.log("change: ", startDate, endDate);
       this.startDate = startDate;
       this.endDate = endDate;
       this.$store
@@ -79,6 +80,7 @@ export default {
           date: endDate.toISOString().substring(0, 10),
         })
         .then(() => {
+          this.labels = [];
           for (
             var day = startDate;
             day <= endDate;
