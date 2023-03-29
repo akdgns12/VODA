@@ -37,14 +37,16 @@ public class UserController {
       OAuthTokenDto oAuthTokenDto = tokenRequest(code);
       KakaoProfileDto kakaoProfile = userInfoRequest(oAuthTokenDto.getAccess_token());
       String email = kakaoProfile.getKakao_account().getEmail();
-      UserSignUpResponseDto userSignUpResponseDto = userService.findByEmail(email);
-      if(userSignUpResponseDto == null){
+      UserSignInResponseDto userSignInResponseDto = userService.findByEmail(email);
+      if(userSignInResponseDto == null){
         // db에 없는 회원이라면 회원가입 form으로 이동
-        return new ResponseEntity<>(oAuthTokenDto.getAccess_token(), HttpStatus.NO_CONTENT);
+        userSignInResponseDto = new UserSignInResponseDto();
+        userSignInResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
+        return new ResponseEntity<>(userSignInResponseDto, HttpStatus.ACCEPTED);
       }else{ // 2. 저장됐다면 바로 메인 페이지로
-        userSignUpResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
-        userSignUpResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
-        return new ResponseEntity<>(userSignUpResponseDto, HttpStatus.OK);
+        userSignInResponseDto.setAccessToken(oAuthTokenDto.getAccess_token());
+        userSignInResponseDto.setRefreshToken(oAuthTokenDto.getRefresh_token());
+        return new ResponseEntity<>(userSignInResponseDto, HttpStatus.OK);
       }
     }catch (Exception e){
       return exceptionHandling(e);
