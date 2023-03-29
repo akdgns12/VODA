@@ -5,7 +5,7 @@ from ..model import models, schemas
 from experiments.emotion_text.test import predict 
 from experiments.emotion_text import model_call
 from kiwipiepy import Kiwi
-from ser import emotion_recognition
+from ser import ser_model
 
 # AIMODEL = model_call.model_call()
 
@@ -61,7 +61,12 @@ def add_sentence(
     db.commit()
     return sentence_emotions, emotions
 
-def speech_emotion(voice_file):
-    emotionRecognizer = emotion_recognition.EmotionRecognizer()
-    speech_emotion = emotionRecognizer.predict_file(voice_file)
-    return speech_emotion
+def speech_emotion(SER, voice_file):
+    labels = ["중립","행복","슬픔","화남","놀람"]
+    result = []
+    speech_emotions = SER.predict_file(voice_file)
+    for elem in speech_emotions:
+        ind = elem.index(max(elem))
+        emotion = labels[ind]
+        result.append(emotion)
+    return result
