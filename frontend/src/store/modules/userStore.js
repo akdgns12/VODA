@@ -41,20 +41,10 @@ const userStore = {
 
         return userData; // userData 변수를 반환
       } catch (error) {
+        console.log(error);
         throw error; // 에러 발생 시 호출자에게 에러를 전달
       }
     },
-    // async getUserInfo({ commit }, { data }) {
-    //   await doGetUser(
-    //     data,
-    //     ({ data }) => {
-    //       commit("SET_USER_DATA", data);
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
-    // },
   },
 };
 

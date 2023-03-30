@@ -18,7 +18,7 @@
       </v-btn>
       <v-card-title class="pa-2 purple lighten-3">
         <h3 class="text-h6 font-weight-light text-center grow">
-          {{ this.$route.params.date}}
+          {{ month  }} {{year}}
         </h3>
       </v-card-title>
 
@@ -26,6 +26,11 @@
         src="https://cdn.vuetifyjs.com/images/cards/forest.jpg"
         gradient="to top, rgba(0,0,3,.44), rgba(0,0,0,.44)"
       >
+        <v-container>
+          <v-row  class = "align-content-right">
+            <strong class="text-h1 font-weight-regular mr-6"> {{day-'0'}}</strong>
+          </v-row>
+        </v-container>
       </v-img>
     </v-card>
     <v-card-text class="py-0">
@@ -33,19 +38,19 @@
         align-top
         dense
       >
+     
         <v-timeline-item
-          v-for="(item, index) in timelineData"
+          v-for="(item, index) in diartDatas"
           :key="index"
-          :color="item.color"
           :small="item.small"
-        >
+        > 
           <v-row class="pt-1">
             <v-col cols="3">
-              <strong>{{ item.time }}</strong>
+              <strong>sda</strong>
             </v-col>
             <v-col>
-              <strong>{{ item.title }}</strong>
-              <div class="text-caption">{{ item.subtitle }}</div>
+              <strong>ada</strong>
+              <div class="text-caption">asda</div>
             </v-col>
           </v-row>
         </v-timeline-item>
@@ -54,37 +59,41 @@
   </v-card>
 </template>
 <script>
-import axios from "axios"
 export default {
   data(){
     return{
       year: '',
       month: '',
       day: '',
-      timelineData:[]
+      date:'',
     }
   },
   methods:{
     splitDate() {
-      const date = this.$route.params.date.split('.');
-      this.year = date[0];
-      this.month = date[1];
-      this.day = date[2];
-    },
-    async fetchTimelineData(){
-      try{
-        const response = await axios.get('/diary',{params:{diarySeq: this.$route.params.diarySeq}})
-        this.timelineData = response.data.timelineData;
-      }catch(error){
-        console.error(error);
+      if(this.$route.params.calendarSeq !== undefined){
+        this.date = this.$route.params.calendarSeq.split('.');
+        const monthLabel = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+   
+        this.year = this.date[0];
+        this.month = monthLabel[this.date[1] - '0' - 1];
+        // this.month[this.date[1]];
+        this.day = this.date[2];
       }
-    }  
+ 
+    },
+    // async fetchTimelineData(){
+    //   try{
+    //     // const response = await axios.get('/diary',{params:{diarySeq: this.$route.params.diarySeq}})
+    //     this.timelineData = response.data.timelineData;
+    //   }catch(error){
+    //     console.error(error);
+    //   }
+    // }  
   },
   mounted() {
     this.splitDate();
-    this.fetchTimelineData();
+    // this.fetchTimelineData();
   },
-
 }
 </script>
 

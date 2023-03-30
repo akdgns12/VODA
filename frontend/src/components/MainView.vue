@@ -3,15 +3,14 @@
     <v-flex xs12 class="mb-3">
       <v-sheet height="500">
         <vc-calendar
+          ref="calendar"
           class="custom-calendar"
-          dark
-          disable-page-swipe
           locale="en"
+          @update:from-page="handleCalendarChange"
         >
           <template v-slot:day-content="{ day }">
             <div class="flex flex-col h-full z-100 overflow-hidden">
               <div class="day-header">{{ day.day }}</div>
-              <br />
               <v-btn @click="handleDateClick(day.date)"> emotion </v-btn>
             </div>
           </template>
@@ -24,22 +23,34 @@
 <script>
 export default {
   data: () => ({
-    focus: new Date(),
+    userId: "",
+    year: null,
+    month: null,
+    date: new Date(),
   }),
+  mounted() {
+    const userData = this.$store.getters.userData;
+    this.month = this.date.getMonth() + 1;
+    this.year = this.date.getFullYear();
+    this.userId = userData.userSeq;
+    const formattedDate = `${this.year}-${
+      this.month < 10 ? "0" + this.month : this.month
+    }-01`;
+
+    this.$store
+      .dispatch("getCalendarInfo", {
+        userSeq: this.userId,
+        date: formattedDate,
+      })
+      .then(() => {
+        const calendarData = this.$store.getters.calendarData;
+        console.log(calendarData);
+      });
+  },
   created() {
     this.$store.dispatch("setShowBottomNavigation", true);
   },
   methods: {
-    showEvent(date) {
-      console.log(date);
-      console.log("focus:", this.focus);
-      this.focus = new Date(this.focus);
-    },
-    customDayFormat(day) {
-      return `
-          ${day.day}
-      `;
-    },
     handleDateClick(date) {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -47,8 +58,21 @@ export default {
       const formattedDate = `${year}.${month < 10 ? "0" + month : month}.${
         day < 10 ? "0" + day : day
       }`;
+      this.$router.push(`/calendar/diary/${formattedDate}`);
+    },
+    handleCalendarChange() {
+      this.month = this.$refs.calendar.pages[0].month;
+      this.year = this.$refs.calendar.pages[0].year;
+      const formattedDate = `${this.year}-${
+        this.month < 10 ? "0" + this.month : this.month
+      }-01`;
       console.log(formattedDate);
-      this.$router.push(`/calendar/diary/{calendarSeq}`);
+      this.$store.dispatch("getCalendarInfo", {
+        userSeq: this.userId,
+        date: formattedDate,
+      });
+      const calendarData = this.$store.getters.calendarData;
+      console.log(calendarData);
     },
   },
 };

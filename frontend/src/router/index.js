@@ -31,7 +31,7 @@ const routes = [
     component: Record,
   },
   {
-    path: "/calendar/diary",
+    path: "/calendar/diary/:calendarSeq",
     name: "DiaryDetail",
     component: DiaryDetail,
     props: true,
