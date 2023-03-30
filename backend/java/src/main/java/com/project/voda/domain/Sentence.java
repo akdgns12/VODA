@@ -28,9 +28,8 @@ public class Sentence extends BaseTimeEntity {
   @JoinColumn(name = "diary_seq", nullable = false)
   private Diary diary;
 
-  @OneToOne(fetch = LAZY)
-  @JoinColumn(name = "emotion_idx", nullable = false)
-  private Emotion emotion;
+  @Column(name = "emotion_idx", nullable = false)
+  private int emotionIdx;
 
   @Column(name = "content", nullable = false)
   private String content;

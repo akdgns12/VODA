@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters>
     <v-col cols="2">
-      <v-btn height="50px"><</v-btn>
+      <v-btn height="50px"></v-btn>
     </v-col>
     <v-col cols="8">
       <v-dialog
