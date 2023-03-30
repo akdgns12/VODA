@@ -1,14 +1,7 @@
 import os
-import sys
 import tensorflow as tf
 import numpy as np
-import pandas as pd
-import random
-import keras
 from keras.models import load_model
-import json
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import librosa
 import gc
 import time
