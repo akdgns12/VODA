@@ -39,8 +39,7 @@
   </v-app>
 </template>
 <script>
-import { apiInstance } from "@/api";
-const api = apiInstance;
+import { doSignUp } from "@/api/login";
 
 export default {
   data: () => ({
@@ -56,14 +55,11 @@ export default {
       if (validate) {
         let saveData = {};
         saveData.nickname = this.nickname;
+        saveData.accessToken = localStorage.getItem("accessToken");
+        console.log(saveData);
 
         try {
-          api
-            .post("/user/signup", saveData, {
-              // headers: {
-              //   "Content-Type": `application/json`,
-              // },
-            })
+          doSignUp(this.nickname, localStorage.getItem("accessToken"))
             .then((response) => {
               console.log(response);
               if (response.data.errorCode === 400) {

@@ -1,7 +1,11 @@
 <template>
   <v-app>
     <v-container fluid class="pa-0">
-      <WeekDatePicker />
+      <WeekDatePicker
+        :startDate="this.startDate"
+        :endDate="this.endDate"
+        @change="change(startDate, endDate)"
+      />
       <canvas ref="barChart" />
     </v-container>
   </v-app>
@@ -15,22 +19,21 @@ Chart.register(...registerables);
 export default {
   components: { WeekDatePicker },
   name: "WeekChart",
-  data: () => ({}),
-
+  data: () => ({
+    startDate: new Date(new Date().setDate(new Date().getDate() - 6)),
+    endDate: new Date(),
+    charts: [],
+    labels: [],
+  }),
   methods: {
     createChart() {
-      new Chart(this.$refs.barChart, {
+      this.charts.forEach((element) => {
+        element.destroy();
+      });
+      let chart = new Chart(this.$refs.barChart, {
         type: "line",
         data: {
-          labels: [
-            "03/18",
-            "03/19",
-            "03/20",
-            "03/21",
-            "03/23",
-            "03/22",
-            "03/23",
-          ],
+          labels: this.labels,
           datasets: [
             {
               label: "슬픔",
@@ -65,14 +68,31 @@ export default {
           ],
         },
       });
+      this.charts.push(chart);
+    },
+    change(startDate, endDate) {
+      this.startDate = startDate;
+      this.endDate = endDate;
+      this.$store
+        .dispatch("getWeekChart", {
+          userSeq: 1,
+          date: endDate.toISOString().substring(0, 10),
+        })
+        .then(() => {
+          this.labels = [];
+          for (
+            var day = startDate;
+            day <= endDate;
+            day.setDate(day.getDate() + 1)
+          ) {
+            this.labels.push(new Date(day).toISOString().substring(5, 10));
+          }
+          this.createChart();
+        });
     },
   },
   mounted() {
-    this.$store
-      .dispatch("getWeekChart", { userSeq: 1, date: "2023-03-23" })
-      .then(() => {
-        this.createChart();
-      });
+    this.change(this.startDate, this.endDate);
   },
 };
 </script>

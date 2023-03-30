@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container fluid class="pa-0">
-      <MonthDatePicker />
+      <MonthDatePicker :date="this.date" @change="change(date)" />
       <canvas ref="polarArea" />
     </v-container>
   </v-app>
@@ -15,11 +15,17 @@ Chart.register(...registerables);
 export default {
   components: { MonthDatePicker },
   name: "MonthChart",
-  data: () => ({}),
+  data: () => ({
+    date: new Date(),
+    charts: [],
+  }),
   computed: {},
   methods: {
     createChart() {
-      new Chart(this.$refs.polarArea, {
+      this.charts.forEach((element) => {
+        element.destroy();
+      });
+      let chart = new Chart(this.$refs.polarArea, {
         type: "polarArea",
         data: {
           labels: this.$store.getters.monthLabels,
@@ -38,14 +44,23 @@ export default {
           ],
         },
       });
+      this.charts.push(chart);
+    },
+    change(date) {
+      this.date = date;
+      this.$store
+        .dispatch("getMonthChart", {
+          userSeq: 1,
+          date: this.date.toISOString().substring(0, 10),
+        })
+        .then(() => {
+          this.createChart();
+        });
     },
   },
   mounted() {
-    this.$store
-      .dispatch("getMonthChart", { userSeq: 1, date: "2023-03-23" })
-      .then(() => {
-        this.createChart();
-      });
+    this.date.setDate(1);
+    this.change(this.date);
   },
 };
 </script>

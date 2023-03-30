@@ -8,6 +8,6 @@ public interface UserService {
  UserSignInResponseDto findByEmail(String email);
 
  // 회원 가입
- void create(UserSignUpRequestDto signUpRequestDto);
+ void create(String email, String nickName);
 
 }
