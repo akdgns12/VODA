@@ -1,6 +1,8 @@
 package com.project.voda.service;
 
 import com.project.voda.domain.User;
+import com.project.voda.dto.UserSignInRequestDto;
+import com.project.voda.dto.UserSignInResponseDto;
 import com.project.voda.dto.UserSignUpRequestDto;
 import com.project.voda.dto.UserSignUpResponseDto;
 import com.project.voda.repository.UserRepository;
@@ -21,10 +23,10 @@ public class UserServiceImpl implements UserService{
 
     // Email로 회원정보 가져오기
     @Override
-    public UserSignUpResponseDto findByEmail(String email) {
+    public UserSignInResponseDto findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) return null;
-        return UserSignUpResponseDto.builder().user(user.get()).build();
+        return UserSignInResponseDto.builder().user(user.get()).build();
     }
 
     // 회원가입

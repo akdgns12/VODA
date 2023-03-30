@@ -2,21 +2,12 @@
   <v-app id="inspire">
     <v-main class="background">
       <!-- SignUp Component -->
-      <v-container
-        style="max-width: 450px"
-        fill-height
-      >
+      <v-container style="max-width: 450px" fill-height>
         <v-row align="center">
           <v-col cols="12">
             <v-card>
               <div class="box pa-10">
-                <h1
-                  style="text-align: center"
-                  class="mb-10"
-              
-                >
-                  SIGN UP
-                </h1>
+                <h1 style="text-align: center" class="mb-10">SIGN UP</h1>
                 <v-form ref="form">
                   <v-text-field
                     v-model="nickname"
@@ -48,70 +39,72 @@
   </v-app>
 </template>
 <script>
+import { apiInstance } from "@/api";
+const api = apiInstance;
+
 export default {
-  
   data: () => ({
-      nickname : "",
-      nameRules: [
-        v => !!v || '닉네임을 작성해주세요',
-        v => (v && v.length <= 10) || '닉네임을 10글자를 넘을 수 없습니다.',
+    nickname: "",
+    nameRules: [
+      (v) => !!v || "닉네임을 작성해주세요",
+      (v) => (v && v.length <= 10) || "닉네임을 10글자를 넘을 수 없습니다.",
     ],
   }),
   methods: {
-    signUpSubmit(){
-      const validate = this.$refs.form.validate()
-      if(validate){
+    signUpSubmit() {
+      const validate = this.$refs.form.validate();
+      if (validate) {
         let saveData = {};
-        saveData.nickname = this.nickname;  
+        saveData.nickname = this.nickname;
 
-      try {
-          this.$axios.get("/user/signup", saveData, {
-            headers: {
-              "Content-Type": `application/json`,
-              },
-              })
-              .then((response) => {
-                console.log(response)
-                if (response.data.errorCode === 400) {
-                  alert(response.data.errorMessage)
-
-                  }
-                else{
-                  alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다")
-                  this.$router.push({path: '/'});
-                }
-                })
-        .catch(error =>{
-          console.log(error.response);
-
-        });
-      } catch (error) {
-        console.error(error);
+        try {
+          api
+            .post("/user/signup", saveData, {
+              // headers: {
+              //   "Content-Type": `application/json`,
+              // },
+            })
+            .then((response) => {
+              console.log(response);
+              if (response.data.errorCode === 400) {
+                alert(response.data.errorMessage);
+              } else {
+                alert("회원가입이 완료되었습니다. 로그인 화면으로 돌아갑니다");
+                this.$router.push({ path: "/" });
+              }
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }},   
+    },
   },
-  created(){
+  created() {
     this.$store.dispatch("setShowBottomNavigation", false);
-  }
-}
+  },
+};
 </script>
 <style lang="scss">
-  @font-face {
-    font-family: 'ComingSoon-Regular';
-    src: url('../../public/fonts/ComingSoon-Regular.ttf');
-  }
-#inspire{
-  font-family: 'ComingSoon-Regular';
+@font-face {
+  font-family: "ComingSoon-Regular";
+  src: url("../../public/fonts/ComingSoon-Regular.ttf");
+}
+#inspire {
+  font-family: "ComingSoon-Regular";
 }
 .pill {
   border-radius: 50px;
-  background: linear-gradient(#97C7FF,#855CF8);
-  font-weight: bold;  
+  background: linear-gradient(#97c7ff, #855cf8);
+  font-weight: bold;
 }
-.background{
-  background: linear-gradient(#855CF8,#D3B0FF,#97C7FF);  
+.background {
+  background: linear-gradient(#855cf8, #d3b0ff, #97c7ff);
 }
-.v-sheet.v-card{
+.v-sheet.v-card {
   border-radius: 20px;
 }
-</style>>
+</style>
+>
