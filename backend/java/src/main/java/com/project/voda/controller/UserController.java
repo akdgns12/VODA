@@ -29,8 +29,8 @@ public class UserController {
   @Value("${spring.security.oauth2.client.registration.kakao.redirect_uri}") private String redirectUri;
 
   @ApiOperation(value = "소셜 로그인")
-  @GetMapping("/login/oauth/kakao")
-  public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code){
+  @GetMapping("/login/oauth/kakao/{code}")
+  public ResponseEntity<?> kakaoCallback(@RequestParam String code){
     try{
       // 토큰 가져오기
       OAuthTokenDto oAuthTokenDto = tokenRequest(code);
