@@ -25,19 +25,6 @@ const calendarStore = {
           console.log(error);
         }
       );
-      //   try{
-      //     const response = await doGetCalendar(userSeq, date);
-      //     const calendarData = response.data;
-      //     const calendarStatus = response.status;
-
-      //     commit("SET_CALENDAR_DATA", calendarData);
-      //     commit("SET_CALENDAR_STATUS", calendarStatus);
-
-      //     return calendarData;
-      //   }catch(error){
-      //       console.log(error);
-      //     }
-      // },
     },
   },
 };

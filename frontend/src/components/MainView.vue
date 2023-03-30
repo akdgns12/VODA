@@ -11,7 +11,12 @@
           <template v-slot:day-content="{ day }">
             <div class="flex flex-col h-full z-100 overflow-hidden">
               <div class="day-header">{{ day.day }}</div>
-              <v-btn @click="handleDateClick(day.date)"> emotion </v-btn>
+              <v-btn
+                v-show="handleEmotionButton(day.day)"
+                @click="handleDateClick(day.date)"
+              >
+                <img :src="calendarData[day.day - 1].emotionImgUrl" />
+              </v-btn>
             </div>
           </template>
         </vc-calendar>
@@ -27,8 +32,9 @@ export default {
     year: null,
     month: null,
     date: new Date(),
+    calendarData: new Array(31).fill({ status: false, emotion_idx: "" }),
   }),
-  mounted() {
+  created() {
     const userData = this.$store.getters.userData;
     this.month = this.date.getMonth() + 1;
     this.year = this.date.getFullYear();
@@ -44,10 +50,17 @@ export default {
       })
       .then(() => {
         const calendarData = this.$store.getters.calendarData;
-        console.log(calendarData);
+        const size = Object.keys(calendarData).length;
+        for (let i = 0; i < size; i++) {
+          const numberStr = calendarData[i].date.split("-")[2];
+          const number = Number(numberStr);
+          // this.calendarData[number] = true;
+          this.calendarData.splice(number - 1, 1, {
+            status: true,
+            emotion_idx: calendarData[i].emotionImgUrl,
+          });
+        }
       });
-  },
-  created() {
     this.$store.dispatch("setShowBottomNavigation", true);
   },
   methods: {
@@ -60,19 +73,34 @@ export default {
       }`;
       this.$router.push(`/calendar/diary/${formattedDate}`);
     },
+    handleEmotionButton(date) {
+      return this.calendarData[date - 1].status;
+    },
     handleCalendarChange() {
       this.month = this.$refs.calendar.pages[0].month;
+      this.calendarData.fill({ status: false, emotion_idx: "" });
       this.year = this.$refs.calendar.pages[0].year;
       const formattedDate = `${this.year}-${
         this.month < 10 ? "0" + this.month : this.month
       }-01`;
-      console.log(formattedDate);
-      this.$store.dispatch("getCalendarInfo", {
-        userSeq: this.userId,
-        date: formattedDate,
-      });
-      const calendarData = this.$store.getters.calendarData;
-      console.log(calendarData);
+      this.$store
+        .dispatch("getCalendarInfo", {
+          userSeq: this.userId,
+          date: formattedDate,
+        })
+        .then(() => {
+          const calendarData = this.$store.getters.calendarData;
+          const size = Object.keys(calendarData).length;
+          for (let i = 0; i < size; i++) {
+            const numberStr = calendarData[i].date.split("-")[2];
+            const number = Number(numberStr);
+            // this.calendarData[number] = true;
+            this.calendarData.splice(number - 1, 1, {
+              status: true,
+              emotion_idx: calendarData[i].emotionImgUrl,
+            });
+          }
+        });
     },
   },
 };
