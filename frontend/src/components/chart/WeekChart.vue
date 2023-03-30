@@ -71,7 +71,6 @@ export default {
       this.charts.push(chart);
     },
     change(startDate, endDate) {
-      console.log("change: ", startDate, endDate);
       this.startDate = startDate;
       this.endDate = endDate;
       this.$store
