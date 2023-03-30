@@ -59,6 +59,7 @@ export default {
     },
   },
   mounted() {
+    this.date.setDate(1);
     this.change(this.date);
   },
 };
