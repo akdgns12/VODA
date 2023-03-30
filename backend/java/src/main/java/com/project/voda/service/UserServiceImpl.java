@@ -1,10 +1,8 @@
 package com.project.voda.service;
 
 import com.project.voda.domain.User;
-import com.project.voda.dto.UserSignInRequestDto;
 import com.project.voda.dto.UserSignInResponseDto;
 import com.project.voda.dto.UserSignUpRequestDto;
-import com.project.voda.dto.UserSignUpResponseDto;
 import com.project.voda.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +29,11 @@ public class UserServiceImpl implements UserService{
 
     // 회원가입
     @Override
-    public void create(UserSignUpRequestDto signUpRequestDto) {
-        User user = signUpRequestDto.toEntity();
+    public void create(String email, String nickName) {
+        UserSignUpRequestDto userSignUpRequestDto = new UserSignUpRequestDto();
+        userSignUpRequestDto.setEmail(email);
+        userSignUpRequestDto.setNickname(nickName);
+        User user = userSignUpRequestDto.toEntity();
 
         userRepository.save(user);
     }
