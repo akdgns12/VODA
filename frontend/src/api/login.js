@@ -12,4 +12,17 @@ async function doGetUser(code) {
     throw error;
   }
 }
-export { doGetUser };
+
+async function doSignUp(nickName, accessToken) {
+  try {
+    const response = await api.post(`/user/signup/`, {
+      nickName: nickName,
+      accessToken: accessToken,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { doGetUser, doSignUp };
