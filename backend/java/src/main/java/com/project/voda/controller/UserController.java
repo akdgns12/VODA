@@ -54,12 +54,13 @@ public class UserController {
 
   @ApiOperation(value = "회원 가입", notes = "닉네임과 access_token을 전달받고 회원가입 하는 API")
   @PostMapping("/signup")
-  public ResponseEntity<?> join(@RequestBody UserSignUpRequestDto signUpRequestDto, @RequestParam String access_token){
-    log.info("회원가입 Data : ",signUpRequestDto);
+  public ResponseEntity<?> join(@RequestBody Map<String, Object> requestMap){
+    log.info("requestMap: {}", requestMap);
+    String accessToken = String.valueOf(requestMap.get("accessToken"));
+    String nickName = String.valueOf(requestMap.get("nickName"));
     try{
-      KakaoProfileDto kakaoProfile = userInfoRequest(access_token);
-      signUpRequestDto.setEmail(kakaoProfile.getKakao_account().getEmail());
-      userService.create(signUpRequestDto);
+      KakaoProfileDto kakaoProfile = userInfoRequest(accessToken);
+      userService.create(kakaoProfile.kakao_account.getEmail(), nickName);
       return new ResponseEntity<>(HttpStatus.OK);
     }catch (Exception e){
       return exceptionHandling(e);
