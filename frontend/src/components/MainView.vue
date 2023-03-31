@@ -3,16 +3,28 @@
     <v-flex xs12 class="mb-3">
       <v-sheet height="500">
         <vc-calendar
+          ref="calendar"
           class="custom-calendar"
-          dark
-          disable-page-swipe
           locale="en"
+          @update:from-page="handleCalendarChange"
         >
           <template v-slot:day-content="{ day }">
             <div class="flex flex-col h-full z-100 overflow-hidden">
               <div class="day-header">{{ day.day }}</div>
-              <br />
-              <v-btn @click="handleDateClick(day.date)"> emotion </v-btn>
+              <v-btn
+                v-show="handleEmotionButton(day.day)"
+                @click="handleDateClick(day.date)"
+              >
+                <img
+                  v-if="handleEmotionButton(day.day)"
+                  :src="
+                    require(`@/assets/emotions/${
+                      calendarData[day.day - 1].emotionImgUrl
+                    }`)
+                  "
+                  alt="emotion"
+                />
+              </v-btn>
             </div>
           </template>
         </vc-calendar>
@@ -24,22 +36,42 @@
 <script>
 export default {
   data: () => ({
-    focus: new Date(),
+    userId: "",
+    year: null,
+    month: null,
+    date: new Date(),
+    calendarData: new Array(31).fill({ status: false, emotionImgUrl: "" }),
   }),
   created() {
+    const userData = this.$store.getters.userData;
+    this.month = this.date.getMonth() + 1;
+    this.year = this.date.getFullYear();
+    this.userId = userData.userSeq;
+    const formattedDate = `${this.year}-${
+      this.month < 10 ? "0" + this.month : this.month
+    }-01`;
+
+    this.$store
+      .dispatch("getCalendarInfo", {
+        userSeq: this.userId,
+        date: formattedDate,
+      })
+      .then(() => {
+        const calendarData = this.$store.getters.calendarData;
+        const size = Object.keys(calendarData).length;
+        for (let i = 0; i < size; i++) {
+          const numberStr = calendarData[i].date.split("-")[2];
+          const number = Number(numberStr);
+          // this.calendarData[number] = true;
+          this.calendarData.splice(number - 1, 1, {
+            status: true,
+            emotionImgUrl: calendarData[i].emotionImgUrl,
+          });
+        }
+      });
     this.$store.dispatch("setShowBottomNavigation", true);
   },
   methods: {
-    showEvent(date) {
-      console.log(date);
-      console.log("focus:", this.focus);
-      this.focus = new Date(this.focus);
-    },
-    customDayFormat(day) {
-      return `
-          ${day.day}
-      `;
-    },
     handleDateClick(date) {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -47,8 +79,36 @@ export default {
       const formattedDate = `${year}.${month < 10 ? "0" + month : month}.${
         day < 10 ? "0" + day : day
       }`;
-      console.log(formattedDate);
-      this.$router.push(`/calendar/diary/{calendarSeq}`);
+      this.$router.push(`/calendar/diary/${formattedDate}`);
+    },
+    handleEmotionButton(date) {
+      return this.calendarData[date - 1].status;
+    },
+    handleCalendarChange() {
+      this.month = this.$refs.calendar.pages[0].month;
+      this.calendarData.fill({ status: false, emotionImgUrl: "" });
+      this.year = this.$refs.calendar.pages[0].year;
+      const formattedDate = `${this.year}-${
+        this.month < 10 ? "0" + this.month : this.month
+      }-01`;
+      this.$store
+        .dispatch("getCalendarInfo", {
+          userSeq: this.userId,
+          date: formattedDate,
+        })
+        .then(() => {
+          const calendarData = this.$store.getters.calendarData;
+          const size = Object.keys(calendarData).length;
+          for (let i = 0; i < size; i++) {
+            const numberStr = calendarData[i].date.split("-")[2];
+            const number = Number(numberStr);
+            // this.calendarData[number] = true;
+            this.calendarData.splice(number - 1, 1, {
+              status: true,
+              emotionImgUrl: calendarData[i].emotionImgUrl,
+            });
+          }
+        });
     },
   },
 };
