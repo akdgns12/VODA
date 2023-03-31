@@ -1,13 +1,9 @@
 <template>
   <v-app>
     <div id="app">
+      <TopNavigation class="top-nav" v-if="showTopNavigation" />
       <router-view />
-
-      <BottomNavigation></BottomNavigation>
-
-      <v-btn @click="toSignUp">sign Up </v-btn>
-      <v-btn @click="toMain"> Main </v-btn>
-      <v-btn @click="logout()"> Logout</v-btn>
+      <BottomNavigation class="bottom-nav" v-if="showBottomNavigation" />
     </div>
   </v-app>
 </template>
@@ -18,7 +14,9 @@ import {
   mdiChartBellCurve,
   mdiCalendarMonth,
 } from "@mdi/js";
+import TopNavigation from "./components/TopNavigation.vue";
 import BottomNavigation from "./components/BottomNavigation.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -31,38 +29,13 @@ export default {
     },
   }),
   components: {
+    TopNavigation,
     BottomNavigation,
   },
-  methods: {
-    toSignUp() {
-      this.$router.push("/user/signup");
-    },
-    toMain() {
-      this.$router.push("/calendar/:userSeq");
-    },
-    // 카카오 로그아웃
-    async logout() {
-      window.location.href =
-        `https://kauth.kakao.com/oauth/logout?client_id=` +
-        process.env.VUE_APP_KAKAO_APP_KEY +
-        `&logout_redirect_uri=` +
-        process.env.VUE_APP_KAKAO_LOGOUT_REDIRECT_URI;
-    },
-  },
   computed: {
-    color() {
-      switch (this.value) {
-        case 0:
-          return "#5AC165";
-        case 1:
-          return "#855CF8";
-        case 2:
-          return "#FF9500";
-        default:
-          return "#5AC165";
-      }
-    },
+    ...mapGetters(["showTopNavigation", "showBottomNavigation"]),
   },
+  methods: {},
 };
 </script>
 
@@ -93,10 +66,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   font-weight: 900;
-}
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 }
 </style>
