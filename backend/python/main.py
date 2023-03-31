@@ -17,7 +17,7 @@ def set_cors(application:FastAPI) :
         allow_origins=origins,
         allow_credentials=True,
         allow_methods=["POST", "post"],
-        allow_headers=["http://localhost:8081", "*"]
+        allow_headers=["*"]
     )
 
 def get_application() -> FastAPI:
