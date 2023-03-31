@@ -43,6 +43,9 @@ export default {
     calendarData: new Array(31).fill({ status: false, emotionImgUrl: "" }),
   }),
   created() {
+    this.$store.dispatch("setShowBottomNavigation", true);
+    this.$store.dispatch("setShowTopNavigation", true);
+
     const userData = this.$store.getters.userData;
     this.month = this.date.getMonth() + 1;
     this.year = this.date.getFullYear();
