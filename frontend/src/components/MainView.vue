@@ -15,7 +15,15 @@
                 v-show="handleEmotionButton(day.day)"
                 @click="handleDateClick(day.date)"
               >
-                <img :src="calendarData[day.day - 1].emotionImgUrl" />
+                <img
+                  v-if="handleEmotionButton(day.day)"
+                  :src="
+                    require(`@/assets/emotions/${
+                      calendarData[day.day - 1].emotionImgUrl
+                    }`)
+                  "
+                  alt="emotion"
+                />
               </v-btn>
             </div>
           </template>
@@ -32,7 +40,7 @@ export default {
     year: null,
     month: null,
     date: new Date(),
-    calendarData: new Array(31).fill({ status: false, emotion_idx: "" }),
+    calendarData: new Array(31).fill({ status: false, emotionImgUrl: "" }),
   }),
   created() {
     const userData = this.$store.getters.userData;
@@ -57,7 +65,7 @@ export default {
           // this.calendarData[number] = true;
           this.calendarData.splice(number - 1, 1, {
             status: true,
-            emotion_idx: calendarData[i].emotionImgUrl,
+            emotionImgUrl: calendarData[i].emotionImgUrl,
           });
         }
       });
@@ -78,7 +86,7 @@ export default {
     },
     handleCalendarChange() {
       this.month = this.$refs.calendar.pages[0].month;
-      this.calendarData.fill({ status: false, emotion_idx: "" });
+      this.calendarData.fill({ status: false, emotionImgUrl: "" });
       this.year = this.$refs.calendar.pages[0].year;
       const formattedDate = `${this.year}-${
         this.month < 10 ? "0" + this.month : this.month
@@ -97,7 +105,7 @@ export default {
             // this.calendarData[number] = true;
             this.calendarData.splice(number - 1, 1, {
               status: true,
-              emotion_idx: calendarData[i].emotionImgUrl,
+              emotionImgUrl: calendarData[i].emotionImgUrl,
             });
           }
         });
