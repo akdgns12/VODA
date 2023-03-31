@@ -8,8 +8,11 @@ from kiwipiepy import Kiwi
 from ser import ser_model
 from ser.speech_to_text import stt
 
+import numpy as np
+import uuid
+from dotenv import load_dotenv
 # AIMODEL = model_call.model_call()
-
+VOICE_WEIGHT = int(os.getenv("VOICE_WEIGHT"))
 def add_diary(
         db : Session, 
         AIMODEL : model_call,
@@ -22,7 +25,7 @@ def add_diary(
     diary = models.Diary(
         content = text_content ,
         delete_yn = False ,
-        voice_url = "test",
+        voice_url = voice_url,
         calendar_seq = calendar.calendar_seq,
         emotion_idx = 3 
     )
@@ -37,6 +40,7 @@ def add_sentence(
         diary: models.Diary, 
         daily_emotions : models.DailyEmotion,
         text_content:str,
+        ind:int
 ):
     kiwi = Kiwi()
     sentences = kiwi.split_into_sents(text_content)
@@ -52,26 +56,26 @@ def add_sentence(
         emotions[sentence_emotions[-1][1]] +=1 
         db.add(save_sentence)
     best_emotion_cnt = 0 
-    best_emotion_ind = 3
+    best_emotion_ind = ind
+    emotions[ind] += VOICE_WEIGHT # + 음성 결과 
     for ind,emotion in enumerate(emotions):
         daily_emotions[ind].cnt += emotion
         if best_emotion_cnt <= emotion: 
             best_emotion_cnt = emotion 
             best_emotion_ind = ind 
     diary.emotion_idx = best_emotion_ind
+    emotions[ind] -= VOICE_WEIGHT # - 음성 결과
     db.commit()
     return sentence_emotions, emotions
 
 def speech_emotion(SER, filepath):
     labels = ["중립","행복","슬픔","화남","놀람"]
     result = []
-    speech_emotions = SER.predict_file(filepath)
+    speech_emotions = SER.predict_file(voice_file)
     for elem in speech_emotions:
-        ind = elem.index(max(elem))
+        # ind = elem.index(max(elem))
+        ind = np.argmax(elem)
         emotion = labels[ind]
+        ind = change_ind[ind]
         result.append(emotion)
     return result
-
-def speech_text(filepath):
-    text = stt(filepath)
-    return text
