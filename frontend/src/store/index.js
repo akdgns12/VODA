@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import bottomBarStore from "./modules/bottomBarStore";
+import navigationStore from "./modules/navigationStore";
 import calendarStore from "./modules/calendarStore";
 import chartStore from "./modules/chartStore";
 import diaryStore from "./modules/diaryStore";
@@ -11,7 +11,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    bottomBarStore,
+    navigationStore,
     calendarStore,
     chartStore,
     diaryStore,
