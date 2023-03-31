@@ -12,4 +12,16 @@ function apiInstance() {
   return instance;
 }
 
-export { apiInstance };
+function apiInstanceFile() {
+  const instance = axios.create({
+    baseURL: process.env.VUE_APP_PAPI_BASE_URL,
+    withCredentials: true,
+    headers: {
+      "Content-type": "multipart/form-data",
+    },
+  });
+
+  return instance;
+}
+
+export { apiInstance, apiInstanceFile };
