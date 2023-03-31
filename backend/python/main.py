@@ -11,7 +11,7 @@ from api.model import models
 models.Base.metadata.create_all(bind=engine)
 
 def set_cors(application:FastAPI) :
-    origins =["*"]
+    origins =["*", "http://localhost:8081"]
     application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
