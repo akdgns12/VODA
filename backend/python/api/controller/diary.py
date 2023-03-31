@@ -21,8 +21,10 @@ def post_diary(
      daily_emotions = daily_emotion_service.check_exist_daily_emotion(db,date,id)
      diary = diary_service.add_diary(db,AIMODEL,calendar,text_content,"asd")
      sentences,emotions_cnt = diary_service.add_sentence(db,AIMODEL,diary,daily_emotions,text_content)
+     #STT
+     text_from_speech = diary_service.speech_text(diary.voice_url)
      # Speech emotion
-     emotion_speech = diary_service.speech_emotion(SER, voice_file)
+     emotion_speech = diary_service.speech_emotion(SER, diary.voice_url)
      calendar_service.update_best_emotion(db,calendar,daily_emotions)
      labels = ["슬픔","놀람","화남","중립","행복"]
      result = {
