@@ -41,6 +41,10 @@ export default {
       { tab: "Month", content: "MonthChart" },
     ],
   }),
+  created() {
+    this.$store.dispatch("setShowBottomNavigation", true);
+    this.$store.dispatch("setShowTopNavigation", true);
+  },
 };
 </script>
 

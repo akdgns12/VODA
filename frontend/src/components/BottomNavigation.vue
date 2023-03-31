@@ -1,32 +1,31 @@
 <template>
-  <v-bottom-navigation
-    v-model="value"
-    :background-color="color"
-    dark
-    class="bottom-nav d-flex justify-between"
-    v-if="showBottomNavigation"
-    grow
-  >
-    <v-btn @click="toCalendar">
-      <span></span>
-      <v-icon large>
-        {{ icons.mdiCalendarMonth }}
-      </v-icon>
-    </v-btn>
+  <v-app-bar>
+    <v-layout>
+      <v-bottom-navigation
+        v-model="value"
+        grow
+        class="bottom-nav d-flex justify-between"
+      >
+        <v-btn @click="toCalendar">
+          <v-icon large color="black">
+            {{ icons.mdiCalendarMonth }}
+          </v-icon>
+        </v-btn>
 
-    <v-btn @click="toRecord">
-      <v-icon color="red" size="60">
-        {{ icons.mdiRadioboxMarked }}
-      </v-icon>
-    </v-btn>
+        <v-btn @click="toRecord">
+          <v-icon color="red" size="60">
+            {{ icons.mdiRadioboxMarked }}
+          </v-icon>
+        </v-btn>
 
-    <v-btn>
-      <span></span>
-      <v-icon large>
-        {{ icons.mdiChartBellCurve }}
-      </v-icon>
-    </v-btn>
-  </v-bottom-navigation>
+        <v-btn @click="toChart">
+          <v-icon large color="black">
+            {{ icons.mdiChartBellCurve }}
+          </v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-layout>
+  </v-app-bar>
 </template>
 
 <script>
@@ -35,7 +34,6 @@ import {
   mdiChartBellCurve,
   mdiCalendarMonth,
 } from "@mdi/js";
-import { mapGetters } from "vuex";
 
 export default {
   name: "BottomNavigation",
@@ -47,30 +45,25 @@ export default {
       mdiRadioboxMarked,
     },
   }),
-  computed: {
-    ...mapGetters(["showBottomNavigation"]),
-    color() {
-      switch (this.value) {
-        case 0:
-          return "#5AC165";
-        case 1:
-          return "#855CF8";
-        case 2:
-          return "#FF9500";
-        default:
-          return "#5AC165";
-      }
-    },
-  },
   methods: {
     toRecord() {
       this.$router.push("/record");
     },
     toCalendar() {
-      this.$router.push("/calendar");
+      this.$router.push("/calendar/:userSeq");
+    },
+    toChart() {
+      this.$router.push("/chart");
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-left: 0px;
+}
+</style>

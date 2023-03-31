@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-app>
     <v-flex xs12 class="mb-3">
       <v-sheet height="500">
         <vc-calendar
@@ -30,7 +30,7 @@
         </vc-calendar>
       </v-sheet>
     </v-flex>
-  </v-layout>
+  </v-app>
 </template>
 
 <script>
@@ -43,6 +43,9 @@ export default {
     calendarData: new Array(31).fill({ status: false, emotionImgUrl: "" }),
   }),
   created() {
+    this.$store.dispatch("setShowBottomNavigation", true);
+    this.$store.dispatch("setShowTopNavigation", true);
+
     const userData = this.$store.getters.userData;
     this.month = this.date.getMonth() + 1;
     this.year = this.date.getFullYear();
