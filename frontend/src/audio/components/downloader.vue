@@ -31,9 +31,7 @@ export default {
 
       try {
         const formData = new FormData();
-        const type = this.record.blob.type.split("/")[1];
-        console.log(type);
-        console.log(`${this.filename}`);
+        // const type = this.record.blob.type.split("/")[1];
 
         const today = new Date();
         var year = today.getFullYear();
@@ -43,25 +41,19 @@ export default {
         var dateString = year + "-" + month + "-" + day;
         var userSeq = 1;
 
-        formData.append("voice_file", `recordExmaple.${type}`);
-        console.log(formData.get("voice_file"));
-
         const link = document.createElement("a");
-        link.href = this.record.url;
-        // console.log(link);
-        console.log(link.href);
-        console.log(this.record.url);
-        // link.download = `${this.filename}.${type}`;
+        // link.href = this.record.url;
         // link.download = `${this.filename}.mp3`;
 
-        var text_content = "야이 새뀌들아";
+        formData.append(`voice_file`, this.record.blob);
+        const text_content = "야이 새뀌들아";
+
         const response = await doSendRecord(
           formData,
           dateString,
           text_content,
           userSeq
         );
-
         return response;
       } catch (error) {
         throw error;

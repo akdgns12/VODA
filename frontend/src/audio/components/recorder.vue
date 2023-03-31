@@ -36,7 +36,6 @@
               v-if="record.id === selected.id && showDownloadButton"
               class="ar__downloader"
               :record="record"
-              :filename="filename"
             />
           </div>
         </div>
@@ -46,33 +45,41 @@
       </v-flex>
     </v-container>
 
-    <!-- bottom nav -->
-    <v-layout class="bottom-nav">
-      <v-bottom-navigation grow>
-        <v-btn @click="toMain">
-          <v-icon large color="black">
-            {{ icons.mdiCalendarMonth }}
-          </v-icon>
-        </v-btn>
-        <!-- 녹음 시작 및 중지 버튼 -->
-        <v-btn class="ar-recorder">
-          <icon-button
-            class="ar-icon ar-icon__lg"
-            :name="iconButtonType"
-            :class="{
-              'ar-icon--rec': isRecording,
-              'ar-icon--pulse': isRecording && volume > 0.02,
-            }"
-            @click.native="toggleRecorder"
-          />
-        </v-btn>
-        <v-btn>
-          <v-icon large color="black">
-            {{ icons.mdiChartBellCurve }}
-          </v-icon>
-        </v-btn>
-      </v-bottom-navigation>
-    </v-layout>
+    <div>
+      <v-app-bar class="bottom-nav d-flex justify-between">
+        <!-- bottom nav -->
+        <v-layout>
+          <v-bottom-navigation
+            v-model="value"
+            grow
+            class="bottom-nav d-flex justify-between"
+          >
+            <v-btn @click="toCalendar">
+              <v-icon large color="black">
+                {{ icons.mdiCalendarMonth }}
+              </v-icon>
+            </v-btn>
+            <!-- 녹음 시작 및 중지 버튼 -->
+            <v-btn class="ar-recorder">
+              <icon-button
+                class="ar-icon ar-icon__lg"
+                :name="iconButtonType"
+                :class="{
+                  'ar-icon--rec': isRecording,
+                  'ar-icon--pulse': isRecording && volume > 0.02,
+                }"
+                @click.native="toggleRecorder"
+              />
+            </v-btn>
+            <v-btn @click="toChart">
+              <v-icon large color="black">
+                {{ icons.mdiChartBellCurve }}
+              </v-icon>
+            </v-btn>
+          </v-bottom-navigation>
+        </v-layout>
+      </v-app-bar>
+    </div>
   </v-app>
 </template>
 
@@ -110,6 +117,7 @@ export default {
   },
   data() {
     return {
+      value: 3,
       isUploading: false,
       recorder: this._initRecorder(),
       recordList: [],
@@ -133,8 +141,11 @@ export default {
     this.stopRecorder();
   },
   methods: {
-    toMain() {
-      this.$router.push("/main");
+    toCalendar() {
+      this.$router.push("/calendar");
+    },
+    toChart() {
+      this.$router.push("/chart");
     },
     toggleRecorder() {
       if (this.attempts && this.recorder.records.length >= this.attempts) {
@@ -230,7 +241,7 @@ export default {
   position: fixed;
   bottom: 0;
   width: 100%;
-  margin-left: -16px;
+  margin-left: 0px;
 }
 .ar {
   width: 420px;
