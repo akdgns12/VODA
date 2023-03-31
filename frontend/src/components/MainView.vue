@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-app>
     <v-flex xs12 class="mb-3">
       <v-sheet height="500">
         <vc-calendar
@@ -30,7 +30,7 @@
         </vc-calendar>
       </v-sheet>
     </v-flex>
-  </v-layout>
+  </v-app>
 </template>
 
 <script>

@@ -50,6 +50,7 @@ export default {
   },
   created() {
     this.$store.dispatch("setShowBottomNavigation", false);
+    this.$store.dispatch("setShowTopNavigation", false);
   },
 };
 </script>
