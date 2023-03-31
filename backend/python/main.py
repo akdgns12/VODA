@@ -11,12 +11,12 @@ from api.model import models
 models.Base.metadata.create_all(bind=engine)
 
 def set_cors(application:FastAPI) :
-    origins =["*", "http://localhost:8081"]
+    origins =["http://localhost:8081", "http://j8a104.p.ssafy.io:3000", "http://j8a104.p.ssafy.io:3001", "https://j8a104.p.ssafy.io"]
     application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["POST", "post"],
         allow_headers=["*"]
     )
 
