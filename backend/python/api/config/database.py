@@ -18,7 +18,7 @@ MYSQL_DB = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset=
 
 # Create the SQLAlchemy engine
 engine = create_engine(
-    MYSQL_DB, encoding="utf-8", pool_size=20, max_overflow=0
+    MYSQL_DB,  pool_size=20, max_overflow=0
 )
 
 # Create a SessionLocal class(not database session yet, will be)

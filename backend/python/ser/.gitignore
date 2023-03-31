@@ -1,3 +1,6 @@
 audio/
 dataset/
+Validationset/
 *.h5
+emotion_recognition.py
+test/
