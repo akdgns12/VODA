@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum EmotionEnum {
 
-    EMOTION(new String[] {"sadness","surprise","angry","neutral","happiness"}),
+    EMOTION(new String[] {"슬픔","놀람","화남","보통","행복"}),
     CNT(5),
     IMGPATH(new String[]{"sadness.png","surprise.png","angry.png","neutral.png","happiness.png"});
     private String[] content;
