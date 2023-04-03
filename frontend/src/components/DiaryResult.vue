@@ -1,14 +1,13 @@
 <template>
   <v-app>
     <v-container style="margin-top: 30px">
+      <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
+      <br />
       <img
         :src="require(`@/assets/emotions/${emotionImagePath}`)"
-        style="width: 50px; height: 50px"
+        style="width: 89px; height: 98px"
       />
-    </v-container>
-    <div>주요 감정은 '{{ emotionMain }}'입니다.</div>
 
-    <v-contatiner>
       <v-col>
         <div class="chart-container">
           <canvas
@@ -17,30 +16,21 @@
           ></canvas>
         </div>
       </v-col>
-    </v-contatiner>
+    </v-container>
 
-    <h3 style="margin: 15px; font-size: 1.2rem; text-align: center">
-      문장 분석
-    </h3>
-
-    <li
-      v-for="sentence in sentenceDtos"
-      style="border-bottom: 1px solid #eee; padding-bottom: 10px"
-    >
-      <div style="margin-top: 10px">
-        <h5>
+    <li v-for="sentence in sentenceDtos" v-bind:key="sentence">
+      <v-row no-gutters style="margin-top: 10px">
+        <v-col cols="7" style="text-align: left; margin-left: 32px">
+          {{ sentence.content }}
+        </v-col>
+        <v-col cols="4">
           <img
             :src="require(`@/assets/emotions/${sentence.emotionImagePath}`)"
-            style="width: 15px; height: 15px"
+            style="width: 52px; height: 57px"
           />
-          [{{ sentence.emotionMain }}]
-        </h5>
-      </div>
-      <div>
-        <h6>"{{ sentence.content }}"</h6>
-      </div>
+        </v-col>
+      </v-row>
     </li>
-    <br /><br />
   </v-app>
 </template>
 
@@ -82,7 +72,10 @@ export default {
       },
     };
   },
-
+  created() {
+    this.$store.dispatch("setShowBottomNavigation", false);
+    this.$store.dispatch("setShowTopNavigation", true);
+  },
   mounted() {
     this.getData();
   },
