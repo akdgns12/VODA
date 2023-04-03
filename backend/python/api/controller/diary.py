@@ -1,10 +1,11 @@
-from fastapi import APIRouter, File, Form, UploadFile, status
+from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException
 from datetime import datetime, date 
 from ..config.database import get_db 
 from ..service import calendar_service , diary_service, daily_emotion_service
 from experiments.emotion_text.model_call import model_call
 from ser import ser_model
 from ser import speech_to_text as stt
+import speech_recognition as sr
 router = APIRouter()
 AIMODEL = model_call()
 SER = ser_model.EmotionRecognizer()
@@ -18,7 +19,14 @@ def post_diary(
 ): 
      db = get_db() 
      ind,file_name = diary_service.speech_emotion(SER, voice_file)
-     text_content = stt.stt(file_name)
+     
+     try :
+         text_content = stt.stt(file_name)
+     except sr.exceptions.UnknownValueError : 
+        raise HTTPException(
+            status_code=202, 
+            detail="voice too short"
+        )
      calendar = calendar_service.check_exist_calendar(db,date,id)
      daily_emotions = daily_emotion_service.check_exist_daily_emotion(db,date,id)
      diary = diary_service.add_diary(db,AIMODEL,calendar,text_content,file_name)
