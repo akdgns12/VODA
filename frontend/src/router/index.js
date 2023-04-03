@@ -7,8 +7,7 @@ import Record from "../audio/components/recorder.vue";
 import DiaryDetail from "../components/DiaryDetail.vue";
 import Chart from "../components/ChartView.vue";
 import RedirectHandler from "../components/OAuth2RedirectHadeler.vue";
-import TextResult from "../components/TextResult.vue"
-import Bar from "../components/Bar.vue"
+import DiaryResult from "../components/DiaryResult.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -48,15 +47,10 @@ const routes = [
     component: Chart,
   },
   {
-    path: "/diary",
-    name: "diary",
-    component: TextResult
+    path: "/result",
+    name: "result",
+    component: DiaryResult,
   },
-  {
-    path: "/bar",
-    name: "bar",
-    component: Bar
-  }
 ];
 
 // eslint-disable-next-line no-new
