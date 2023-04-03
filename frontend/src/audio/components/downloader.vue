@@ -42,18 +42,12 @@ export default {
         var userSeq = 1;
 
         const link = document.createElement("a");
-        // link.href = this.record.url;
+        link.href = this.record.url;
         // link.download = `${this.filename}.mp3`;
 
         formData.append(`voice_file`, this.record.blob);
-        const text_content = "야이 새뀌들아";
 
-        const response = await doSendRecord(
-          formData,
-          dateString,
-          text_content,
-          userSeq
-        );
+        const response = await doSendRecord(formData, dateString, userSeq);
         return response;
       } catch (error) {
         throw error;
