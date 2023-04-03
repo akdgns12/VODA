@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="recorder">
     <h2>오늘의 일기를</h2>
     <h2>녹음해보세요.</h2>
     <v-container class="ar" fluid>
@@ -45,41 +45,33 @@
       </v-flex>
     </v-container>
 
-    <div>
-      <v-app-bar class="bottom-nav d-flex justify-between">
-        <!-- bottom nav -->
-        <v-layout>
-          <v-bottom-navigation
-            v-model="value"
-            grow
-            class="bottom-nav d-flex justify-between"
-          >
-            <v-btn @click="toCalendar">
-              <v-icon large color="black">
-                {{ icons.mdiCalendarMonth }}
-              </v-icon>
-            </v-btn>
-            <!-- 녹음 시작 및 중지 버튼 -->
-            <v-btn class="ar-recorder">
-              <icon-button
-                class="ar-icon ar-icon__lg"
-                :name="iconButtonType"
-                :class="{
-                  'ar-icon--rec': isRecording,
-                  'ar-icon--pulse': isRecording && volume > 0.02,
-                }"
-                @click.native="toggleRecorder"
-              />
-            </v-btn>
-            <v-btn @click="toChart">
-              <v-icon large color="black">
-                {{ icons.mdiChartBellCurve }}
-              </v-icon>
-            </v-btn>
-          </v-bottom-navigation>
-        </v-layout>
+    <!-- bottom nav -->
+    <v-bottom-navigation grow class="bottom-nav">
+      <v-app-bar class="bottom-nav-bar">
+        <v-btn @click="toCalendar">
+          <v-icon large color="black">
+            {{ icons.mdiCalendarMonth }}
+          </v-icon>
+        </v-btn>
+        <!-- 녹음 시작 및 중지 버튼 -->
+        <v-btn class="ar-recorder">
+          <icon-button
+            class="ar-icon ar-icon__lg"
+            :name="iconButtonType"
+            :class="{
+              'ar-icon--rec': isRecording,
+              'ar-icon--pulse': isRecording && volume > 0.02,
+            }"
+            @click.native="toggleRecorder"
+          />
+        </v-btn>
+        <v-btn @click="toChart">
+          <v-icon large color="black">
+            {{ icons.mdiChartBellCurve }}
+          </v-icon>
+        </v-btn>
       </v-app-bar>
-    </div>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -117,7 +109,6 @@ export default {
   },
   data() {
     return {
-      value: 3,
       isUploading: false,
       recorder: this._initRecorder(),
       recordList: [],
@@ -128,7 +119,6 @@ export default {
         mdiCalendarMonth,
         mdiRadioboxMarked,
       },
-      value: 3,
     };
   },
 
@@ -189,12 +179,6 @@ export default {
     },
   },
   computed: {
-    color() {
-      switch (this.value) {
-        default:
-          return "#5AC165";
-      }
-    },
     attemptsLeft() {
       return this.attempts - this.recordList.length;
     },
@@ -220,34 +204,27 @@ export default {
     volume() {
       return parseFloat(this.recorder.volume);
     },
-    color() {
-      switch (this.value) {
-        case 0:
-          return "#5AC165";
-        case 1:
-          return "#855CF8";
-        case 2:
-          return "#FF9500";
-        default:
-          return "#5AC165";
-      }
-    },
   },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.recorder {
+  overflow: hidden;
+}
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
   margin-left: 0px;
+  overflow: hidden;
+  background-color: white;
 }
 .ar {
   width: 420px;
   font-family: "Roboto", sans-serif;
   border-radius: 16px;
-  background-color: #fafafa;
+  background-color: #ffffff;
   box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.17);
   position: relative;
   box-sizing: content-box;
@@ -270,10 +247,10 @@ export default {
       line-height: 45px;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid #ffffff;
       position: relative;
       &--selected {
-        border: 1px solid #e8e8e8;
+        border: 1px solid #ffffff;
         border-radius: 24px;
         background-color: #ffffff;
         margin-top: -1px;
@@ -300,13 +277,13 @@ export default {
     }
     &__time-limit {
       position: absolute;
-      color: #aeaeae;
+      color: #ffffff;
       font-size: 12px;
       top: 128px;
     }
     &__records-limit {
       position: absolute;
-      color: #aeaeae;
+      color: #ffffff;
       font-size: 13px;
       top: 78px;
     }
@@ -397,11 +374,6 @@ export default {
   &__downloader {
     right: 115px;
     margin-top: 10px;
-  }
-  .bottom-nav {
-    position: fixed;
-    bottom: -100px;
-    width: 100%;
   }
 }
 @import "../scss/icons";
