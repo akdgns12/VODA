@@ -1,22 +1,21 @@
 <template>
-  <v-app>
-    <v-container style="margin-top: 30px">
-      <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
-      <br />
+  <v-app style="margin-top: 30px">
+    <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
+    <br />
+    <div style="text-align: center">
       <img
         :src="require(`@/assets/emotions/${emotionImagePath}`)"
         style="width: 89px; height: 98px"
       />
-
-      <v-col>
-        <div class="chart-container">
-          <canvas
-            ref="bar"
-            style="position: relative; z-index: 0; width: 350px"
-          ></canvas>
-        </div>
-      </v-col>
-    </v-container>
+    </div>
+    <v-col>
+      <div class="chart-container">
+        <canvas
+          ref="bar"
+          style="position: relative; z-index: 0; width: 350px"
+        ></canvas>
+      </div>
+    </v-col>
 
     <li v-for="sentence in sentenceDtos" v-bind:key="sentence">
       <v-row no-gutters style="margin-top: 10px">
