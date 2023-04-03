@@ -40,7 +40,11 @@ export default {
     year: null,
     month: null,
     date: new Date(),
-    calendarData: new Array(31).fill({ status: false, emotionImgUrl: "" }),
+    calendarData: new Array(31).fill({
+      status: false,
+      emotionImgUrl: "",
+      calendarSeq: 0,
+    }),
   }),
   created() {
     this.$store.dispatch("setShowBottomNavigation", true);
@@ -65,10 +69,10 @@ export default {
         for (let i = 0; i < size; i++) {
           const numberStr = calendarData[i].date.split("-")[2];
           const number = Number(numberStr);
-          // this.calendarData[number] = true;
           this.calendarData.splice(number - 1, 1, {
             status: true,
             emotionImgUrl: calendarData[i].emotionImgUrl,
+            calendarSeq: calendarData[i].calendarSeq,
           });
         }
       });
@@ -82,14 +86,21 @@ export default {
       const formattedDate = `${year}.${month < 10 ? "0" + month : month}.${
         day < 10 ? "0" + day : day
       }`;
-      this.$router.push(`/calendar/diary/${formattedDate}`);
+      this.$router.push({
+        path: `/calendar/diary/${this.calendarData[day - 1].calendarSeq}`,
+        query: { formattedDate },
+      });
     },
     handleEmotionButton(date) {
       return this.calendarData[date - 1].status;
     },
     handleCalendarChange() {
       this.month = this.$refs.calendar.pages[0].month;
-      this.calendarData.fill({ status: false, emotionImgUrl: "" });
+      this.calendarData.fill({
+        status: false,
+        emotionImgUrl: "",
+        calendarSeq: 0,
+      });
       this.year = this.$refs.calendar.pages[0].year;
       const formattedDate = `${this.year}-${
         this.month < 10 ? "0" + this.month : this.month
@@ -109,6 +120,7 @@ export default {
             this.calendarData.splice(number - 1, 1, {
               status: true,
               emotionImgUrl: calendarData[i].emotionImgUrl,
+              calendarSeq: calendarData[i].calendarSeq,
             });
           }
         });
