@@ -22,6 +22,7 @@ async function doSignUp(nickName, accessToken) {
     });
     return response;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
