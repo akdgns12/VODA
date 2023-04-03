@@ -17,10 +17,11 @@ def check_exist_calendar(db:Session, date:date, user_seq : int) -> models.Calend
         db.commit() 
     return calendar 
 
-def update_best_emotion(db:Session, calendar : models.Calendar, daily_emotions : list ) ->models.Calendar:
+def update_best_emotion(db:Session, calendar : models.Calendar, daily_emotions : list) ->models.Calendar:
     max_idx = 3
     max_cnt = 0
-    for idx,daily_emotion in enumerate(daily_emotions) : 
+    
+    for idx,daily_emotion in enumerate(daily_emotions) :
         if daily_emotion.cnt >= max_cnt :
             max_cnt = daily_emotion.cnt 
             max_idx = idx 
