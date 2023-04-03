@@ -102,9 +102,10 @@ def speech_emotion(SER, voice_file):
             ind : voice emotion result index
             file_name : uuid - file id
     """
-    labels = ["중립","행복","슬픔","화남","놀람"]
+    # labels = ["중립","행복","슬픔","화남","놀람"]
+    labels = ["슬픔","놀람","화남","중립","행복"]
     change_ind = {0:3, 1:4, 2:0, 3:2, 4:1}
-    result = [] 
+    result = [0 for _ in range(5)] 
     content = voice_file.file.read() 
     file_name = f"./voice_file/{str(uuid.uuid4())}.wav"
     with open(file_name,"wb") as fp :
@@ -115,8 +116,9 @@ def speech_emotion(SER, voice_file):
     for elem in speech_emotions:
         # ind = elem.index(max(elem))
         ind = np.argmax(elem)
-        emotion = labels[ind]
         ind = change_ind[ind]
-        result.append(emotion)
-    print(f"음성에서 {result[0]}이 느껴집니다.")
+        result[ind] += 1 
+
+    ind = result.index(max(result))
+    print(f"음성에서 {labels[ind]}이 느껴집니다.")
     return ind,file_name.split('/')[-1]
