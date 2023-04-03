@@ -9,6 +9,7 @@
 backend/python/experiments/emotion_text/weight/*
 backend/python/experiments/**/text_data/
 backend/python/.env
+backend/python/voice_file/**
 .idea/
 # User-specific stuff
 .idea/**/workspace.xml

@@ -4,6 +4,6 @@ RUN echo Asia/Seoul > /etc/timezone
 WORKDIR /app 
 ADD . .
 RUN pip install --upgrade pip 
-RUN pip install -r requirements_text.txt 
+RUN pip install -r requirements_voice_text.txt 
 EXPOSE 8081
 CMD python main.py

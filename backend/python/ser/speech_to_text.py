@@ -1,9 +1,11 @@
 import speech_recognition as sr
-
+import os 
+from dotenv import load_dotenv
 r = sr.Recognizer()
 
-def stt(filepath):
-    test = sr.AudioFile(filepath)
+def stt(file_path):
+    file_path = os.getenv("VOICE_FILE_PATH")+file_path
+    test = sr.AudioFile(file_path)
     with test as source:
         audio = r.record(source)
     return r.recognize_google(audio, language='ko-KR')
