@@ -11,12 +11,14 @@ import java.util.List;
 public class DiaryDetailResponseDto {
     List<SentenceDto> sentenceDtos ;
     String emotionMain;
+    String emotionImagePath;
     int[] emotionCnt;
 
     @Builder
-    public DiaryDetailResponseDto(List<SentenceDto> sentences, String emotionMain, int[] emotionCnt){
+    public DiaryDetailResponseDto(List<SentenceDto> sentences, String emotionMain, String emotionImagePath, int[] emotionCnt){
         this.emotionCnt = emotionCnt;
         this.emotionMain = emotionMain;
+        this.emotionImagePath = emotionImagePath;
         this.sentenceDtos = sentences;
     }
 }

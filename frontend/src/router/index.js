@@ -7,7 +7,7 @@ import Record from "../audio/components/recorder.vue";
 import DiaryDetail from "../components/DiaryDetail.vue";
 import Chart from "../components/ChartView.vue";
 import RedirectHandler from "../components/OAuth2RedirectHadeler.vue";
-
+import DiaryResult from "../components/DiaryResult.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -45,6 +45,11 @@ const routes = [
     path: "/chart",
     name: "chart",
     component: Chart,
+  },
+  {
+    path: "/result",
+    name: "result",
+    component: DiaryResult,
   },
 ];
 
