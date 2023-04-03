@@ -144,7 +144,14 @@ export default {
       }
     },
     deleteSelected(diarySeq) {
-      this.$store.dispatch("delDiaryData", { diarySeq: diarySeq });
+      this.$store.dispatch("delDiaryData", { diarySeq: diarySeq }).then(() => {
+        this.$store
+          .dispatch("getDiaryData", { calendarSeq: this.calendarSeq })
+          .then(() => {
+            this.diaryData = this.$store.getters.diaryData;
+            this.selected = null;
+          });
+      });
       this.showDeletePopup = false;
     },
   },
