@@ -20,6 +20,17 @@ def add_diary(
         text_content : str,
         voice_url : str, 
     ) -> int:
+    """
+    데이터베이스에 다이어리를 추가합니다. 
+        Args:
+            db : DB Session
+            AIMODEL : KoBERTModel 
+            calendar : Calendar entity
+            text_content : STT Result 
+            voice_url : voice file path (S3 or file path)
+        Return : 
+            diary : diary entity 
+    """
    
     emotion_result = AIMODEL.predict(text_content)
     diary = models.Diary(
@@ -40,8 +51,21 @@ def add_sentence(
         diary: models.Diary, 
         daily_emotions : models.DailyEmotion,
         text_content:str,
-        ind:int
+        voice_result:int
 ):
+    """
+    나누어진 문장을 데이터베이스에 추가합니다. 
+        Args : 
+            db : DB Session
+            AIMODEL : KoBERTModel 
+            diary : Diary entity
+            daily_emotions : daily_emotions entity 
+            text_content : STT Result 
+            voice_result : voice emotion - classification result 
+        Return :
+            sentece_emotions : sentence with emotion result 
+            emotions : emotion cnt list 
+    """
     kiwi = Kiwi()
     sentences = kiwi.split_into_sents(text_content)
     sentence_emotions = []
@@ -56,26 +80,43 @@ def add_sentence(
         emotions[sentence_emotions[-1][1]] +=1 
         db.add(save_sentence)
     best_emotion_cnt = 0 
-    best_emotion_ind = ind
-    emotions[ind] += VOICE_WEIGHT # + 음성 결과 
+    best_emotion_ind = voice_result
+    emotions[voice_result] += VOICE_WEIGHT # + 음성 결과 
     for ind,emotion in enumerate(emotions):
         daily_emotions[ind].cnt += emotion
         if best_emotion_cnt <= emotion: 
             best_emotion_cnt = emotion 
             best_emotion_ind = ind 
     diary.emotion_idx = best_emotion_ind
-    emotions[ind] -= VOICE_WEIGHT # - 음성 결과
+    emotions[voice_result] -= VOICE_WEIGHT # - 음성 결과
     db.commit()
     return sentence_emotions, emotions
 
-def speech_emotion(SER, filepath):
+def speech_emotion(SER, voice_file):
+    """
+    음성파일을 uuid기반으로 저장하고 저장된 음성을 기반으로 감정을 분류합니다. 
+        Args : 
+            SER : Sound Emotion Recognition Model
+            voice_file : voice file path
+        Return : 
+            ind : voice emotion result index
+            file_name : uuid - file id
+    """
     labels = ["중립","행복","슬픔","화남","놀람"]
-    result = []
-    speech_emotions = SER.predict_file(voice_file)
+    change_ind = {0:3, 1:4, 2:0, 3:2, 4:1}
+    result = [] 
+    content = voice_file.file.read() 
+    file_name = f"./voice_file/{str(uuid.uuid4())}.wav"
+    with open(file_name,"wb") as fp :
+        fp.write(content)
+
+    speech_emotions = SER.predict_file(file_name)
+    print(speech_emotions)
     for elem in speech_emotions:
         # ind = elem.index(max(elem))
         ind = np.argmax(elem)
         emotion = labels[ind]
         ind = change_ind[ind]
         result.append(emotion)
-    return result
+    print(f"음성에서 {result[0]}이 느껴집니다.")
+    return ind,file_name.split('/')[-1]

@@ -56,15 +56,15 @@ class EmotionRecognizer:
             melnorm = librosa.util.normalize(meldb)
 
             data = np.array(melnorm)
-            del sampling_rate
-            del audio_array
             # del mfcc
             # del chroma
             del mel
             del meldb
             del melnorm
             result.append(data)
-            gc.collect()
+        del sampling_rate
+        del audio_array
+        gc.collect()
         return result
 
 
