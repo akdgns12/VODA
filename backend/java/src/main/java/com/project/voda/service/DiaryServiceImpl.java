@@ -92,6 +92,7 @@ public class DiaryServiceImpl implements DiaryService{
         return DiaryDetailResponseDto.builder()
                 .sentences(sentenceDtos)
                 .emotionMain(diary.getEmotion().getName())
+                .emotionImagePath(EMOTION_IMG_PATHS[diary.getEmotion().getEmotionIdx()])
                 .emotionCnt(emotionCnt)
                 .build();
     }
