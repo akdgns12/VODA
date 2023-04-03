@@ -144,8 +144,6 @@ export default {
       }
     },
     deleteSelected(diarySeq) {
-      console.log(diarySeq);
-      console.log(typeof diarySeq);
       this.$store.dispatch("delDiaryData", { diarySeq: diarySeq });
       this.showDeletePopup = false;
     },

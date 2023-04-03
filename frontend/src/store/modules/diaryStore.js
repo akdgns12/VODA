@@ -30,12 +30,10 @@ const diaryStore = {
       );
     },
     async delDiaryData({ commit }, { diarySeq }) {
-      console.log(typeof diarySeq);
       await doDelDiary(
         diarySeq,
         ({ data }) => {
           commit("SET_TEST", data);
-          console.log(data);
         },
         (error) => {
           console.log(error);

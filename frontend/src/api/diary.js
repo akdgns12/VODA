@@ -12,7 +12,6 @@ async function doGetDiary(calendarSeq, success, fail) {
 }
 
 async function doDelDiary(diarySeq, success, fail) {
-  console.log(diarySeq);
   await api.delete(`/diary/${diarySeq}`).then(success).catch(fail);
 }
 
