@@ -47,8 +47,6 @@ export default {
   created() {
     this.$store.dispatch("setShowBottomNavigation", true);
     this.$store.dispatch("setShowTopNavigation", true);
-    this.$store.dispatch("setBottomNavigationHeight", 60);
-    this.$store.dispatch("setTopNavigationHeight", 60);
 
     const userData = this.$store.getters.userData;
     this.month = this.date.getMonth() + 1;
