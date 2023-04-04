@@ -18,12 +18,11 @@ export default {
       const code = params.get("code");
 
       await this.$store.dispatch("getUserInfo", { data: code });
-      const userData = this.$store.getters.userData;
 
       this.isLoading = false;
 
       if (this.$store.getters.userStatus == 200) {
-        this.$router.push(`/calendar/${userData.userSeq}`);
+        this.$router.push(`/calendar`);
       } else {
         // 없으면 회원가입 페이지로 라우팅
         this.$router.push("/user/signup");

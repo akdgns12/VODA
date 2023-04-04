@@ -50,7 +50,7 @@ export default {
       this.$router.push("/record");
     },
     toCalendar() {
-      this.$router.push("/calendar/:userSeq");
+      this.$router.push("/calendar");
     },
     toChart() {
       this.$router.push("/chart");
