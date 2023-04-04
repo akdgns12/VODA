@@ -61,7 +61,7 @@ export default {
   src: url("../../public/fonts/NanumSquareNeo-eHv.ttf");
 }
 .logo {
-  margin-top: 20vh;
+  margin-top: 25vh;
   margin-left: auto;
   margin-right: auto;
   align-self: center;
@@ -90,14 +90,17 @@ export default {
 }
 .loginBtn {
   position: relative;
-  bottom: 0;
+  margin-top: 20vh;
 }
 @media only screen and (max-width: 600px) {
+  .logo {
+    margin-top: 20vh;
+  }
   .loginBtn {
     margin-top: 10px;
     position: absolute;
     left: 50%;
-    bottom: 20px;
+    bottom: 20vh;
     transform: translateX(-50%);
   }
 }
