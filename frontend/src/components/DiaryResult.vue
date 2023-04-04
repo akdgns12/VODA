@@ -1,35 +1,37 @@
 <template>
-  <v-app style="margin-top: 30px">
-    <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
-    <br />
-    <div style="text-align: center">
-      <img
-        :src="require(`@/assets/emotions/${emotionImagePath}`)"
-        style="width: 89px; height: 98px"
-      />
-    </div>
-    <v-col>
-      <div class="chart-container">
-        <canvas
-          ref="bar"
-          style="position: relative; z-index: 0; width: 350px"
-        ></canvas>
+  <v-app style="margin-top: 70px; margin-bottom: 70px">
+    <v-container style="margin-top: 30px">
+      <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
+      <br />
+      <div style="text-align: center">
+        <img
+          :src="require(`@/assets/emotions/${emotionImagePath}`)"
+          style="width: 89px; height: 98px"
+        />
       </div>
-    </v-col>
+      <v-col>
+        <div class="chart-container">
+          <canvas
+            ref="bar"
+            style="position: relative; z-index: 0; width: 350px"
+          ></canvas>
+        </div>
+      </v-col>
 
-    <li v-for="sentence in sentenceDtos" v-bind:key="sentence">
-      <v-row no-gutters style="margin-top: 10px">
-        <v-col cols="7" style="text-align: left; margin-left: 32px">
-          {{ sentence.content }}
-        </v-col>
-        <v-col cols="4">
-          <img
-            :src="require(`@/assets/emotions/${sentence.emotionImagePath}`)"
-            style="width: 52px; height: 57px"
-          />
-        </v-col>
-      </v-row>
-    </li>
+      <li v-for="sentence in sentenceDtos" v-bind:key="sentence">
+        <v-row no-gutters style="margin-top: 10px">
+          <v-col cols="7" style="text-align: left; margin-left: 32px">
+            {{ sentence.content }}
+          </v-col>
+          <v-col cols="4">
+            <img
+              :src="require(`@/assets/emotions/${sentence.emotionImagePath}`)"
+              style="width: 52px; height: 57px"
+            />
+          </v-col>
+        </v-row>
+      </li>
+    </v-container>
   </v-app>
 </template>
 
@@ -41,7 +43,6 @@ Chart.register(...registerables);
 export default {
   data() {
     return {
-      diarySeq: 17,
       sentenceDtos: [], // Add sentenceDto to the data object
       emotionMain: "",
       emotionImagePath: "",
@@ -72,8 +73,9 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("setShowBottomNavigation", false);
+    this.$store.dispatch("setShowBottomNavigation", true);
     this.$store.dispatch("setShowTopNavigation", true);
+    console.log(this.$route.params.diarySeq);
   },
   mounted() {
     this.getData();
@@ -85,8 +87,9 @@ export default {
         const config = {
           headers: { "Content-Type": "application/json" },
         };
+
         const response = await axios.get(
-          "http://localhost:8080/diary/1",
+          `http://localhost:8080/diary/${this.$route.params.diarySeq}`,
           config
         );
         console.log(response);
