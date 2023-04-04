@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="recorder">
     <h2>오늘의 일기를</h2>
     <h2>녹음해보세요.</h2>
     <v-container class="ar" fluid>
@@ -36,7 +36,6 @@
               v-if="record.id === selected.id && showDownloadButton"
               class="ar__downloader"
               :record="record"
-              :filename="filename"
             />
           </div>
         </div>
@@ -47,9 +46,9 @@
     </v-container>
 
     <!-- bottom nav -->
-    <v-layout class="bottom-nav">
-      <v-bottom-navigation grow>
-        <v-btn @click="toMain">
+    <v-bottom-navigation grow class="bottom-nav">
+      <v-app-bar class="bottom-nav-bar">
+        <v-btn @click="toCalendar">
           <v-icon large color="black">
             {{ icons.mdiCalendarMonth }}
           </v-icon>
@@ -66,13 +65,13 @@
             @click.native="toggleRecorder"
           />
         </v-btn>
-        <v-btn>
+        <v-btn @click="toChart">
           <v-icon large color="black">
             {{ icons.mdiChartBellCurve }}
           </v-icon>
         </v-btn>
-      </v-bottom-navigation>
-    </v-layout>
+      </v-app-bar>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -120,7 +119,6 @@ export default {
         mdiCalendarMonth,
         mdiRadioboxMarked,
       },
-      value: 3,
     };
   },
 
@@ -133,8 +131,11 @@ export default {
     this.stopRecorder();
   },
   methods: {
-    toMain() {
-      this.$router.push("/main");
+    toCalendar() {
+      this.$router.push("/calendar");
+    },
+    toChart() {
+      this.$router.push("/chart");
     },
     toggleRecorder() {
       if (this.attempts && this.recorder.records.length >= this.attempts) {
@@ -178,12 +179,6 @@ export default {
     },
   },
   computed: {
-    color() {
-      switch (this.value) {
-        default:
-          return "#5AC165";
-      }
-    },
     attemptsLeft() {
       return this.attempts - this.recordList.length;
     },
@@ -209,34 +204,27 @@ export default {
     volume() {
       return parseFloat(this.recorder.volume);
     },
-    color() {
-      switch (this.value) {
-        case 0:
-          return "#5AC165";
-        case 1:
-          return "#855CF8";
-        case 2:
-          return "#FF9500";
-        default:
-          return "#5AC165";
-      }
-    },
   },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.recorder {
+  overflow: hidden;
+}
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
-  margin-left: -16px;
+  margin-left: 0px;
+  overflow: hidden;
+  background-color: white;
 }
 .ar {
   width: 420px;
   font-family: "Roboto", sans-serif;
   border-radius: 16px;
-  background-color: #fafafa;
+  background-color: #ffffff;
   box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.17);
   position: relative;
   box-sizing: content-box;
@@ -259,10 +247,10 @@ export default {
       line-height: 45px;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid #ffffff;
       position: relative;
       &--selected {
-        border: 1px solid #e8e8e8;
+        border: 1px solid #ffffff;
         border-radius: 24px;
         background-color: #ffffff;
         margin-top: -1px;
@@ -289,13 +277,13 @@ export default {
     }
     &__time-limit {
       position: absolute;
-      color: #aeaeae;
+      color: #ffffff;
       font-size: 12px;
       top: 128px;
     }
     &__records-limit {
       position: absolute;
-      color: #aeaeae;
+      color: #ffffff;
       font-size: 13px;
       top: 78px;
     }
@@ -386,11 +374,6 @@ export default {
   &__downloader {
     right: 115px;
     margin-top: 10px;
-  }
-  .bottom-nav {
-    position: fixed;
-    bottom: -100px;
-    width: 100%;
   }
 }
 @import "../scss/icons";

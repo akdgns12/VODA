@@ -8,6 +8,8 @@ import DiaryDetail from "../components/DiaryDetail.vue";
 import Chart from "../components/ChartView.vue";
 import RedirectHandler from "../components/OAuth2RedirectHadeler.vue";
 import DiaryResult from "../components/DiaryResult.vue";
+import RecordLoading from "../components/RecordLoading.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -50,6 +52,11 @@ const routes = [
     path: "/result",
     name: "result",
     component: DiaryResult,
+  },
+  {
+    path: "/recordLoading",
+    name: "recordLoading",
+    component: RecordLoading,
   },
 ];
 

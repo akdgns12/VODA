@@ -6,6 +6,7 @@ import calendarStore from "./modules/calendarStore";
 import chartStore from "./modules/chartStore";
 import diaryStore from "./modules/diaryStore";
 import userStore from "./modules/userStore";
+import recordStore from "./modules/recordStore";
 
 Vue.use(Vuex);
 
@@ -16,5 +17,6 @@ export default new Vuex.Store({
     chartStore,
     diaryStore,
     userStore,
+    recordStore,
   },
 });
