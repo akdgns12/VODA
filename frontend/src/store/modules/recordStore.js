@@ -2,7 +2,6 @@ const recordStore = {
   state: {
     recordData: {},
     recordStatus: null,
-    error: null,
   },
   getters: {
     recordData(state) {
