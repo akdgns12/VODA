@@ -44,6 +44,7 @@
                 <img
                   :src="require(`@/assets/emotions/${selected.emotionImgUrl}`)"
                   alt="emotion"
+                  @click="showResult(selected.diarySeq)"
                 />
               </v-avatar>
               <h3 class="text-h5 mb-2">
@@ -153,6 +154,9 @@ export default {
           });
       });
       this.showDeletePopup = false;
+    },
+    showResult(diarySeq) {
+      this.$router.push(`/result/${diarySeq}`);
     },
   },
 };
