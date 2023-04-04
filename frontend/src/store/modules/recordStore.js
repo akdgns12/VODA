@@ -8,9 +8,6 @@ const recordStore = {
     recordData(state) {
       return state.recordData;
     },
-    error(state) {
-      return state.error;
-    },
   },
   mutations: {
     SET_RECORD_DATA(state, recordData) {
