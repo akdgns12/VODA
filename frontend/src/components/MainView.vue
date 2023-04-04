@@ -1,34 +1,32 @@
 <template>
   <v-app>
     <v-flex xs12 class="mb-3">
-      <v-sheet height="500">
-        <vc-calendar
-          ref="calendar"
-          class="custom-calendar"
-          locale="en"
-          @update:from-page="handleCalendarChange"
-        >
-          <template v-slot:day-content="{ day }">
-            <div class="flex flex-col h-full z-100 overflow-hidden">
-              <div class="day-header">{{ day.day }}</div>
-              <v-btn
-                v-show="handleEmotionButton(day.day)"
-                @click="handleDateClick(day.date)"
-              >
-                <img
-                  v-if="handleEmotionButton(day.day)"
-                  :src="
-                    require(`@/assets/emotions/${
-                      calendarData[day.day - 1].emotionImgUrl
-                    }`)
-                  "
-                  alt="emotion"
-                />
-              </v-btn>
+      <vc-calendar
+        ref="calendar"
+        class="custom-calendar"
+        locale="en"
+        @update:from-page="handleCalendarChange"
+      >
+        <template v-slot:day-content="{ day }">
+          <div class="flex flex-col z-100">
+            <div class="day-header">{{ day.day }}</div>
+            <div
+              v-show="handleEmotionButton(day.day)"
+              @click="handleDateClick(day.date)"
+            >
+              <img
+                v-if="handleEmotionButton(day.day)"
+                :src="
+                  require(`@/assets/emotions/${
+                    calendarData[day.day - 1].emotionImgUrl
+                  }`)
+                "
+                alt="emotion"
+              />
             </div>
-          </template>
-        </vc-calendar>
-      </v-sheet>
+          </div>
+        </template>
+      </vc-calendar>
     </v-flex>
   </v-app>
 </template>
@@ -66,14 +64,16 @@ export default {
       .then(() => {
         const calendarData = this.$store.getters.calendarData;
         const size = Object.keys(calendarData).length;
-        for (let i = 0; i < size; i++) {
-          const numberStr = calendarData[i].date.split("-")[2];
-          const number = Number(numberStr);
-          this.calendarData.splice(number - 1, 1, {
-            status: true,
-            emotionImgUrl: calendarData[i].emotionImgUrl,
-            calendarSeq: calendarData[i].calendarSeq,
-          });
+        if (size != 0) {
+          for (let i = 0; i < size; i++) {
+            const numberStr = calendarData[i].date.split("-")[2];
+            const number = Number(numberStr);
+            this.calendarData.splice(number - 1, 1, {
+              status: true,
+              emotionImgUrl: calendarData[i].emotionImgUrl,
+              calendarSeq: calendarData[i].calendarSeq,
+            });
+          }
         }
       });
     this.$store.dispatch("setShowBottomNavigation", true);
@@ -113,15 +113,16 @@ export default {
         .then(() => {
           const calendarData = this.$store.getters.calendarData;
           const size = Object.keys(calendarData).length;
-          for (let i = 0; i < size; i++) {
-            const numberStr = calendarData[i].date.split("-")[2];
-            const number = Number(numberStr);
-            // this.calendarData[number] = true;
-            this.calendarData.splice(number - 1, 1, {
-              status: true,
-              emotionImgUrl: calendarData[i].emotionImgUrl,
-              calendarSeq: calendarData[i].calendarSeq,
-            });
+          if (size != 0) {
+            for (let i = 0; i < size; i++) {
+              const numberStr = calendarData[i].date.split("-")[2];
+              const number = Number(numberStr);
+              this.calendarData.splice(number - 1, 1, {
+                status: true,
+                emotionImgUrl: calendarData[i].emotionImgUrl,
+                calendarSeq: calendarData[i].calendarSeq,
+              });
+            }
           }
         });
     },
@@ -134,28 +135,13 @@ export default {
   font-family: "ComingSoon-Regular";
   src: url("../../public/fonts/ComingSoon-Regular.ttf");
 }
-.my-header {
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  padding: 5px 0;
-}
 
-@media only screen and (max-width: 600px) {
-  .my-header {
-    font-size: 32px;
-  }
-}
 ::-webkit-scrollbar {
   width: 0px;
 }
 .day-label {
   font-size: 14px;
 }
-.day2 {
-  margin: 10px;
-}
-
 .day-header {
   text-align: center;
   font-size: 18px;
@@ -167,12 +153,12 @@ export default {
 //달력 테두리
 ::v-deep .custom-calendar.vc-container {
   //달력 내부 선
-  margin-top: 30px;
+  margin-top: 70px;
+  margin-bottom: 70px;
   // --day-border: 1px solid #b8c2cc;
   // --day-border-highlight: 1px solid #b8c2cc;
   //날짜별 크기
-  --day-width: 20px;
-  --day-height: 90px;
+
   //요일칸 색상
   --weekday-bg: #f8fafc;
   //요일 테두리 색상
@@ -186,13 +172,16 @@ export default {
   border-radius: 10px 10px 0px 0px;
   //달력 너비
   width: 90%;
+  --day-width: width/7%;
+  --day-height: 12vh;
   .vc-arrow {
     color: beige;
-    background-color: red;
+    background: transparent;
+    box-shadow: 0ch;
   }
   .vc-header {
     padding: 10px 0;
-    background-color: red;
+    background: linear-gradient(#97c7ff, #855cf8);
     border-radius: 10px 10px 0px 0px;
   }
   .vc-weeks {
@@ -202,16 +191,18 @@ export default {
     background-color: var(--weekday-bg);
     border-bottom: var(--weekday-border);
     border-top: var(--weekday-border);
-    padding: 5px 0;
+    padding: 10px 0;
     color: black;
     font-family: "ComingSoon-Regular";
+    font-size: 18px;
   }
   .vc-day {
     padding: 0 5px 3px 5px;
-    text-align: left;
+    text-align: center;
     height: var(--day-height);
     min-width: var(--day-width);
     background-color: white;
+    overflow: hidden;
 
     &.weekday-1,
     &.weekday-7 {
@@ -233,6 +224,31 @@ export default {
 
   .vc-day-dots {
     margin-bottom: 5px;
+  }
+  img {
+    height: var(--day-height);
+    min-width: var(--day-width);
+  }
+}
+@media only screen and (max-width: 600px) {
+  ::v-deep .custom-calendar.vc-container {
+    .day-header {
+      font-size: 14px;
+    }
+    .vc-title {
+      font-size: 25px;
+    }
+    border-radius: 10px 10px 0px 0px;
+    //달력 너비
+    width: 90%;
+    .vc-arrow {
+    }
+    .vc-header {
+    }
+    .vc-weekday {
+      padding: 5px 0;
+      font-size: 15px;
+    }
   }
 }
 </style>

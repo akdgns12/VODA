@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto rounded">
-    <v-card-title class="pa-3 purple lighten-3" style="height: 70px">
+  <v-card class="diary mx-auto rounded" style="height: 100%">
+    <v-card-title class="header pa-3" style="height: 70px">
       <h3 class="text-h4 font-weight-light text-center grow">
         {{ month }} {{ day }} {{ year }}
       </h3>
@@ -159,6 +159,13 @@ export default {
 </script>
 
 <style>
+.header {
+  background: linear-gradient(#855cf8, #d3b0ff, #97c7ff);
+}
+.diary {
+  margin-top: 58px;
+  height: 100%;
+}
 .v-expansion-panel-header__icon {
   align-items: center;
   align-content: space-between;
@@ -173,5 +180,8 @@ export default {
   align-content: space-between;
   margin-left: auto;
   margin-right: auto;
+}
+.v-avatar img {
+  height: auto;
 }
 </style>

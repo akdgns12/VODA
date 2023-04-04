@@ -40,6 +40,7 @@ public class CalendarController {
     log.info("userSeq: {}, date: {}", userSeq, date);
     try {
       List<CalendarListResponseDto> response = calendarService.getCalendarAndEmotion(userSeq, date);
+
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch (Exception e) {
       return exceptionHandling(e);
