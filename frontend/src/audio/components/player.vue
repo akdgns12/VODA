@@ -188,7 +188,7 @@ export default {
   align-self: right;
 }
 .ar-player {
-  width: 380px;
+  width: 200px;
   height: unset;
   border: 0;
   border-radius: 0;

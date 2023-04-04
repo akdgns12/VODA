@@ -1,24 +1,45 @@
+import { doGetDiary, doDelDiary } from "@/api/diary";
 const diaryStore = {
   state: {
-    emotions:[]
+    diaryData: {},
+    test: {},
   },
   getters: {
-    getEmotionByType:(state) => (type) =>{
-      return state.emotions.find((emotion) => emotion.type===type);
-    }
+    diaryData(state) {
+      return state.diaryData;
+    },
   },
   mutations: {
-    setEmotions(state,emotions){
-      state.emotions = emotions
-    }
+    SET_DIARY_DATA(state, diaryData) {
+      state.diaryData = diaryData;
+    },
+    SET_TEST(state, test) {
+      state.test = test;
+    },
   },
   actions: {
-    fetchEmotions({ commit }, diarySeq){
-      return axios.get(`/diary/${diarySeq}`)
-      .then((response)=>{
-        commit('setEmotions', response.data);
-      })
-    }
+    async getDiaryData({ commit }, { calendarSeq }) {
+      await doGetDiary(
+        calendarSeq,
+        ({ data }) => {
+          commit("SET_DIARY_DATA", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async delDiaryData({ commit }, { diarySeq }) {
+      await doDelDiary(
+        diarySeq,
+        ({ data }) => {
+          commit("SET_TEST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
 };
-
+export default diaryStore;
