@@ -1,5 +1,5 @@
 <template>
-  <v-app class="recorder">
+  <v-app class="recorder" style="margin-top: 70px; margin-bottom: 70px">
     <h2>오늘의 일기를</h2>
     <h2>녹음해보세요.</h2>
     <v-container class="ar" fluid>
@@ -14,34 +14,21 @@
 
         <!-- 녹음 파일 선택, 삭제, download component -->
         <div class="ar-records">
-          <div
+          <v-col
+            cols="12"
             class="ar-records__record"
-            :class="{
-              'ar-records__record--selected': record.id === selected.id,
-            }"
             :key="record.id"
             v-for="(record, idx) in recordList"
-            @click="choiceRecord(record)"
           >
-            <div
-              class="ar__rm"
-              v-if="record.id === selected.id"
-              @click="removeRecord(idx)"
+            <v-col cols="1" md="10" class="ar__rm" @click="removeRecord(idx)"
+              >&times;</v-col
             >
-              &times;
-            </div>
-            <div class="ar__text">Record {{ idx + 1 }}</div>
-            <div class="ar__text">{{ record.duration }}</div>
-            <downloader
-              v-if="record.id === selected.id && showDownloadButton"
-              class="ar__downloader"
-              :record="record"
-            />
-          </div>
+            <v-col cols="2" md="10" class="ar__text">Record</v-col>
+            <v-col cols="2" class="ar__text">{{ record.duration }}</v-col>
+            <audio-player :record="record" class="audio-player" />
+            <downloader class="ar__downloader" :record="record" />
+          </v-col>
         </div>
-
-        <!-- 선택된 record -->
-        <audio-player :record="selected" />
       </v-flex>
     </v-container>
 
@@ -112,7 +99,7 @@ export default {
       isUploading: false,
       recorder: this._initRecorder(),
       recordList: [],
-      selected: {},
+      // selected: {},
       uploadStatus: null,
       icons: {
         mdiChartBellCurve,
@@ -375,6 +362,9 @@ export default {
     right: 115px;
     margin-top: 10px;
   }
+}
+.v-application--wrap {
+  min-height: 500px;
 }
 @import "../scss/icons";
 </style>

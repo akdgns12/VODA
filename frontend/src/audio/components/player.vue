@@ -5,14 +5,16 @@
         <template v-slot:activator="{ on, attrs }">
           <!-- 녹음 재생 버튼 -->
           <v-btn
+            icon
             id="play"
-            class="ar-icon ar-icon__lg ar-player__play"
             :name="playBtnIcon"
             :class="{ 'ar-player__play--active': isPlaying }"
             @click.native="playback"
             v-bind="attrs"
             v-on="on"
-          />
+          >
+            <v-icon> mdi-play </v-icon>
+          </v-btn>
         </template>
 
         <!-- 녹음 재생 component -->
