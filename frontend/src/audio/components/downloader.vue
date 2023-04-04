@@ -13,7 +13,6 @@
 
 <script>
 import IconButton from "./icon-button";
-import { doSendRecord } from "@/api/record";
 
 export default {
   props: {
@@ -29,29 +28,9 @@ export default {
         return;
       }
 
-      try {
-        const formData = new FormData();
-        // const type = this.record.blob.type.split("/")[1];
-
-        const today = new Date();
-        var year = today.getFullYear();
-        var month = ("0" + (today.getMonth() + 1)).slice(-2);
-        var day = ("0" + today.getDate()).slice(-2);
-
-        var dateString = year + "-" + month + "-" + day;
-        var userSeq = 1;
-
-        const link = document.createElement("a");
-        link.href = this.record.url;
-        // link.download = `${this.filename}.mp3`;
-
-        formData.append(`voice_file`, this.record.blob);
-
-        const response = await doSendRecord(formData, dateString, userSeq);
-        return response;
-      } catch (error) {
-        throw error;
-      }
+      // store에 record 저장하고 로딩페이지로 라우팅
+      this.$store.dispatch("setRecord", { data: this.record });
+      this.$router.push(`/recordLoading`);
     },
     download() {
       if (!this.record.url) {
