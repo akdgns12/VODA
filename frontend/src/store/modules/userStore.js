@@ -38,6 +38,7 @@ const userStore = {
         // 로컬 스토리지에 accessToken과 refreshToken을 저장
         localStorage.setItem("accessToken", userData.accessToken);
         localStorage.setItem("refreshToken", userData.refreshToken);
+        localStorage.setItem("userSeq", userData.userSeq);
 
         return userData; // userData 변수를 반환
       } catch (error) {
