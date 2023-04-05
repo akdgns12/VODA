@@ -79,7 +79,7 @@
     <v-dialog v-model="showDeletePopup" max-width="400">
       <v-card>
         <v-card-title class="headline" style="justify-content: center">
-          삭제하시겠습니까?
+          현재 다이어리를 삭제하시겠습니까?
         </v-card-title>
         <v-divider></v-divider>
         <v-card-actions style="justify-content: space-around">
