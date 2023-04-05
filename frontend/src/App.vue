@@ -67,7 +67,6 @@ export default {
   font-weight: 900;
 }
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   font-family: "NanumSquareNeoa";
   /* -webkit-font-smoothing: antialiased; */
   /* -moz-osx-font-smoothing: grayscale; */
