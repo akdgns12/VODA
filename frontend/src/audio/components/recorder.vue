@@ -1,7 +1,12 @@
 <template>
-  <v-app class="recorder" style="margin-top: 70px; margin-bottom: 70px">
-    <h2>오늘의 일기를</h2>
-    <h2>녹음해보세요.</h2>
+  <v-app
+    class="recorder"
+    style="width: 100%; margin-top: 70px; margin-bottom: 70px"
+  >
+    <div style="margin-top: 16px; margin-bottom: 16px">
+      <h2>오늘의 일기를</h2>
+      <h2>녹음해보세요.</h2>
+    </div>
     <v-container class="ar" fluid>
       <v-flex class="ar-content" :class="{ ar__blur: isUploading }">
         <div class="ar-recorder__records-limit" v-if="attempts">
@@ -13,27 +18,27 @@
         </div>
 
         <!-- 녹음 파일 선택, 삭제, download component -->
-        <div class="ar-records">
-          <div
-            class="ar-records__record"
-            :key="record.id"
-            v-for="(record, idx) in recordList"
-          >
-            <v-col cols="2" class="ar__rm" @click="removeRecord(idx)"
+        <div>
+          <v-row :key="record.id" v-for="(record, idx) in recordList">
+            <v-col style="color: red" cols="1" @click="removeRecord(idx)"
               >&times;</v-col
             >
-            <v-col cols="2" class="ar__text">Record</v-col>
-            <v-col cols="2" class="ar__text">{{ record.duration }}</v-col>
-            <audio-player :record="record" class="audio-player" />
-            <downloader class="ar__downloader" :record="record" />
-          </div>
+            <v-col cols="1">{{ record.duration }}</v-col>
+            <v-col cols="1">
+              <audio-player :record="record" class="audio-player" />
+            </v-col>
+            <v-col cols="1">
+              <downloader class="ar__downloader" :record="record" />
+            </v-col>
+          </v-row>
         </div>
       </v-flex>
     </v-container>
 
     <!-- bottom nav -->
-    <v-bottom-navigation grow class="bottom-nav">
-      <v-app-bar class="bottom-nav-bar">
+
+    <v-app-bar class="bottom-nav-bar">
+      <v-bottom-navigation grow class="bottom-nav">
         <v-btn @click="toCalendar">
           <v-icon large color="black">
             {{ icons.mdiCalendarMonth }}
@@ -56,8 +61,8 @@
             {{ icons.mdiChartBellCurve }}
           </v-icon>
         </v-btn>
-      </v-app-bar>
-    </v-bottom-navigation>
+      </v-bottom-navigation>
+    </v-app-bar>
   </v-app>
 </template>
 
@@ -75,6 +80,7 @@ import {
 
 export default {
   created() {
+    this.$store.dispatch("setShowTopNavigation", true);
     this.$store.dispatch("setShowBottomNavigation", false);
   },
   props: {
@@ -202,16 +208,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.bottom-nav {
+.bottom-nav-bar {
   position: fixed;
   bottom: 0;
   width: 100%;
   margin-left: 0px;
   overflow: hidden;
   background-color: white;
+  padding: 0px;
+}
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-left: 0px;
 }
 .ar {
-  width: 420px;
+  // width: 420px;
+  // height: 420px;
   font-family: "Roboto", sans-serif;
   border-radius: 16px;
   background-color: #ffffff;
@@ -233,7 +247,7 @@ export default {
     margin-right: 20px;
     // record List
     &__record {
-      width: 340px;
+      // width: 340px;
       height: 45px;
       padding: 0 3px;
       margin: 0 auto;
@@ -370,8 +384,10 @@ export default {
     margin-right: 10px;
   }
 }
-.v-application--wrap {
-  min-height: 500px;
+
+.v-application {
+  position: fixed;
 }
+
 @import "../scss/icons";
 </style>
