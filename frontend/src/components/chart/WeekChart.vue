@@ -75,7 +75,7 @@ export default {
       this.endDate = endDate;
       this.$store
         .dispatch("getWeekChart", {
-          userSeq: 1,
+          userSeq: localStorage.getItem("userSeq"),
           date: endDate.toISOString().substring(0, 10),
         })
         .then(() => {

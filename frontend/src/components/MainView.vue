@@ -34,7 +34,7 @@
 <script>
 export default {
   data: () => ({
-    userId: "",
+    userId: localStorage.getItem("userSeq"),
     year: null,
     month: null,
     date: new Date(),
@@ -48,10 +48,8 @@ export default {
     this.$store.dispatch("setShowBottomNavigation", true);
     this.$store.dispatch("setShowTopNavigation", true);
 
-    const userData = this.$store.getters.userData;
     this.month = this.date.getMonth() + 1;
     this.year = this.date.getFullYear();
-    this.userId = userData.userSeq;
     const formattedDate = `${this.year}-${
       this.month < 10 ? "0" + this.month : this.month
     }-01`;
