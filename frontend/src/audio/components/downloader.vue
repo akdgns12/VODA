@@ -3,12 +3,21 @@
 </style>
 
 <template>
-  <icon-button
+  <!-- <icon-button
     id="submit"
     class="ar-icon ar-icon__xs ar-icon--no-border"
     name="download"
     @click.native="submit"
-  />
+  /> -->
+  <v-btn
+    icon
+    class="btn-icon"
+    id="submit"
+    name="download"
+    @click.native="submit"
+  >
+    <v-icon>mdi-file-send</v-icon>
+  </v-btn>
 </template>
 
 <script>
@@ -46,3 +55,8 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.btn-icon {
+  margin-left: 200px;
+}
+</style>

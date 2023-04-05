@@ -5,14 +5,16 @@
         <template v-slot:activator="{ on, attrs }">
           <!-- 녹음 재생 버튼 -->
           <v-btn
+            icon
             id="play"
-            class="ar-icon ar-icon__lg ar-player__play"
             :name="playBtnIcon"
             :class="{ 'ar-player__play--active': isPlaying }"
             @click.native="playback"
             v-bind="attrs"
             v-on="on"
-          />
+          >
+            <v-icon> mdi-play </v-icon>
+          </v-btn>
         </template>
 
         <!-- 녹음 재생 component -->
@@ -104,8 +106,13 @@ export default {
       this.isPlaying = false;
     });
     this.player.addEventListener("loadeddata", (ev) => {
-      this._resetProgress();
-      this.duration = convertTimeMMSS(this.player.duration);
+      try {
+        this._resetProgress();
+        this.duration = convertTimeMMSS(this.player.duration);
+      } catch (error) {
+        alert("녹음 길이가 너무 짧습니다.");
+        return;
+      }
     });
     this.player.addEventListener("timeupdate", this._onTimeUpdate);
   },
@@ -182,9 +189,6 @@ export default {
 </script>
 
 <style lang="scss">
-.ar-player {
-  align-self: right;
-}
 .ar-player {
   width: 200px;
   height: unset;
