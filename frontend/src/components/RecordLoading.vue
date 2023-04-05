@@ -38,7 +38,7 @@ export default {
       const formData = new FormData();
       formData.append(`voice_file`, this.record.blob);
 
-      const response = await doSendRecord(formData, dateString, 3);
+      const response = await doSendRecord(formData, dateString, userSeq);
 
       if (response.status == 201) {
         this.$router.push(`/result/${response.data.diary_seq}`);
