@@ -71,7 +71,7 @@
                 {{ selected.content }}
               </v-col>
             </v-row>
-            <audio-player :record="selected.voiceUrl" />
+            <audio-player :src="selected.voiceUrl" />
           </v-card>
         </v-scroll-y-transition>
       </v-col>
