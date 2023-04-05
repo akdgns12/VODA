@@ -26,7 +26,7 @@ export default {
       var day = ("0" + today.getDate()).slice(-2);
 
       var dateString = year + "-" + month + "-" + day;
-      var userSeq = 1;
+      var userSeq = localStorage.getItem("userSeq");
 
       const link = document.createElement("a");
       link.href = this.record.url;
@@ -42,6 +42,7 @@ export default {
       } else if (response.status == 202) {
         // text가 없는 음성 파일 -> 잘못된 녹음입니다. 제대로 녹음해주세요
         this.$router.push("/record");
+        alert("음성 인식이 어렵습니다. 다시 녹음해주세요");
       }
       return response;
     } catch (error) {
