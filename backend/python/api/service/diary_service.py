@@ -88,6 +88,7 @@ def add_sentence(
             best_emotion_cnt = emotion 
             best_emotion_ind = ind 
     diary.emotion_idx = best_emotion_ind
+    daily_emotions[voice_result] -= VOICE_WEIGHT
     emotions[voice_result] -= VOICE_WEIGHT # - 음성 결과
     db.commit()
     return sentence_emotions, emotions
