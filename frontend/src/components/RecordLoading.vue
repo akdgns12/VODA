@@ -38,7 +38,7 @@ export default {
       const formData = new FormData();
       formData.append(`voice_file`, this.record.blob);
 
-      const response = await doSendRecord(formData, dateString, userSeq);
+      const response = await doSendRecord(formData, dateString, 3);
 
       if (response.status == 201) {
         this.$router.push(`/result/${response.data.diary_seq}`);
@@ -47,8 +47,11 @@ export default {
         this.$router.push("/record");
         alert("음성 인식이 어렵습니다. 다시 녹음해주세요");
       }
+
       return response;
     } catch (error) {
+      this.$router.push("/record");
+      alert("서버 오류 발생.");
       throw error;
     }
   },
