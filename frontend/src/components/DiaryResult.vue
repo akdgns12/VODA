@@ -89,11 +89,7 @@ export default {
         };
 
         const response = await axios.get(
-<<<<<<< Updated upstream:frontend/src/components/DiaryResult.vue
-          `http://localhost:8080/diary/${this.$route.params.diarySeq}`,
-=======
-          `${process.env.VUE_APP_API_BASE_URL}/diary/1`,
->>>>>>> Stashed changes:frontend/src/components/diary/DiaryResult.vue
+          `${process.env.VUE_APP_API_BASE_URL}/diary/${this.$route.params.diarySeq}`,
           config
         );
         console.log(response);
