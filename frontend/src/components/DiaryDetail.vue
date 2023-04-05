@@ -1,20 +1,24 @@
 <template>
-  <v-card class="diary mx-auto rounded" style="height: 100%">
-    <v-card-title class="header pa-3" style="height: 70px">
+  <v-card class="diary mx-auto rounded" style="height: calc(100vh - 70px)">
+    <v-card-title class="header pa-3" style="height: 60px">
       <h3 class="text-h4 font-weight-light text-center grow">
         {{ month }} {{ day }} {{ year }}
       </h3>
     </v-card-title>
-    <v-row class="container pa-4" justify="space-between">
-      <v-col cols="3" class="no-x-scroll">
+    <v-row class="container pa-2" justify="space-between">
+      <v-col cols="2" class="no-x-scroll pa-2">
         <v-sheet
           class="overflow-y-auto overflow-x-hidden"
-          style="max-height: calc(100vh - 230px); overflow-y: auto"
+          style="
+            max-height: calc(100vh - 230px);
+            overflow-y: auto;
+            box-shadow: none;
+          "
         >
           <v-row>
             <v-col v-for="(item, i) in diaryData" :key="i">
               <div @click="selected = item">
-                <v-avatar size="50">
+                <v-avatar size="10vw">
                   <img
                     :src="require(`@/assets/emotions/${item.emotionImgUrl}`)"
                     alt="emotion"
@@ -30,56 +34,71 @@
 
       <v-col class="text-center">
         <v-scroll-y-transition mode="out-in">
-          <v-container
-            v-if="!selected"
-            class="text-h6 grey--text text--lighten-1 font-weight-light"
-            style="align-self: center; margin: 0 auto"
-            :style="{ maxHeight: 'calc(100vh - 230px)', overflowY: 'auto' }"
+          <v-card
+            class="diary-detail"
+            v-if="selected"
+            flat
+            v-bind:class="getEmotionClass(selected.emotionImgUrl)"
           >
-            Select a Diary
-          </v-container>
-          <v-card v-else flat>
             <v-card-text>
-              <v-avatar size="88">
+              <v-col
+                style="padding: 3px; display: flex; justify-content: flex-end"
+              >
+                <v-icon
+                  class="mt-2 mr-3"
+                  color="red"
+                  dark
+                  @click="showDeletePopup = true"
+                >
+                  {{ icon.mdiCloseCircleOutline }}
+                </v-icon>
+              </v-col>
+              <v-avatar size="20vw">
                 <img
                   :src="require(`@/assets/emotions/${selected.emotionImgUrl}`)"
                   alt="emotion"
                   @click="showResult(selected.diarySeq)"
                 />
               </v-avatar>
-              <h3 class="text-h5 mb-2">
+
+              <h3 class="text-h5 mt-3 mb-3">
                 {{ selected.emotionName }}
               </h3>
             </v-card-text>
             <v-divider></v-divider>
             <v-row style="margin: 0">
-              <v-col class="mb-2" tag="strong">
+              <v-col class="mb-2 mx-2" tag="strong">
                 {{ selected.content }}
               </v-col>
             </v-row>
             <audio-player :record="selected.voiceUrl" />
-            <v-btn color="red" dark @click="showDeletePopup = true">
-              Delete
-            </v-btn>
           </v-card>
         </v-scroll-y-transition>
       </v-col>
     </v-row>
     <v-dialog v-model="showDeletePopup" max-width="400">
       <v-card>
-        <v-card-title class="headline">
-          Are you sure you want to delete?
+        <v-card-title class="headline" style="justify-content: center">
+          현재 다이어리를 삭제하시겠습니까?
         </v-card-title>
-        <v-card-actions>
-          <v-btn color="red darken-1" text @click="showDeletePopup = false">
-            No
-          </v-btn>
+        <v-divider></v-divider>
+        <v-card-actions style="justify-content: space-around">
           <v-btn
-            color="green darken-1"
+            style="width: 50%"
+            color="blue darken-1"
+            text
+            @click="showDeletePopup = false"
+          >
+            취소
+          </v-btn>
+          <v-divider vertical="true"></v-divider>
+          <v-btn
+            style="width: 50%"
+            color="red darken-1"
             text
             @click="deleteSelected(selected.diarySeq)"
           >
-            Yes
+            삭제
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -88,6 +107,7 @@
 </template>
 <script>
 import AudioPlayer from "../audio/components/player.vue";
+import { mdiCloseCircleOutline } from "@mdi/js";
 export default {
   components: { AudioPlayer },
   data() {
@@ -100,6 +120,9 @@ export default {
       day: "",
       selected: null,
       showDeletePopup: false,
+      icon: {
+        mdiCloseCircleOutline,
+      },
     };
   },
   mounted() {
@@ -109,6 +132,7 @@ export default {
       .dispatch("getDiaryData", { calendarSeq: this.calendarSeq })
       .then(() => {
         this.diaryData = this.$store.getters.diaryData;
+        this.selected = this.diaryData[0];
       });
     this.date = this.$route.query.formattedDate.split(".");
     this.year = this.date[0];
@@ -127,7 +151,6 @@ export default {
       "December",
     ];
     this.month = monthLabel[this.date[1] - "0" - 1];
-    // this.month[this.date[1]];
     this.day = this.addOrdinalSuffix(this.date[2] - "0");
   },
   methods: {
@@ -144,6 +167,17 @@ export default {
           return day + "th";
       }
     },
+    getEmotionClass(emotionUrl) {
+      const emotionClasses = {
+        "happiness.svg": "bg-happiness",
+        "sadness.svg": "bg-sadness",
+        "surprise.svg": "bg-surprise",
+        "angry.svg": "bg-angry",
+        "neutral.svg": "bg-neutral",
+      };
+      console.log(emotionClasses[emotionUrl]);
+      return emotionClasses[emotionUrl] || "";
+    },
     deleteSelected(diarySeq) {
       this.$store.dispatch("delDiaryData", { diarySeq: diarySeq }).then(() => {
         this.$store
@@ -151,6 +185,10 @@ export default {
           .then(() => {
             this.diaryData = this.$store.getters.diaryData;
             this.selected = null;
+            if (this.diaryData.length === 0) {
+              // diaryData가 비어있으면 메인 화면으로 이동
+              this.$router.push("/calendar");
+            }
           });
       });
       this.showDeletePopup = false;
@@ -165,27 +203,45 @@ export default {
 <style>
 .header {
   background: linear-gradient(#855cf8, #d3b0ff, #97c7ff);
+  width: 100%;
+}
+.container {
+  width: 100%;
+  height: calc(100vh - 230px);
 }
 .diary {
   margin-top: 58px;
-  height: 100%;
-}
-.v-expansion-panel-header__icon {
-  align-items: center;
-  align-content: space-between;
-  margin-top: 4px;
-  margin-left: 12px;
-}
-.v-expansion-panel-header {
-  width: 80%;
-  display: inline;
-}
-.detail_header {
-  align-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
+  display: grid;
+  grid-template-rows: 70px;
+  justify-items: center;
 }
 .v-avatar img {
   height: auto;
+}
+.diary-detail {
+  margin-left: 3px;
+  /* display: grid;
+  justify-items: center; */
+  height: 100%;
+}
+@media only screen and (max-width: 600px) {
+}
+.bg-happiness {
+  background-color: #bde6c1 !important;
+}
+.bg-sadness {
+  background-color: #7ebdff !important;
+}
+.bg-surprise {
+  background-color: #fff1a5 !important;
+}
+.bg-angry {
+  background-color: #f9c4c4 !important;
+}
+.bg-neutral {
+  background-color: #ffcf8c !important;
+}
+col {
+  padding: 4px;
 }
 </style>

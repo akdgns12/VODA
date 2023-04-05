@@ -190,7 +190,7 @@ export default {
 
 <style lang="scss">
 .ar-player {
-  width: 200px;
+  // width: 200px;
   height: unset;
   border: 0;
   border-radius: 0;
