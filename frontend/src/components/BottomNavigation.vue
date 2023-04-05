@@ -66,4 +66,7 @@ export default {
   width: 100%;
   margin-left: 0px;
 }
+.v-bottom-navigation {
+  justify-content: space-evenly;
+}
 </style>

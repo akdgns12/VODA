@@ -1,20 +1,16 @@
 <template>
   <v-app style="margin-top: 70px; margin-bottom: 70px">
-    <v-container style="margin-top: 30px">
+    <v-container>
       <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
-      <br />
-      <div style="text-align: center">
+      <v-row class="mt-2 justify-center">
         <img
           :src="require(`@/assets/emotions/${emotionImagePath}`)"
           style="width: 89px; height: 98px"
         />
-      </div>
+      </v-row>
       <v-col>
         <div class="chart-container">
-          <canvas
-            ref="bar"
-            style="position: relative; z-index: 0; width: 350px"
-          ></canvas>
+          <canvas class="chart-img" ref="bar" style="display: inline"></canvas>
         </div>
       </v-col>
 
@@ -141,12 +137,24 @@ export default {
 };
 </script>
 <style>
+@font-face {
+  font-family: "NanumSquareNeoa";
+  src: url("../../public/fonts/NanumSquareNeo-dEb.ttf");
+  font-weight: 900;
+}
+.container {
+  width: 100%;
+  height: calc(100vh - 130px);
+  overflow-y: scroll;
+}
 .chart-container {
   position: relative;
   width: 100%;
   height: auto;
 }
-
+.chart-img {
+  width: 80vw;
+}
 li {
   list-style: none;
   padding: 0;
