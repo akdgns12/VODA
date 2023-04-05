@@ -14,20 +14,19 @@
 
         <!-- 녹음 파일 선택, 삭제, download component -->
         <div class="ar-records">
-          <v-col
-            cols="12"
+          <div
             class="ar-records__record"
             :key="record.id"
             v-for="(record, idx) in recordList"
           >
-            <v-col cols="1" md="10" class="ar__rm" @click="removeRecord(idx)"
+            <v-col cols="2" class="ar__rm" @click="removeRecord(idx)"
               >&times;</v-col
             >
-            <v-col cols="2" md="10" class="ar__text">Record</v-col>
+            <v-col cols="2" class="ar__text">Record</v-col>
             <v-col cols="2" class="ar__text">{{ record.duration }}</v-col>
             <audio-player :record="record" class="audio-player" />
             <downloader class="ar__downloader" :record="record" />
-          </v-col>
+          </div>
         </div>
       </v-flex>
     </v-container>
@@ -99,7 +98,6 @@ export default {
       isUploading: false,
       recorder: this._initRecorder(),
       recordList: [],
-      // selected: {},
       uploadStatus: null,
       icons: {
         mdiChartBellCurve,
@@ -125,13 +123,18 @@ export default {
       this.$router.push("/chart");
     },
     toggleRecorder() {
-      if (this.attempts && this.recorder.records.length >= this.attempts) {
+      try {
+        if (this.attempts && this.recorder.records.length >= this.attempts) {
+          return;
+        }
+        if (!this.isRecording || (this.isRecording && this.isPause)) {
+          this.recorder.start();
+        } else {
+          this.stopRecorder();
+        }
+      } catch (error) {
+        alert("녹음 길이가 너무 짧습니다.");
         return;
-      }
-      if (!this.isRecording || (this.isRecording && this.isPause)) {
-        this.recorder.start();
-      } else {
-        this.stopRecorder();
       }
     },
     stopRecorder() {
@@ -186,6 +189,9 @@ export default {
       if (this.time && this.recorder.duration >= this.time * 60) {
         this.stopRecorder();
       }
+      if (this.time == "00:00") {
+        alert("녹음 길이가 너무 짧습니다.");
+      }
       return convertTimeMMSS(this.recorder.duration);
     },
     volume() {
@@ -196,9 +202,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.recorder {
-  overflow: hidden;
-}
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -221,15 +224,18 @@ export default {
     flex-direction: column;
     align-items: center;
   }
+  // record List Box
   &-records {
     height: 138px;
     padding-top: 1px;
     overflow-y: auto;
     margin-bottom: 20px;
+    margin-right: 20px;
+    // record List
     &__record {
-      width: 320px;
+      width: 340px;
       height: 45px;
-      padding: 0 10px;
+      padding: 0 3px;
       margin: 0 auto;
       line-height: 45px;
       display: flex;
@@ -361,6 +367,7 @@ export default {
   &__downloader {
     right: 115px;
     margin-top: 10px;
+    margin-right: 10px;
   }
 }
 .v-application--wrap {

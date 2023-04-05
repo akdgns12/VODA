@@ -106,8 +106,13 @@ export default {
       this.isPlaying = false;
     });
     this.player.addEventListener("loadeddata", (ev) => {
-      this._resetProgress();
-      this.duration = convertTimeMMSS(this.player.duration);
+      try {
+        this._resetProgress();
+        this.duration = convertTimeMMSS(this.player.duration);
+      } catch (error) {
+        alert("녹음 길이가 너무 짧습니다.");
+        return;
+      }
     });
     this.player.addEventListener("timeupdate", this._onTimeUpdate);
   },
@@ -184,9 +189,6 @@ export default {
 </script>
 
 <style lang="scss">
-.ar-player {
-  align-self: right;
-}
 .ar-player {
   width: 200px;
   height: unset;
