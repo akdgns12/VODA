@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app style="margin-top: 70px; margin-bottom: 70px">
     <h1 align="left">감정곡선</h1>
     <v-container fluid class="pa-0">
-      <v-card style="width: 100%" height="50">
+      <v-card style="width: 100%; height: 50px">
         <v-tabs v-model="tab" fixed-tabs bg-color="primary">
           <v-tab v-for="item in items" :key="item.tab">
             {{ item.tab }}
@@ -56,5 +56,8 @@ h1 {
 .v-card__text,
 .v-card__title {
   padding: 0px;
+}
+.v-application--wrap {
+  min-height: 500px;
 }
 </style>

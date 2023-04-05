@@ -23,7 +23,7 @@ const routes = [
     component: SignUp,
   },
   {
-    path: "/calendar/:userseq",
+    path: "/calendar",
     name: "calendar",
     component: Calendar,
   },
@@ -49,7 +49,7 @@ const routes = [
     component: Chart,
   },
   {
-    path: "/result",
+    path: "/result/:diarySeq",
     name: "result",
     component: DiaryResult,
   },

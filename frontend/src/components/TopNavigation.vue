@@ -7,31 +7,29 @@
       prominent
       height="60"
     >
-      <v-btn icon>
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
       <v-spacer></v-spacer>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-btn icon @click="showLogoutDialog = true">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      bottom
-      temporary
-      height="120"
-    >
-      <v-list nav dense bottom>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item @click="logout()">
-            <v-list-item-title>Logout</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
+    <v-dialog v-model="showLogoutDialog" max-width="400">
+      <v-card>
+        <v-card-title class="justify-center">
+          로그아웃 하시겠습니까?
+        </v-card-title>
+        <v-card-actions>
+          <v-col cols="6">
+            <v-btn color="red darken-1" text @click="showLogoutDialog = false">
+              No
+            </v-btn>
+          </v-col>
+          <v-col cols="6">
+            <v-btn color="green darken-1" text @click="logout()"> Yes </v-btn>
+          </v-col>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -40,6 +38,7 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
+    showLogoutDialog: false,
   }),
 
   watch: {
@@ -55,6 +54,7 @@ export default {
         process.env.VUE_APP_KAKAO_APP_KEY +
         `&logout_redirect_uri=` +
         process.env.VUE_APP_KAKAO_LOGOUT_REDIRECT_URI;
+      this.showLogoutDialog = false;
     },
   },
 };

@@ -50,7 +50,7 @@ export default {
       this.date = date;
       this.$store
         .dispatch("getMonthChart", {
-          userSeq: 1,
+          userSeq: localStorage.getItem("userSeq"),
           date: this.date.toISOString().substring(0, 10),
         })
         .then(() => {

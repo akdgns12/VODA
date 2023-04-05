@@ -85,6 +85,7 @@ export default {
     src: { type: String },
     record: { type: Object },
     filename: { type: String },
+    voiceUrl: { type: String },
   },
   data() {
     return {
@@ -109,9 +110,6 @@ export default {
       this.duration = convertTimeMMSS(this.player.duration);
     });
     this.player.addEventListener("timeupdate", this._onTimeUpdate);
-    // this.$eventBus.$on("remove-record", () => {
-    //   this._resetProgress();
-    // });
   },
   computed: {
     audioSource() {

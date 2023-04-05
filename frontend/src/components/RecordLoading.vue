@@ -38,7 +38,7 @@ export default {
       const response = await doSendRecord(formData, dateString, userSeq);
 
       if (response.status == 201) {
-        this.$router.push(`/result`);
+        this.$router.push(`/result/${response.data.diary_seq}`);
       } else if (response.status == 202) {
         // text가 없는 음성 파일 -> 잘못된 녹음입니다. 제대로 녹음해주세요
         this.$router.push("/record");

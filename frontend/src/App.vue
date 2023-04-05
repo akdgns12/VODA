@@ -1,9 +1,17 @@
 <template>
   <v-app>
     <div id="app">
-      <TopNavigation class="top-nav" v-if="showTopNavigation" />
+      <TopNavigation
+        class="top-nav"
+        v-if="showTopNavigation"
+        style="position: fixed; z-index: 10"
+      />
       <router-view />
-      <BottomNavigation class="bottom-nav" v-if="showBottomNavigation" />
+      <BottomNavigation
+        class="bottom-nav"
+        v-if="showBottomNavigation"
+        style="position: fixed; z-index: 10"
+      />
     </div>
   </v-app>
 </template>
