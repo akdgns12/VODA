@@ -1,7 +1,16 @@
 <template>
   <v-app style="margin-top: 70px; margin-bottom: 70px">
-    <h1 align="left">감정곡선</h1>
-    <v-container fluid class="pa-0">
+    <v-container
+      style="
+        overflow-y: hidden;
+        height: calc(100vh - 140px);
+        display: grid;
+        justify-items: center;
+        grid-template-rows: 80px;
+      "
+      class="pa-0"
+    >
+      <h1 align="left">감정곡선</h1>
       <v-card style="width: 100%; height: 50px">
         <v-tabs v-model="tab" fixed-tabs bg-color="primary">
           <v-tab v-for="item in items" :key="item.tab">

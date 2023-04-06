@@ -1,7 +1,12 @@
 <template>
-  <v-app class="recorder" style="margin-top: 70px; margin-bottom: 70px">
-    <h2>오늘의 일기를</h2>
-    <h2>녹음해보세요.</h2>
+  <v-app
+    class="recorder"
+    style="width: 100%; margin-top: 70px; margin-bottom: 70px"
+  >
+    <div style="margin-top: 16px; margin-bottom: 16px">
+      <h2>오늘의 일기를</h2>
+      <h2>녹음해보세요.</h2>
+    </div>
     <v-container class="ar" fluid>
       <v-flex class="ar-content" :class="{ ar__blur: isUploading }">
         <div class="ar-recorder__records-limit" v-if="attempts">
@@ -11,29 +16,38 @@
         <div class="ar-recorder__time-limit" v-if="time">
           Record duration is limited: {{ time }}m
         </div>
-
+        <v-divider></v-divider>
         <!-- 녹음 파일 선택, 삭제, download component -->
-        <div class="ar-records">
-          <div
-            class="ar-records__record"
+        <div style="max-width: 400px">
+          <v-row
             :key="record.id"
             v-for="(record, idx) in recordList"
+            style="
+              display: flex;
+              flex: 1 1 auto;
+              justify-content: space-evenly;
+              align-items: center;
+            "
           >
-            <v-col cols="2" class="ar__rm" @click="removeRecord(idx)"
+            <v-col style="color: red" cols="1" @click="removeRecord(idx)"
               >&times;</v-col
             >
-            <v-col cols="2" class="ar__text">Record</v-col>
-            <v-col cols="2" class="ar__text">{{ record.duration }}</v-col>
-            <audio-player :record="record" class="audio-player" />
-            <downloader class="ar__downloader" :record="record" />
-          </div>
+            <v-col style="margin-left: 0px">{{ record.duration }}</v-col>
+            <v-col>
+              <audio-player :record="record" class="audio-player" />
+            </v-col>
+            <v-col cols="1">
+              <downloader class="ar__downloader" :record="record" />
+            </v-col>
+          </v-row>
         </div>
       </v-flex>
     </v-container>
 
     <!-- bottom nav -->
-    <v-bottom-navigation grow class="bottom-nav">
-      <v-app-bar class="bottom-nav-bar">
+
+    <v-app-bar class="bottom-nav-bar">
+      <v-bottom-navigation grow class="bottom-nav">
         <v-btn @click="toCalendar">
           <v-icon large color="black">
             {{ icons.mdiCalendarMonth }}
@@ -56,8 +70,8 @@
             {{ icons.mdiChartBellCurve }}
           </v-icon>
         </v-btn>
-      </v-app-bar>
-    </v-bottom-navigation>
+      </v-bottom-navigation>
+    </v-app-bar>
   </v-app>
 </template>
 
@@ -75,6 +89,7 @@ import {
 
 export default {
   created() {
+    this.$store.dispatch("setShowTopNavigation", true);
     this.$store.dispatch("setShowBottomNavigation", false);
   },
   props: {
@@ -202,22 +217,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.bottom-nav {
+.v-bottom-navigation {
+  justify-content: space-evenly;
+}
+.bottom-nav-bar {
   position: fixed;
   bottom: 0;
   width: 100%;
   margin-left: 0px;
   overflow: hidden;
   background-color: white;
+  padding: 0px;
+}
+.bottom-nav {
+  position: fixed;
+  margin-left: 0px;
 }
 .ar {
-  width: 420px;
-  font-family: "Roboto", sans-serif;
+  // width: 420px;
+  // height: 420px;
   border-radius: 16px;
   background-color: #ffffff;
   box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.17);
   position: relative;
-  box-sizing: content-box;
   &-content {
     padding: 16px;
     display: flex;
@@ -233,7 +255,7 @@ export default {
     margin-right: 20px;
     // record List
     &__record {
-      width: 340px;
+      // width: 340px;
       height: 45px;
       padding: 0 3px;
       margin: 0 auto;
@@ -365,13 +387,15 @@ export default {
   }
   &__downloader,
   &__downloader {
-    right: 115px;
-    margin-top: 10px;
-    margin-right: 10px;
+    // right: 115px;
+    // margin-top: 10px;
+    // margin-right: 10px;
   }
 }
-.v-application--wrap {
-  min-height: 500px;
+
+.v-application {
+  position: fixed;
 }
+
 @import "../scss/icons";
 </style>

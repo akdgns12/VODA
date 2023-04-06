@@ -1,7 +1,10 @@
 <template>
-  <div class="spinner-div">
-    <div v-if="isLoading">로딩 중입니다.</div>
-  </div>
+  <v-app class="container" style="margin-top: 70px; margin-bottom: 70px">
+    <div class="record-loading">
+      <img src="../assets/loading.gif" />
+    </div>
+    <h2>로딩중입니다.</h2>
+  </v-app>
 </template>
 
 <script>
@@ -44,12 +47,33 @@ export default {
         this.$router.push("/record");
         alert("음성 인식이 어렵습니다. 다시 녹음해주세요");
       }
+
       return response;
     } catch (error) {
+      this.$router.push("/record");
+      alert("서버 오류 발생.");
       throw error;
     }
   },
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+img {
+  height: 200px;
+  margin-top: 150px;
+  object-fit: cover;
+}
+.container {
+  &-record-loading {
+    position: absolute;
+    margin-top: 10px;
+    size: 10px;
+    width: 20%;
+    height: 20%;
+    widows: 300px;
+    height: 150px;
+    object-fit: cover;
+  }
+}
+</style>

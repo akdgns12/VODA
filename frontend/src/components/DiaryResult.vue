@@ -1,6 +1,8 @@
 <template>
   <v-app style="margin-top: 70px; margin-bottom: 70px">
-    <v-container>
+    <v-container
+      style="width: 100%; height: calc(100vh - 130px); overflow-y: scroll"
+    >
       <h2>주요 감정은 '{{ emotionMain }}'입니다.</h2>
       <v-row class="mt-2 justify-center">
         <img
@@ -141,11 +143,6 @@ export default {
   font-family: "NanumSquareNeoa";
   src: url("../../public/fonts/NanumSquareNeo-dEb.ttf");
   font-weight: 900;
-}
-.container {
-  width: 100%;
-  height: calc(100vh - 130px);
-  overflow-y: scroll;
 }
 .chart-container {
   position: relative;

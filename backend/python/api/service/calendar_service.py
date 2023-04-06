@@ -7,7 +7,7 @@ from datetime import datetime, date
 from ..model import models, schemas
 
 def check_exist_calendar(db:Session, date:date, user_seq : int) -> models.Calendar:
-    calendar = db.query(models.Calendar).filter(models.Calendar.day == date and models.Calendar.user_seq == user_seq).one_or_none()
+    calendar = db.query(models.Calendar).filter(models.Calendar.day == date).filter(models.Calendar.user_seq == user_seq).one_or_none()
     if not calendar : 
         calendar = models.Calendar(
             day = date,

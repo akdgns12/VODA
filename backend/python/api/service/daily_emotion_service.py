@@ -7,7 +7,7 @@ from datetime import datetime, date
 from ..model import models, schemas
 
 def check_exist_daily_emotion(db:Session, date:date, user_seq : int) -> models.DailyEmotion:
-    daily_emotions = db.query(models.DailyEmotion).filter(models.DailyEmotion.day == date and models.DailyEmotion.user_seq == user_seq).all()
+    daily_emotions = db.query(models.DailyEmotion).filter(models.DailyEmotion.day == date).filter(models.DailyEmotion.user_seq == user_seq).all()
     if not daily_emotions : 
         for emotion_idx in range(5):
             daily_emotions.append(models.DailyEmotion(

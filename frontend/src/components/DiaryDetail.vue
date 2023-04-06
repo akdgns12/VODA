@@ -1,9 +1,14 @@
 <template>
   <v-card class="diary rounded">
     <v-card-title class="header">
-      <h3>{{ month }} {{ day }} {{ year }}</h3>
+      <h2 style="color: #263238">
+        {{ this.$route.query.formattedDate }}
+      </h2>
     </v-card-title>
-    <v-row class="container pa-2">
+    <v-row
+      class="container pa-2"
+      style="width: 100%; height: calc(100vh - 200px)"
+    >
       <v-col cols="2" class="no-x-scroll pa-2">
         <v-sheet
           class="overflow-y-auto overflow-x-hidden"
@@ -69,7 +74,7 @@
                 {{ selected.content }}
               </v-col>
             </v-row>
-            <audio-player :src="selected.voiceUrl" />
+            <audio-player :src="`/voice_file/${selected.voiceUrl}`" />
           </v-card>
         </v-scroll-y-transition>
       </v-col>
@@ -132,39 +137,8 @@ export default {
         this.diaryData = this.$store.getters.diaryData;
         this.selected = this.diaryData[0];
       });
-    this.date = this.$route.query.formattedDate.split(".");
-    this.year = this.date[0];
-    const monthLabel = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    this.month = monthLabel[this.date[1] - "0" - 1];
-    this.day = this.addOrdinalSuffix(this.date[2] - "0");
   },
   methods: {
-    addOrdinalSuffix(day) {
-      if (day > 3 && day < 21) return day + "th";
-      switch (day % 10) {
-        case 1:
-          return day + "st";
-        case 2:
-          return day + "nd";
-        case 3:
-          return day + "rd";
-        default:
-          return day + "th";
-      }
-    },
     getEmotionClass(emotionUrl) {
       const emotionClasses = {
         "happiness.svg": "bg-happiness",
@@ -212,10 +186,6 @@ export default {
   justify-content: space-around;
   height: 60px;
   align-items: center;
-}
-.container {
-  width: 100%;
-  height: calc(100vh - 200px);
 }
 .diary-detail {
   margin-left: 3px;
