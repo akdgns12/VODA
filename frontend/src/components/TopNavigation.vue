@@ -18,15 +18,20 @@
         <v-card-title class="justify-center">
           로그아웃 하시겠습니까?
         </v-card-title>
-        <v-card-actions>
-          <v-col cols="6">
-            <v-btn color="red darken-1" text @click="showLogoutDialog = false">
-              No
-            </v-btn>
-          </v-col>
-          <v-col cols="6">
-            <v-btn color="green darken-1" text @click="logout()"> Yes </v-btn>
-          </v-col>
+        <v-divider></v-divider>
+        <v-card-actions style="justify-content: space-around">
+          <v-btn
+            style="width: 50%"
+            color="blue darken-1"
+            text
+            @click="showLogoutDialog = false"
+          >
+            취소
+          </v-btn>
+          <v-divider vertical="true"></v-divider>
+          <v-btn style="width: 50%" color="red darken-1" text @click="logout()">
+            로그아웃
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

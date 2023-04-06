@@ -1,31 +1,27 @@
 <template>
-  <v-app>
-    <div class="container">
-      <video autoplay muted loop class="video-background">
-        <source src="../assets/bg.mp4" type="video/mp4" />
-      </video>
-      <v-container>
-        <v-row>
-          <div class="logo"></div>
-        </v-row>
+  <div class="signUpWrapper">
+    <video autoplay muted loop class="video-background">
+      <source src="../assets/bg.mp4" type="video/mp4" />
+    </video>
+    <v-container>
+      <v-row justify="center">
+        <div class="logo">
+          <img src="../assets/logo.svg" alt="로고 이미지" />
+        </div>
+      </v-row>
 
-        <v-row justify="center" align-end gutter="md">
-          <v-col cols="12" sm="6" md="4">
-            <v-spacer></v-spacer>
-            <div class="loginBtn">
-              <a @click="loginWithKakao">
-                <img
-                  src="@/assets/KakaoLogin/kakaoLogin.png"
-                  width="222"
-                  alt="카카오 로그인 버튼"
-                />
-              </a>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-  </v-app>
+      <v-row class="loginBtn" justify="center" style="margin-top: 20vh">
+        <div>
+          <a @click="loginWithKakao">
+            <img
+              src="@/assets/KakaoLogin/kakaoLogin.png"
+              alt="카카오 로그인 버튼"
+            />
+          </a>
+        </div>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -33,7 +29,6 @@ export default {
   name: "loginPage",
   data: () => ({
     showBottomNav: false,
-    URL: "",
   }),
   methods: {
     async loginWithKakao() {
@@ -56,52 +51,35 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@font-face {
-  font-family: "NanumSquareNeoHv";
-  src: url("../../public/fonts/NanumSquareNeo-eHv.ttf");
-}
 .logo {
   margin-top: 25vh;
-  margin-left: auto;
-  margin-right: auto;
   align-self: center;
-  background-image: url("../assets/logo.svg");
   background-size: contain;
-  width: 400px;
-  height: 110px;
+  min-width: 350px;
+  // min-height: 110px;
+  z-index: 10;
 }
-.container {
+.signUpWrapper {
   position: relative;
   height: 100vh;
   overflow: hidden;
-  // background: linear-gradient(#855CF8,#D3B0FF,#97C7FF);
 }
 .video-background {
   position: absolute;
-  background-size: cover;
+  // background-size: cover;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.fill-height {
-  height: 100%;
-}
 .loginBtn {
   position: relative;
   margin-top: 20vh;
 }
-@media only screen and (max-width: 600px) {
-  .logo {
-    margin-top: 20vh;
-  }
-  .loginBtn {
-    margin-top: 10px;
-    position: absolute;
-    left: 50%;
-    bottom: 20vh;
-    transform: translateX(-50%);
+@media (min-width: 960px) {
+  .container {
+    max-width: 100vw;
   }
 }
 </style>

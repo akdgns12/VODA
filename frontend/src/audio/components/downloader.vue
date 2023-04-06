@@ -57,6 +57,6 @@ export default {
 </script>
 <style scoped lang="scss">
 .btn-icon {
-  margin-left: 200px;
+  // margin-left: 200px;
 }
 </style>
