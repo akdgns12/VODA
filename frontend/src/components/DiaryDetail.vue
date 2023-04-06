@@ -35,13 +35,25 @@
 
       <v-divider vertical></v-divider>
 
-      <v-col class="text-center">
+      <v-col
+        class="text-center overflow-y-auto overflow-x-hidden"
+        style="
+          max-height: calc(100vh - 210px);
+          overflow-y: auto;
+          box-shadow: none;
+        "
+      >
         <v-scroll-y-transition mode="out-in">
           <v-card
             class="diary-detail"
             v-if="selected"
             flat
             v-bind:class="getEmotionClass(selected.emotionImgUrl)"
+            style="
+              max-height: calc(100vh - 140px);
+              overflow-y: auto;
+              box-shadow: none;
+            "
           >
             <v-card-text>
               <v-col
