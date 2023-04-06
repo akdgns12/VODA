@@ -16,15 +16,24 @@
         <div class="ar-recorder__time-limit" v-if="time">
           Record duration is limited: {{ time }}m
         </div>
-
+        <v-divider></v-divider>
         <!-- 녹음 파일 선택, 삭제, download component -->
-        <div>
-          <v-row :key="record.id" v-for="(record, idx) in recordList">
+        <div style="max-width: 400px">
+          <v-row
+            :key="record.id"
+            v-for="(record, idx) in recordList"
+            style="
+              display: flex;
+              flex: 1 1 auto;
+              justify-content: space-evenly;
+              align-items: center;
+            "
+          >
             <v-col style="color: red" cols="1" @click="removeRecord(idx)"
               >&times;</v-col
             >
-            <v-col cols="1">{{ record.duration }}</v-col>
-            <v-col cols="1">
+            <v-col style="margin-left: 0px">{{ record.duration }}</v-col>
+            <v-col>
               <audio-player :record="record" class="audio-player" />
             </v-col>
             <v-col cols="1">
@@ -208,6 +217,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.v-bottom-navigation {
+  justify-content: space-evenly;
+}
 .bottom-nav-bar {
   position: fixed;
   bottom: 0;
@@ -219,19 +231,15 @@ export default {
 }
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  width: 100%;
   margin-left: 0px;
 }
 .ar {
   // width: 420px;
   // height: 420px;
-  font-family: "Roboto", sans-serif;
   border-radius: 16px;
   background-color: #ffffff;
   box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.17);
   position: relative;
-  box-sizing: content-box;
   &-content {
     padding: 16px;
     display: flex;
@@ -379,9 +387,9 @@ export default {
   }
   &__downloader,
   &__downloader {
-    right: 115px;
-    margin-top: 10px;
-    margin-right: 10px;
+    // right: 115px;
+    // margin-top: 10px;
+    // margin-right: 10px;
   }
 }
 

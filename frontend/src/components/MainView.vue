@@ -4,7 +4,7 @@
       <vc-calendar
         ref="calendar"
         class="custom-calendar"
-        locale="en"
+        :masks="{ title: 'YYYY-MM' }"
         @update:from-page="handleCalendarChange"
       >
         <template v-slot:day-content="{ day }">
@@ -130,10 +130,10 @@ export default {
 
 <style scoped lang="scss">
 @font-face {
-  font-family: "ComingSoon-Regular";
-  src: url("../../public/fonts/ComingSoon-Regular.ttf");
+  font-family: "NanumSquareNeoa";
+  src: url("../../public/fonts/NanumSquareNeo-dEb.ttf");
+  font-weight: 900;
 }
-
 ::-webkit-scrollbar {
   width: 0px;
 }
@@ -143,7 +143,6 @@ export default {
 .day-header {
   text-align: center;
   font-size: 18px;
-  font-family: "ComingSoon-Regular";
 }
 ::-webkit-scrollbar-track {
   display: none;
@@ -151,10 +150,9 @@ export default {
 //달력 테두리
 ::v-deep .custom-calendar.vc-container {
   //달력 내부 선
+  font-family: "NanumSquareNeoa";
   margin-top: 70px;
   margin-bottom: 70px;
-  // --day-border: 1px solid #b8c2cc;
-  // --day-border-highlight: 1px solid #b8c2cc;
   //날짜별 크기
 
   //요일칸 색상
@@ -163,8 +161,6 @@ export default {
   --weekday-border: 1px solid #eaeaea;
   .vc-title {
     color: beige;
-    font-family: "SigmarOne-Regular";
-    font-family: "ComingSoon-Regular";
     font-size: 25px;
   }
   border-radius: 10px 10px 0px 0px;
@@ -191,7 +187,6 @@ export default {
     border-top: var(--weekday-border);
     padding: 10px 0;
     color: black;
-    font-family: "ComingSoon-Regular";
     font-size: 18px;
   }
   .vc-day {
