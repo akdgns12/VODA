@@ -1,7 +1,6 @@
 # 🎆 VODA - 감정 인식 일기
 
-<!-- ![](./frontend/src/assets/loading.gif) -->
-<img src="./img/dongdongdorodong.gif" width="600">
+![](./img/dongdongdorodong.gif)
 
 ## 💜 프로젝트 진행 기간
 
