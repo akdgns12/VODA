@@ -1,4 +1,4 @@
-# 🎆 VODA - 감정 인식 일기
+# 🎆 VODA - 음성 감정 일기
 
 ![](./img/dongdongdorodong.gif)
 
