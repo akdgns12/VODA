@@ -3,14 +3,17 @@
     <video autoplay muted loop class="video-background">
       <source src="../assets/bg.mp4" type="video/mp4" />
     </video>
-    <v-container>
+    <v-container style="height: 100vh; display: flex; flex-direction: column">
       <v-row justify="center">
         <div class="logo">
           <img src="../assets/logo.svg" alt="로고 이미지" />
         </div>
       </v-row>
 
-      <v-row class="loginBtn" justify="center" style="margin-top: 20vh">
+      <v-row
+        class="loginBtn"
+        style="align-items: center; justify-content: center"
+      >
         <div>
           <a @click="loginWithKakao">
             <img
@@ -52,7 +55,6 @@ export default {
 
 <style scoped lang="scss">
 .logo {
-  margin-top: 25vh;
   align-self: center;
   background-size: contain;
   min-width: 350px;
@@ -76,6 +78,8 @@ export default {
 .loginBtn {
   position: relative;
   margin-top: 20vh;
+}
+@media only screen and (max-width: 600px) {
 }
 @media (min-width: 960px) {
   .container {
